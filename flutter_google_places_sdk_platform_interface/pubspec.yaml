@@ -1,0 +1,20 @@
+name: flutter_google_places_sdk_platform_interface
+description: A common platform interface for accessing google maps native sdk on various platforms
+version: 0.0.1
+author: Matan Shukry
+homepage: https://github.com/flutter/plugins/tree/master/packages/url_launcher/url_launcher_platform_interface
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mockito: ^4.1.1
+
+flutter:
