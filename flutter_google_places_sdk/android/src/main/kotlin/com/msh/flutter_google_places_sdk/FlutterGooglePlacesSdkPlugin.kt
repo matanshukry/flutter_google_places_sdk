@@ -65,7 +65,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
             result.success(resultList)
           } else {
             val exception = task.exception
-            result.error("apiError", exception?.message ?: "Unknown exception", exception)
+            result.error("API_ERROR", exception?.message ?: "Unknown exception", null)
           }
         }
       }
@@ -123,8 +123,6 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       val instance = FlutterGooglePlacesSdkPlugin()
-//      instance.setActivity(registrar.activity())
-//      registrar.addNewIntentListener(instance)
       instance.onAttachedToEngine(registrar.context(), registrar.messenger())
     }
   }

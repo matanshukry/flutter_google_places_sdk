@@ -28,19 +28,28 @@ class AutocompletePrediction {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is AutocompletePrediction && runtimeType == other.runtimeType &&
-              distanceMeters == other.distanceMeters &&
-              placeId == other.placeId && primaryText == other.primaryText &&
-              secondaryText == other.secondaryText &&
-              fullText == other.fullText;
+      other is AutocompletePrediction &&
+          runtimeType == other.runtimeType &&
+          distanceMeters == other.distanceMeters &&
+          placeId == other.placeId &&
+          primaryText == other.primaryText &&
+          secondaryText == other.secondaryText &&
+          fullText == other.fullText;
 
   @override
   int get hashCode =>
-      distanceMeters.hashCode ^ placeId.hashCode ^ primaryText
-          .hashCode ^ secondaryText.hashCode ^ fullText.hashCode;
+      distanceMeters.hashCode ^
+      placeId.hashCode ^
+      primaryText.hashCode ^
+      secondaryText.hashCode ^
+      fullText.hashCode;
 
-  Map<String, dynamic> toMap() =>
-      {
+  @override
+  String toString() {
+    return 'AutocompletePrediction{distanceMeters: $distanceMeters, placeId: $placeId, primaryText: $primaryText, secondaryText: $secondaryText, fullText: $fullText}';
+  }
+
+  Map<String, dynamic> toMap() => {
         'distanceMeters': distanceMeters,
         'placeId': placeId,
         'primaryText': primaryText,

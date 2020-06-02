@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show MethodCall, MethodChannel;
@@ -12,7 +11,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   const channel =
-  MethodChannel(FlutterGooglePlacesSdkMethodChannel.CHANNEL_NAME);
+      MethodChannel(FlutterGooglePlacesSdkMethodChannel.CHANNEL_NAME);
 
 //  final mock = FlutterGooglePlacesSdkPlatformMock();
 //  FlutterGooglePlacesSdkPlatform.instance = mock;
@@ -68,8 +67,8 @@ void main() {
         }
         return Future<dynamic>.value(response);
       });
-      flutterGooglePlacesSdk = FlutterGooglePlacesSdk(
-          apiKey: kDefaultApiKey, locale: kDefaultLocale);
+      flutterGooglePlacesSdk =
+          FlutterGooglePlacesSdk(kDefaultApiKey, locale: kDefaultLocale);
       log.clear();
     });
 
@@ -121,7 +120,8 @@ void main() {
           ],
         );
 
-        final expected = FindAutocompletePredictionsResponse([kPrediction1, kPrediction2]);
+        final expected =
+            FindAutocompletePredictionsResponse([kPrediction1, kPrediction2]);
         expect(result, equals(expected));
       });
     });

@@ -1,8 +1,9 @@
 name: flutter_google_places_sdk
 description: Access google maps native sdk
-version: 0.0.1
-author:
-homepage:
+version: 0.1.0
+author: Matan Shukry
+homepage: https://github.com/matanshukry/flutter_google_places_sdk/tree/master/flutter_google_places_sdk
+
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -12,9 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_plugin_android_lifecycle: ^1.0.8
-  flutter_google_places_sdk_platform_interface:
-      path: '../flutter_google_places_sdk_platform_interface'
-#  flutter_google_places_sdk_platform_interface: ^1.1.0
+  flutter_google_places_sdk_platform_interface: ^0.1.0
 
 dev_dependencies:
   flutter_test:
