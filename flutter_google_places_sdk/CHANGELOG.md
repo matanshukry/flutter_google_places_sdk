@@ -1,3 +1,7 @@
+## 0.1.0+3
+
+* Exposing Powered by google assets from platform interface
+
 ## 0.1.0+2
 
 * Updated platform interface dependency to `0.1.0+1`

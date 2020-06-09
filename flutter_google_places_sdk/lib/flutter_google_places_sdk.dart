@@ -6,6 +6,12 @@ import 'package:flutter_google_places_sdk_platform_interface/flutter_google_plac
 class FlutterGooglePlacesSdk {
   FlutterGooglePlacesSdk(this.apiKey, {this.locale}) : assert(apiKey != null);
 
+  static const AssetImage ASSET_POWERED_BY_GOOGLE_ON_WHITE =
+      FlutterGooglePlacesSdkPlatform.ASSET_POWERED_BY_GOOGLE_ON_WHITE;
+
+  static const AssetImage ASSET_POWERED_BY_GOOGLE_ON_NON_WHITE =
+      FlutterGooglePlacesSdkPlatform.ASSET_POWERED_BY_GOOGLE_ON_NON_WHITE;
+
   static FlutterGooglePlacesSdkPlatform platform =
       FlutterGooglePlacesSdkPlatform.instance;
 
