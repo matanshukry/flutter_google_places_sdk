@@ -9,30 +9,6 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('$FlutterGooglePlacesSdkPlatform', () {
-    test('$FlutterGooglePlacesSdkMethodChannel() is the default instance', () {
-      expect(FlutterGooglePlacesSdkPlatform.instance,
-          isInstanceOf<FlutterGooglePlacesSdkMethodChannel>());
-    });
-
-    test('Cannot be implemented with `implements`', () {
-      expect(() {
-        FlutterGooglePlacesSdkPlatform.instance =
-            ImplementsFlutterGooglePlacesSdkPlatform();
-      }, throwsA(isInstanceOf<AssertionError>()));
-    });
-
-    test('Can be mocked with `implements`', () {
-      final mock = FlutterGooglePlacesSdkPlatformMock();
-      FlutterGooglePlacesSdkPlatform.instance = mock;
-    });
-
-    test('Can be extended', () {
-      FlutterGooglePlacesSdkPlatform.instance =
-          ExtendsFlutterGooglePlacesSdkPlatform();
-    });
-  });
-
   group('$FlutterGooglePlacesSdkMethodChannel', () {
     const channel = MethodChannel('plugins.msh.com/flutter_google_places_sdk');
     final List<MethodCall> log = <MethodCall>[];

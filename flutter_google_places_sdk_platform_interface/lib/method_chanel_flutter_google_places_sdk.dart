@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
-import 'package:flutter_google_places_sdk_platform_interface/src/types/locale_util.dart';
 
 const String _CHANNEL_NAME = 'plugins.msh.com/flutter_google_places_sdk';
 
@@ -23,7 +22,12 @@ class FlutterGooglePlacesSdkMethodChannel
   Future<void> initialize(String apiKey, {Locale locale}) {
     return _channel.invokeMethod<void>('initialize', {
       'apiKey': apiKey,
-      'locale': locale == null ? null : LocaleUtil.toMap(locale),
+      'locale': locale == null
+          ? null
+          : {
+              'country': locale.countryCode,
+              'language': locale.languageCode,
+            },
     });
   }
 
