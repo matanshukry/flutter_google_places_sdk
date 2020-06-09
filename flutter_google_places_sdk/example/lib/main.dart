@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
-import 'package:flutter_google_places_sdk_platform_interface/src/types/autocomplete_predictions.dart';
+import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
 
 const title = 'Flutter Google Places SDK Example';
 
@@ -61,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: _looking == true ? null : _predict,
             child: const Text('Predict'),
           ),
+          Image(image: FlutterGooglePlacesSdkPlatform.ASSET_POWERED_BY_GOOGLE_ON_WHITE),
           _buildErrorWidget(),
           Column(
             mainAxisSize: MainAxisSize.min,
