@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
 import 'package:flutter_google_places_sdk_platform_interface/method_chanel_flutter_google_places_sdk.dart';
 import 'package:flutter_google_places_sdk_platform_interface/src/types/find_autocomplete_predictions_response.dart';
+import 'package:flutter_google_places_sdk_platform_interface/src/types/place_details.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
@@ -40,8 +42,18 @@ abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
 
   Future<FindAutocompletePredictionsResponse> findAutocompletePredictions(
       String query,
-      {List<String> countries}) {
+      {List<String> countries,
+      bool newSessionToken,
+      Location origin,}) {
     throw UnimplementedError(
         'findAutocompletePredictions() has not been implemented.');
+  }
+
+  Future<PlaceDetails> fetchPlaceDetails(
+    String placeId,
+    List<PlaceField> fields,
+  ) {
+    throw UnimplementedError(
+        'fetchPlaceDetails() has not been implemented.');
   }
 }
