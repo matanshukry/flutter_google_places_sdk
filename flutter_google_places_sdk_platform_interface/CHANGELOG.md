@@ -1,3 +1,7 @@
+## 0.2.0+1
+
+* Fixed null cases with place object
+
 ## 0.2.0
 
 * Upgraded dependencies versions. Now supporting null safety

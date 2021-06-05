@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_google_places_sdk_platform_interface/src/types/period.dart';
+import 'package:flutter_google_places_sdk_platform_interface/src/types/utils.dart';
 
 class OpeningHours {
   const OpeningHours({required this.periods, required this.weekdayText});
@@ -29,8 +30,9 @@ class OpeningHours {
       ? null
       : OpeningHours(
           periods: map['periods']
-              .cast<String, dynamic>()
-              .map((entry) => Period.fromMap(entry)),
-          weekdayText: map['weekdayText'],
+              .map((entry) => Period.fromMap(toJsonMap(entry)!))
+              .toList()
+              .cast<Period>(),
+          weekdayText: map['weekdayText'].cast<String>(),
         );
 }

@@ -50,25 +50,25 @@ class Place {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Place &&
-              runtimeType == other.runtimeType &&
-              address == other.address &&
-              addressComponents == other.addressComponents &&
-              businessStatus == other.businessStatus &&
-              attributions == other.attributions &&
-              latLng == other.latLng &&
-              name == other.name &&
-              openingHours == other.openingHours &&
-              phoneNumber == other.phoneNumber &&
-              photoMetadatas == other.photoMetadatas &&
-              plusCode == other.plusCode &&
-              priceLevel == other.priceLevel &&
-              rating == other.rating &&
-              types == other.types &&
-              userRatingsTotal == other.userRatingsTotal &&
-              utcOffsetMinutes == other.utcOffsetMinutes &&
-              viewport == other.viewport &&
-              websiteUri == other.websiteUri;
+      other is Place &&
+          runtimeType == other.runtimeType &&
+          address == other.address &&
+          addressComponents == other.addressComponents &&
+          businessStatus == other.businessStatus &&
+          attributions == other.attributions &&
+          latLng == other.latLng &&
+          name == other.name &&
+          openingHours == other.openingHours &&
+          phoneNumber == other.phoneNumber &&
+          photoMetadatas == other.photoMetadatas &&
+          plusCode == other.plusCode &&
+          priceLevel == other.priceLevel &&
+          rating == other.rating &&
+          types == other.types &&
+          userRatingsTotal == other.userRatingsTotal &&
+          utcOffsetMinutes == other.utcOffsetMinutes &&
+          viewport == other.viewport &&
+          websiteUri == other.websiteUri;
 
   @override
   int get hashCode =>
@@ -94,8 +94,7 @@ class Place {
   String toString() =>
       'Place{address: $address, addressComponents: $addressComponents, businessStatus: $businessStatus, attributions: $attributions, latLng: $latLng, name: $name, openingHours: $openingHours, phoneNumber: $phoneNumber, photoMetadatas: $photoMetadatas, plusCode: $plusCode, priceLevel: $priceLevel, rating: $rating, types: $types, userRatingsTotal: $userRatingsTotal, utcOffsetMinutes: $utcOffsetMinutes, viewport: $viewport, websiteUri: $websiteUri}';
 
-  Map<String, dynamic> toMap() =>
-      {
+  Map<String, dynamic> toMap() => {
         'address': address,
         'addressComponents': addressComponents?.map((e) => e.toMap()),
         'businessStatus': businessStatus?.value,
@@ -115,19 +114,18 @@ class Place {
         'websiteUri': websiteUri?.toString(),
       };
 
-  static Place fromMap(Map<String, dynamic> map) =>
-      Place(
+  static Place fromMap(Map<String, dynamic> map) => Place(
         address: map['address'],
         addressComponents: map['addressComponents']
             ?.map((entry) =>
-            AddressComponent.fromMap(entry.cast<String, dynamic>()))
+                AddressComponent.fromMap(entry.cast<String, dynamic>()))
             ?.toList()
             ?.cast<AddressComponent>(),
         businessStatus: (map['businessStatus'] as String?)?.toBusinessStatus(),
         attributions: map['attributions']?.cast<String>(),
         latLng: LatLng.fromMap(toJsonMap(map['latLng'])),
         name: map['name'],
-        openingHours: OpeningHours.fromMap(map['openingHours']),
+        openingHours: OpeningHours.fromMap(toJsonMap(map['openingHours'])),
         phoneNumber: map['phoneNumber'],
         photoMetadatas: map['photoMetadatas']
             ?.map((entry) => PhotoMetadata.fromMap(toJsonMap(entry)))
@@ -143,6 +141,7 @@ class Place {
         userRatingsTotal: map['userRatingsTotal'],
         utcOffsetMinutes: map['utcOffsetMinutes'],
         viewport: LatLngBounds.fromMap(toJsonMap(map['viewport'])),
-        websiteUri: Uri.parse(map['websiteUri']),
+        websiteUri:
+            map['websiteUri'] == null ? null : Uri.parse(map['websiteUri']),
       );
 }

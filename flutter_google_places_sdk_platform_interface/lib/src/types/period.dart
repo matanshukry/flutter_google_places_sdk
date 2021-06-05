@@ -1,4 +1,5 @@
 import 'package:flutter_google_places_sdk_platform_interface/src/types/time_of_week.dart';
+import 'package:flutter_google_places_sdk_platform_interface/src/types/utils.dart';
 
 class Period {
   const Period({this.open, this.close});
@@ -23,7 +24,7 @@ class Period {
   Map<String, dynamic> toMap() => {'open': open, 'close': close};
 
   static Period fromMap(Map<String, dynamic> map) => Period(
-    open: TimeOfWeek.fromMap(map['open']),
-    close: TimeOfWeek.fromMap(map['close']),
+    open: TimeOfWeek.fromMap(toJsonMap(map['open'])),
+    close: TimeOfWeek.fromMap(toJsonMap(map['close'])),
   );
 }

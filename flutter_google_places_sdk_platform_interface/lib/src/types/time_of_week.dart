@@ -1,5 +1,6 @@
 import 'package:flutter_google_places_sdk_platform_interface/src/types/day_of_week.dart';
 import 'package:flutter_google_places_sdk_platform_interface/src/types/place_local_time.dart';
+import 'package:flutter_google_places_sdk_platform_interface/src/types/utils.dart';
 
 class TimeOfWeek {
   const TimeOfWeek({required this.day, required this.time});
@@ -26,7 +27,7 @@ class TimeOfWeek {
   static TimeOfWeek? fromMap(Map<String, dynamic>? map) => map == null
       ? null
       : TimeOfWeek(
-          day: map['day']?.toDayOfWeek(),
-          time: PlaceLocalTime.fromMap(map['time']),
+          day: (map['day'] as String).toDayOfWeek()!,
+          time: PlaceLocalTime.fromMap(toJsonMap(map['time'])!),
         );
 }
