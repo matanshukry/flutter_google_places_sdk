@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show MethodCall, MethodChannel;
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
-import 'package:flutter_google_places_sdk_platform_interface/method_chanel_flutter_google_places_sdk.dart';
+import 'package:flutter_google_places_sdk_platform_interface/method_channel_flutter_google_places_sdk.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -13,11 +13,8 @@ void main() {
   const channel =
       MethodChannel(FlutterGooglePlacesSdkMethodChannel.CHANNEL_NAME);
 
-//  final mock = FlutterGooglePlacesSdkPlatformMock();
-//  FlutterGooglePlacesSdkPlatform.instance = mock;
-
   final List<MethodCall> log = <MethodCall>[];
-  FlutterGooglePlacesSdk flutterGooglePlacesSdk;
+  late FlutterGooglePlacesSdk flutterGooglePlacesSdk;
 
   const kPrediction1 = AutocompletePrediction(
     placeId: 'mwzmsk-iamsdcim',
@@ -34,17 +31,20 @@ void main() {
     fullText: 'ftext6cad',
   );
 
+  const kPlace = const Place(latLng: LatLng(lat: 542.13, lng: -32.43));
+
   final kDefaultResponses = <dynamic, dynamic>{
     'findAutocompletePredictions': <dynamic>[
       kPrediction1.toMap(),
       kPrediction2.toMap()
-    ]
+    ],
+    'fetchPlace': kPlace.toMap(),
   };
 
   const String kDefaultApiKey = 'test-api-key-23';
   const Locale kDefaultLocale = Locale('he');
 
-  Map<String, dynamic> responses;
+  late Map<String, dynamic> responses;
 
   Matcher _getInitializeMatcher() {
     return isMethodCall('initialize', arguments: {
@@ -75,7 +75,7 @@ void main() {
     group('isInitialized', () {
       test('returns true', () async {
         responses['isInitialized'] = true;
-        final bool result = await flutterGooglePlacesSdk.isInitialized();
+        final bool? result = await flutterGooglePlacesSdk.isInitialized();
 
         expect(log, <Matcher>[
           _getInitializeMatcher(),
@@ -86,7 +86,7 @@ void main() {
 
       test('returns false', () async {
         responses['isInitialized'] = false;
-        final bool result = await flutterGooglePlacesSdk.isInitialized();
+        final bool? result = await flutterGooglePlacesSdk.isInitialized();
 
         expect(log, <Matcher>[
           _getInitializeMatcher(),
@@ -97,16 +97,15 @@ void main() {
     });
 
     group('findAutocompletePredictions', () {
-//      test('requires a non-null query', () {
-//        expect(() => flutterGooglePlacesSdk.findAutocompletePredictions(null),
-//            throwsArgumentError);
-//      });
-
       test('default behavior', () async {
         const queryTest = 'my-query-text';
         const countriesTest = ['c5', 'c32'];
-        final result = await flutterGooglePlacesSdk
-            .findAutocompletePredictions(queryTest, countries: countriesTest);
+        final origin = LatLng(lat: 32.51, lng: 95.31);
+        final result = await flutterGooglePlacesSdk.findAutocompletePredictions(
+            queryTest,
+            countries: countriesTest,
+            newSessionToken: false,
+            origin: origin);
 
         expect(
           log,
@@ -116,6 +115,8 @@ void main() {
                 arguments: <String, dynamic>{
                   'query': queryTest,
                   'countries': countriesTest,
+                  'newSessionToken': false,
+                  'origin': origin.toMap(),
                 }),
           ],
         );
@@ -125,9 +126,28 @@ void main() {
         expect(result, equals(expected));
       });
     });
+
+    group('fetchPlace', () {
+      test('default behavior', () async {
+        const placeId = 'my-place-id';
+        const fields = [PlaceField.Location, PlaceField.PriceLevel];
+        final result =
+            await flutterGooglePlacesSdk.fetchPlace(placeId, fields: fields);
+
+        expect(
+          log,
+          <Matcher>[
+            _getInitializeMatcher(),
+            isMethodCall('fetchPlace', arguments: <String, dynamic>{
+              'placeId': placeId,
+              'fields': fields.map((e) => e.value).toList(growable: false),
+            }),
+          ],
+        );
+
+        final expected = FetchPlaceResponse(kPlace);
+        expect(result, equals(expected));
+      });
+    });
   });
 }
-
-//class FlutterGooglePlacesSdkPlatformMock extends Mock
-//    with MockPlatformInterfaceMixin
-//    implements FlutterGooglePlacesSdkPlatform {}

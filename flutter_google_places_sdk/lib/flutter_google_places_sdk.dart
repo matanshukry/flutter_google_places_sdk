@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
 
 class FlutterGooglePlacesSdk {
-  FlutterGooglePlacesSdk(this.apiKey, {this.locale}) : assert(apiKey != null);
+  FlutterGooglePlacesSdk(this.apiKey, {this.locale});
 
   static const AssetImage ASSET_POWERED_BY_GOOGLE_ON_WHITE =
       FlutterGooglePlacesSdkPlatform.ASSET_POWERED_BY_GOOGLE_ON_WHITE;
@@ -16,17 +16,17 @@ class FlutterGooglePlacesSdk {
       FlutterGooglePlacesSdkPlatform.instance;
 
   final String apiKey;
-  final Locale locale;
+  final Locale? locale;
 
-  Future<void> _lastMethodCall;
-  Future<void> _initialization;
+  Future<void>? _lastMethodCall;
+  Future<void>? _initialization;
 
   Future<T> _addMethodCall<T>(Future<T> Function() method) async {
     Future<T> response;
     if (_lastMethodCall == null) {
       response = _callMethod(method);
     } else {
-      response = _lastMethodCall.then((_) {
+      response = _lastMethodCall!.then((_) {
         return _callMethod(method);
       });
     }
@@ -58,13 +58,25 @@ class FlutterGooglePlacesSdk {
   }
 
   Future<FindAutocompletePredictionsResponse> findAutocompletePredictions(
-      String query,
-      {List<String> countries}) {
-    return _addMethodCall(() =>
-        platform.findAutocompletePredictions(query, countries: countries));
+    String query, {
+    List<String>? countries,
+    bool? newSessionToken,
+    LatLng? origin,
+  }) {
+    return _addMethodCall(() => platform.findAutocompletePredictions(
+          query,
+          countries: countries,
+          newSessionToken: newSessionToken,
+          origin: origin,
+        ));
   }
 
-  Future<bool> isInitialized() {
+  Future<FetchPlaceResponse> fetchPlace(String placeId,
+      {List<PlaceField>? fields}) {
+    return _addMethodCall(() => platform.fetchPlace(placeId, fields: fields));
+  }
+
+  Future<bool?> isInitialized() {
     return _addMethodCall(platform.isInitialized);
   }
 }

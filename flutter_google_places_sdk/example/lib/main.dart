@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
@@ -31,14 +32,42 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _lasText;
+  late final FlutterGooglePlacesSdk _places;
 
-  FlutterGooglePlacesSdk _places;
+  //
+  String? _predictLastText;
 
-  bool _looking = false;
-  dynamic _err;
+  bool _predicting = false;
+  dynamic _predictErr;
 
-  List<AutocompletePrediction> _predictions;
+  List<AutocompletePrediction>? _predictions;
+
+  //
+  final TextEditingController _fetchPlaceIdController = TextEditingController();
+  List<PlaceField> _placeFields = [
+    PlaceField.Address,
+    PlaceField.AddressComponents,
+    PlaceField.BusinessStatus,
+    PlaceField.Id,
+    PlaceField.Location,
+    PlaceField.Name,
+    PlaceField.OpeningHours,
+    PlaceField.PhoneNumber,
+    PlaceField.PhotoMetadatas,
+    PlaceField.PlusCode,
+    PlaceField.PriceLevel,
+    PlaceField.Rating,
+    PlaceField.Types,
+    PlaceField.UserRatingsTotal,
+    PlaceField.UTCOffset,
+    PlaceField.Viewport,
+    PlaceField.WebsiteUri,
+  ];
+
+  bool _fetching = false;
+  dynamic _fetchingErr;
+
+  Place? _place;
 
   @override
   void initState() {
@@ -49,73 +78,154 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final predictionsWidgets = _buildPredictionWidgets();
+    final fetchPlaceWidgets = _buildFetchPlaceWidgets();
     return Scaffold(
       appBar: AppBar(title: const Text(title)),
       body: Padding(
         padding: EdgeInsets.all(30),
-        child: ListView(children: [
-          TextFormField(
-            onChanged: _onTextChanged,
-          ),
-          RaisedButton(
-            onPressed: _looking == true ? null : _predict,
-            child: const Text('Predict'),
-          ),
-          Image(image: FlutterGooglePlacesSdkPlatform.ASSET_POWERED_BY_GOOGLE_ON_WHITE),
-          _buildErrorWidget(),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: (_predictions ?? [])
-                .map(_buildPredictionItem)
-                .toList(growable: false),
-          )
-        ]),
+        child: ListView(
+            children: predictionsWidgets +
+                [
+                  SizedBox(height: 16),
+                ] +
+                fetchPlaceWidgets),
       ),
     );
   }
 
-  void _onTextChanged(String value) {
-    _lasText = value;
+  void _onPredictTextChanged(String value) {
+    _predictLastText = value;
   }
 
-  void _predict() async {
-    if (_looking) {
+  void _fetch() async {
+    if (_fetching) {
       return;
     }
 
+    final text = _fetchPlaceIdController.text;
+    final hasContent = text.isNotEmpty;
+
     setState(() {
-      _looking = true;
-      _err = null;
+      _fetching = hasContent;
+      _fetchingErr = null;
     });
 
+    if (!hasContent) {
+      return;
+    }
+
     try {
-      final result = await _places
-          .findAutocompletePredictions(_lasText, countries: ['il']);
+      final result = await _places.fetchPlace(_fetchPlaceIdController.text,
+          fields: _placeFields);
 
       setState(() {
-        _predictions = result.predictions;
-        _looking = false;
+        _place = result.place;
+        _fetching = false;
       });
     } catch (err) {
       setState(() {
-        _err = err;
-        _looking = false;
+        _fetchingErr = err;
+        _fetching = false;
       });
     }
   }
 
-  Widget _buildPredictionItem(AutocompletePrediction item) {
-    return Column(children: [
-      Text(item.fullText),
-      Text(item.primaryText + ' - ' + item.secondaryText),
-      const Divider(thickness: 2),
-    ]);
+  void _predict() async {
+    if (_predicting) {
+      return;
+    }
+
+    final hasContent = _predictLastText?.isNotEmpty ?? false;
+
+    setState(() {
+      _predicting = hasContent;
+      _predictErr = null;
+    });
+
+    if (!hasContent) {
+      return;
+    }
+
+    try {
+      final result = await _places.findAutocompletePredictions(
+        _predictLastText!,
+        countries: ['il'],
+        newSessionToken: false,
+        origin: LatLng(lat: 43.12, lng: 95.20),
+      );
+
+      setState(() {
+        _predictions = result.predictions;
+        _predicting = false;
+      });
+    } catch (err) {
+      setState(() {
+        _predictErr = err;
+        _predicting = false;
+      });
+    }
   }
 
-  Widget _buildErrorWidget() {
+  void _onItemClicked(AutocompletePrediction item) {
+    _fetchPlaceIdController.text = item.placeId;
+  }
+
+  Widget _buildPredictionItem(AutocompletePrediction item) {
+    return InkWell(
+      onTap: () => _onItemClicked(item),
+      child: Column(children: [
+        Text(item.fullText),
+        Text(item.primaryText + ' - ' + item.secondaryText),
+        const Divider(thickness: 2),
+      ]),
+    );
+  }
+
+  Widget _buildErrorWidget(dynamic err) {
     final theme = Theme.of(context);
-    final errorText = _err == null ? '' : _err.toString();
+    final errorText = err == null ? '' : err.toString();
     return Text(errorText,
-        style: theme.textTheme.caption.copyWith(color: theme.errorColor));
+        style: theme.textTheme.caption?.copyWith(color: theme.errorColor));
+  }
+
+  List<Widget> _buildFetchPlaceWidgets() {
+    return [
+      // --
+      TextFormField(controller: _fetchPlaceIdController),
+      ElevatedButton(
+        onPressed: _fetching == true ? null : _fetch,
+        child: const Text('Fetch Place'),
+      ),
+
+      // -- Error widget + Result
+      _buildErrorWidget(_fetchingErr),
+      Text('Result: ' + (_place?.toString() ?? 'N/A')),
+    ];
+  }
+
+  List<Widget> _buildPredictionWidgets() {
+    return [
+      // --
+      TextFormField(
+        onChanged: _onPredictTextChanged,
+      ),
+      ElevatedButton(
+        onPressed: _predicting == true ? null : _predict,
+        child: const Text('Predict'),
+      ),
+
+      // -- Error widget + Result
+      _buildErrorWidget(_predictErr),
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        children: (_predictions ?? [])
+            .map(_buildPredictionItem)
+            .toList(growable: false),
+      ),
+      Image(
+        image: FlutterGooglePlacesSdkPlatform.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
+      ),
+    ];
   }
 }
