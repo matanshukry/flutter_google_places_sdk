@@ -1,14 +1,14 @@
 class AutocompletePrediction {
   const AutocompletePrediction({
     this.distanceMeters,
-    this.placeId,
-    this.primaryText,
-    this.secondaryText,
-    this.fullText,
+    required this.placeId,
+    required this.primaryText,
+    required this.secondaryText,
+    required this.fullText,
   });
 
   /// the straight-line distance between the place being referred to by getPlaceId() and the origin specified in the request.
-  final int distanceMeters;
+  final int? distanceMeters;
 
   /// the place ID of the place being referred to by this prediction.
   final String placeId;
@@ -45,9 +45,8 @@ class AutocompletePrediction {
       fullText.hashCode;
 
   @override
-  String toString() {
-    return 'AutocompletePrediction{distanceMeters: $distanceMeters, placeId: $placeId, primaryText: $primaryText, secondaryText: $secondaryText, fullText: $fullText}';
-  }
+  String toString() =>
+      'AutocompletePrediction{distanceMeters: $distanceMeters, placeId: $placeId, primaryText: $primaryText, secondaryText: $secondaryText, fullText: $fullText}';
 
   Map<String, dynamic> toMap() => {
         'distanceMeters': distanceMeters,

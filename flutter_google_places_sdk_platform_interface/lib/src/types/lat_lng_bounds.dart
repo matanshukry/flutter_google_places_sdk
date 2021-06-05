@@ -1,0 +1,34 @@
+import 'package:flutter_google_places_sdk_platform_interface/src/types/lat_lng.dart';
+import 'package:flutter_google_places_sdk_platform_interface/src/types/utils.dart';
+
+class LatLngBounds {
+  const LatLngBounds({required this.southwest, required this.northeast});
+
+  final LatLng southwest;
+  final LatLng northeast;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LatLngBounds &&
+          runtimeType == other.runtimeType &&
+          southwest == other.southwest &&
+          northeast == other.northeast;
+
+  @override
+  int get hashCode => southwest.hashCode ^ northeast.hashCode;
+
+  @override
+  String toString() =>
+      'LatLngBounds{southwest: $southwest, northeast: $northeast}';
+
+  Map<String, dynamic> toMap() =>
+      {'southwest': southwest, 'northeast': northeast};
+
+  static LatLngBounds? fromMap(Map<String, dynamic>? map) => map == null
+      ? null
+      : LatLngBounds(
+          southwest: LatLng.fromMap(toJsonMap(map['southwest']))!,
+          northeast: LatLng.fromMap(toJsonMap(map['northeast']))!,
+        );
+}

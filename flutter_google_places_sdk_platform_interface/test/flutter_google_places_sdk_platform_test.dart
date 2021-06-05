@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
-import 'package:flutter_google_places_sdk_platform_interface/method_chanel_flutter_google_places_sdk.dart';
+import 'package:flutter_google_places_sdk_platform_interface/method_channel_flutter_google_places_sdk.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'method_chanel_flutter_google_places_sdk_test.dart';
+import 'method_channel_flutter_google_places_sdk_test.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

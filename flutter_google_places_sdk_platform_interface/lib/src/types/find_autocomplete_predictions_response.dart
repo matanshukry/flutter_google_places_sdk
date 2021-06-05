@@ -18,7 +18,6 @@ class FindAutocompletePredictionsResponse {
   int get hashCode => predictions.hashCode;
 
   @override
-  String toString() {
-    return 'FindAutocompletePredictionsResponse{predictions: $predictions}';
-  }
+  String toString() =>
+      'FindAutocompletePredictionsResponse{predictions: $predictions}';
 }

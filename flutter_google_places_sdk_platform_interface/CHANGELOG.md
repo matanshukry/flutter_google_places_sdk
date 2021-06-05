@@ -1,3 +1,9 @@
+## 0.2.0
+
+* Upgraded dependencies versions. Now supporting null safety
+* Added sessionToken and origin params to findAutoCompletePredictions
+* Added fetchPlace with types
+
 ## 0.1.0+1
 
 * Added 2 assets (powered by google white/non-white variations)
