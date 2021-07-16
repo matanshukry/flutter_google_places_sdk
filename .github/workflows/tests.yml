@@ -1,0 +1,80 @@
+name: FlutterTests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  flutter_version: "2.2.3"
+  java_version: "16.x"
+  dir: "flutter_google_places_sdk"
+
+jobs:
+  setup:
+    name: Setup flutter on [${{ matrix.os }}], [${{ env.dir }}]
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+          - os: macos-latest
+            flutter_path: /Users/runner/hostedtoolcache/flutter
+          - os: macos-latest
+            flutter_path: C:\hostedtoolcache\flutter
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ matrix.flutter_path }}
+          key: ${{ runner.os }}-flutter-${{ env.flutter_version }}
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ env.flutter_version }}
+      - name: Dart version
+        run: dart --version
+      - name: Flutter version
+        run: flutter --version
+
+
+  test:
+    name: Run tests on [${{ matrix.os }}], dir [${{ env.dir }}]
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.java_version }}
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_version }}
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ env.flutter_version }}
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: ${{ env.dir }}
+      - name: Flutter Analyze
+        run: flutter analyze
+        working-directory: ${{ env.dir }}
+      - name: Test
+        run: flutter test
+        working-directory: ${{ env.dir }}
+

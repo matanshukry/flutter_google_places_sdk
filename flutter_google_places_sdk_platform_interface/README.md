@@ -1,5 +1,9 @@
 # flutter_google_places_sdk_platform_interface
 
+[![pub package](https://img.shields.io/pub/v/flutter_google_places_sdk.svg)](https://pub.dartlang.org/packages/flutter_google_places_sdk)
+
+![Tests](https://github.com/matanshukry/flutter_google_places_sdk/actions/workflows/tests_platform_interface.yml/badge.svg)
+
 A common platform interface for the [`flutter_google_places_sdk`][1] plugin.
 
 This interface allows platform-specific implementations of the `flutter_google_places_sdk`

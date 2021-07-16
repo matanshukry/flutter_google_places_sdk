@@ -2,6 +2,8 @@
 
 [![pub package](https://img.shields.io/pub/v/flutter_google_places_sdk.svg)](https://pub.dartlang.org/packages/flutter_google_places_sdk)
 
+![Tests](https://github.com/matanshukry/flutter_google_places_sdk/actions/workflows/tests.yml/badge.svg)
+
 A Flutter plugin for google places sdk that uses the native libraries on each platform.
 Check out [Rational](##RATIONAL) below to understand why you should use this plugin.
 
