@@ -1,6 +1,6 @@
 # flutter_google_places_sdk_platform_interface
 
-[![pub package](https://img.shields.io/pub/v/flutter_google_places_sdk.svg)](https://pub.dartlang.org/packages/flutter_google_places_sdk)
+[![pub package](https://img.shields.io/pub/v/flutter_google_places_sdk_platform_interface.svg)](https://pub.dartlang.org/packages/flutter_google_places_sdk_platform_interface)
 
 ![Tests](https://github.com/matanshukry/flutter_google_places_sdk/actions/workflows/tests_platform_interface.yml/badge.svg)
 
