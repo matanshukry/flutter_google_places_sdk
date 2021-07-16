@@ -1,3 +1,9 @@
+## 0.2.0+2
+
+* Added Doc
+* Running tests using Github Actions on push
+* Added badge to README.md
+
 ## 0.2.0+1
 
 * Fixed null cases with place object
