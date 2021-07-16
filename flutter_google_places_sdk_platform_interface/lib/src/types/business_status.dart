@@ -1,3 +1,6 @@
+/// The business status of a place
+///
+/// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/Place.BusinessStatus
 enum BusinessStatus {
   Operational,
   ClosedTemporarily,

@@ -9,7 +9,7 @@ const String _CHANNEL_NAME = 'plugins.msh.com/flutter_google_places_sdk';
 
 const MethodChannel _channel = MethodChannel(_CHANNEL_NAME);
 
-// An implementation of [FlutterGooglePlacesSdkPlatform] that uses method channels.
+/// An implementation of [FlutterGooglePlacesSdkPlatform] that uses method channels.
 class FlutterGooglePlacesSdkMethodChannel
     extends FlutterGooglePlacesSdkPlatform {
   static const CHANNEL_NAME = _CHANNEL_NAME;
@@ -38,6 +38,8 @@ class FlutterGooglePlacesSdkMethodChannel
   }
 
   /* Client methods */
+
+
   @override
   Future<FindAutocompletePredictionsResponse> findAutocompletePredictions(
     String query, {

@@ -1,3 +1,6 @@
+/// An immutable class representing a pair of latitude and longitude coordinates, stored as degrees.
+///
+/// Ref: https://developers.google.com/android/reference/com/google/android/gms/maps/model/LatLng
 class LatLng {
   const LatLng({required this.lat, required this.lng});
 

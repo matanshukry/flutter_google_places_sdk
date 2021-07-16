@@ -1,5 +1,6 @@
 import 'package:flutter_google_places_sdk_platform_interface/src/types/place.dart';
 
+/// The response for a [FlutterGooglePlacesSdkPlatform.fetchPlace] request
 class FetchPlaceResponse {
   const FetchPlaceResponse(this.place);
 

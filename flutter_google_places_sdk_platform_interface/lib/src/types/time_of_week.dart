@@ -2,6 +2,9 @@ import 'package:flutter_google_places_sdk_platform_interface/src/types/day_of_we
 import 'package:flutter_google_places_sdk_platform_interface/src/types/place_local_time.dart';
 import 'package:flutter_google_places_sdk_platform_interface/src/types/utils.dart';
 
+/// Represents a a timestamp that's identified by the day of the week, and the time in 24 hour format.
+///
+/// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/TimeOfWeek
 class TimeOfWeek {
   const TimeOfWeek({required this.day, required this.time});
 

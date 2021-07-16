@@ -1,3 +1,6 @@
+/// Plus Code, or Open Location Code (OLC), is a geocode system for identifying any geographical area on Earth, even when a street address does not exist.
+///
+/// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/PlusCode
 class PlusCode {
   const PlusCode({required this.compoundCode, required this.globalCode});
 

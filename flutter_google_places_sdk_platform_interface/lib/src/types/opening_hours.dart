@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_google_places_sdk_platform_interface/src/types/period.dart';
 import 'package:flutter_google_places_sdk_platform_interface/src/types/utils.dart';
 
+/// Represents information on when a [Place] will be open during the week.
+///
+/// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/OpeningHours
 class OpeningHours {
   const OpeningHours({required this.periods, required this.weekdayText});
 

@@ -8,6 +8,13 @@ import 'package:flutter_google_places_sdk_platform_interface/src/types/place_typ
 import 'package:flutter_google_places_sdk_platform_interface/src/types/plus_code.dart';
 import 'package:flutter_google_places_sdk_platform_interface/src/types/utils.dart';
 
+/// Represents a particular physical place.
+///
+/// A Place encapsulates information about a physical location, including its name, address, and any other information we might have about it.
+///
+/// Note: In general, some fields will be inapplicable to certain places, or the information may not exist.
+///
+/// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/Place
 class Place {
   const Place({
     this.address,

@@ -1,3 +1,6 @@
+/// Represents a local time with just hours and minutes. This class is based on the LocalTime class (available on SDK 26 and higher).
+///
+/// ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/LocalTime
 class PlaceLocalTime {
   const PlaceLocalTime({required this.hours, required this.minutes});
 

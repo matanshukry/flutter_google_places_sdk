@@ -1,3 +1,9 @@
+/// Represents an autocomplete suggestion of a place,
+/// based on a particular text query.
+///
+/// An AutocompletePrediction includes the description of the suggested place as well as basic details including place ID and types.
+///
+/// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/AutocompletePrediction
 class AutocompletePrediction {
   const AutocompletePrediction({
     this.distanceMeters,

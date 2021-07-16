@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 
+/// Available types for a [Place]
+///
+/// Ref: https://developers.google.com/maps/documentation/places/android-sdk/supported_types
 enum PlaceType {
   OTHER,
   ACCOUNTING,

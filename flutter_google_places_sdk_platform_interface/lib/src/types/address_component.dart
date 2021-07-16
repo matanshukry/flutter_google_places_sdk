@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 
+/// Represents a component of an address, e.g., street number, postcode, city, etc.
+///
+/// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/AddressComponent
 class AddressComponent {
   const AddressComponent({
     required this.name,
@@ -7,8 +10,15 @@ class AddressComponent {
     required this.types,
   });
 
+  /// Name of the address component, e.g. "Sydney".
   final String name;
+
+  /// Short name of the address component, e.g. "AU".
   final String shortName;
+
+  /// Types of the AddressComponent
+  ///
+  /// For a list of supported types, see [Address Component Types](https://developers.google.com/maps/documentation/geocoding/overview#Types)
   final List<String> types;
 
   @override

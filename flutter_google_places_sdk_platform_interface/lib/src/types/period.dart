@@ -1,6 +1,9 @@
 import 'package:flutter_google_places_sdk_platform_interface/src/types/time_of_week.dart';
 import 'package:flutter_google_places_sdk_platform_interface/src/types/utils.dart';
 
+/// Represents a time segment. It may contain an open [TimeOfWeek], or a close [TimeOfWeek], or both.
+///
+/// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/Period
 class Period {
   const Period({this.open, this.close});
 

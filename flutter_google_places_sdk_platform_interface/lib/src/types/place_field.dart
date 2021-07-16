@@ -1,3 +1,6 @@
+/// Used to specify which place data types to return.
+///
+/// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/Place.Field
 enum PlaceField {
   Address,
   AddressComponents,

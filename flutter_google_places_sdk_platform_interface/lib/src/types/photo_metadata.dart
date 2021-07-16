@@ -1,3 +1,6 @@
+/// The metadata corresponding to a single photo associated with a place.
+///
+/// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/PhotoMetadata
 class PhotoMetadata {
   const PhotoMetadata({
     required this.attributions,
