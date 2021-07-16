@@ -1,10 +1,11 @@
 name: FlutterTests
 
 on:
+  workflow_dispatch:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 env:
   flutter_version: "2.2.3"
@@ -13,7 +14,7 @@ env:
 
 jobs:
   setup:
-    name: Setup flutter on [${{ matrix.os }}], [${{ env.dir }}]
+    name: Run tests on [${{ matrix.os }}]
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -25,7 +26,7 @@ jobs:
             flutter_path: /opt/hostedtoolcache/flutter
           - os: macos-latest
             flutter_path: /Users/runner/hostedtoolcache/flutter
-          - os: macos-latest
+          - os: windows-latest
             flutter_path: C:\hostedtoolcache\flutter
 
     steps:
@@ -36,6 +37,9 @@ jobs:
         with:
           path: ${{ matrix.flutter_path }}
           key: ${{ runner.os }}-flutter-${{ env.flutter_version }}
+      - uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.java_version }}
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ env.flutter_version }}
@@ -43,31 +47,6 @@ jobs:
         run: dart --version
       - name: Flutter version
         run: flutter --version
-
-
-  test:
-    name: Run tests on [${{ matrix.os }}], dir [${{ env.dir }}]
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
-        with:
-          java-version: ${{ env.java_version }}
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v1
-        with:
-          path: /opt/hostedtoolcache/flutter
-          key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_version }}
-      - uses: subosito/flutter-action@v1
-        with:
-          flutter-version: ${{ env.flutter_version }}
       - name: Install dependencies
         run: flutter pub get
         working-directory: ${{ env.dir }}
