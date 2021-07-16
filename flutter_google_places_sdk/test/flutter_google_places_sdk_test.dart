@@ -141,6 +141,7 @@ void main() {
             isMethodCall('fetchPlace', arguments: <String, dynamic>{
               'placeId': placeId,
               'fields': fields.map((e) => e.value).toList(growable: false),
+              'newSessionToken': null,
             }),
           ],
         );

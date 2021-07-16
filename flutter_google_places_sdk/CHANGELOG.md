@@ -1,3 +1,9 @@
+## 0.2.1
+
+* Upgraded Mockito to `5.0.11`
+* Exported all types from `flutter_google_places_sdk_platform_interface`
+* Changed the example import to use the new exported types without importing from `flutter_google_places_sdk_platform_interface`
+
 ## 0.2.0
 
 * Upgraded dependencies versions. Now supporting null safety

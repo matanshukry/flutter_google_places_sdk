@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
-import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
 
 const title = 'Flutter Google Places SDK Example';
 
@@ -224,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
             .toList(growable: false),
       ),
       Image(
-        image: FlutterGooglePlacesSdkPlatform.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
+        image: FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
       ),
     ];
   }

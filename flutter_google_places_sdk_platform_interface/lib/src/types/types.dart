@@ -10,8 +10,6 @@ export 'opening_hours.dart';
 export 'period.dart';
 export 'photo_metadata.dart';
 export 'place.dart';
-export 'place.dart';
-export 'place_field.dart';
 export 'place_field.dart';
 export 'place_local_time.dart';
 export 'place_type.dart';

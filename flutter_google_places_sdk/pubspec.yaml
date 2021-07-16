@@ -1,7 +1,6 @@
 name: flutter_google_places_sdk
 description: A Flutter plugin for google places sdk that uses the native libraries on each platform
-version: 0.2.0
-author: Matan Shukry
+version: 0.2.1
 homepage: https://github.com/matanshukry/flutter_google_places_sdk/tree/master/flutter_google_places_sdk
 
 environment:
@@ -17,7 +16,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: ^5.0.9
+  mockito: ^5.0.11
 
 flutter:
   plugin:
