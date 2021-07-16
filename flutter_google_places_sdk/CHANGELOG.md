@@ -1,3 +1,10 @@
+## 0.2.1+1
+
+* Upgraded flutter_google_places_sdk_platform_interface to 0.2.0+2
+* Added Docs
+* Running tests using Github Actions on push
+* Added badge to README.md
+
 ## 0.2.1
 
 * Upgraded Mockito to `5.0.11`
