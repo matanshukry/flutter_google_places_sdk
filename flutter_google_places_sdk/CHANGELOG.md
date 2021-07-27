@@ -1,3 +1,8 @@
+## 0.2.2
+
+* Removed iOS indication since it was never implemented
+* Added Web endorsement
+
 ## 0.2.1+1
 
 * Upgraded flutter_google_places_sdk_platform_interface to 0.2.0+2

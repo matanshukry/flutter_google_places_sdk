@@ -13,6 +13,12 @@ Note: Currently only support Android
 
 To use this plugin, add `flutter_google_places_sdk` as a [dependency in your pubspec.yaml file](https://flutter.dev/platform-plugins/).
 
+## Web Usage
+
+When using the web support you also need to enable the Maps JavaScript API in google cloud:
+
+https://developers.google.com/maps/documentation/javascript/get-api-key
+
 ## Rational
 
 By now you probably found some other plugins, and wondering why this one was even created.

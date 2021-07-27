@@ -306,7 +306,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
   }
 
   companion object {
-    private const val METHOD_INITIALIZE = "initialize" // string apiKey, Locale locale
+    private const val METHOD_INITIALIZE = "initialize"
     private const val METHOD_DEINITIALIZE = "deinitialize"
     private const val METHOD_IS_INITIALIZE = "isInitialized"
     private const val METHOD_FIND_AUTOCOMPLETE_PREDICTIONS = "findAutocompletePredictions"
