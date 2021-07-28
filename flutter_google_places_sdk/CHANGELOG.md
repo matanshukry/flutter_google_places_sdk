@@ -1,3 +1,7 @@
+## 0.2.2+1
+
+* Added web dependency to complete endorsement
+
 ## 0.2.2
 
 * Removed iOS indication since it was never implemented
