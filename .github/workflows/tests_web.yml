@@ -1,4 +1,4 @@
-name: FlutterTests-PlatformInterface
+name: FlutterTests-Web
 
 on:
   workflow_dispatch:
