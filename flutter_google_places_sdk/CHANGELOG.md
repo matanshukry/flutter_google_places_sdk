@@ -1,3 +1,7 @@
+## 0.2.3
+
+* Implemented iOS
+
 ## 0.2.2+1
 
 * Added web dependency to complete endorsement
