@@ -183,7 +183,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     return completer.future;
   }
 
-  Place? _parsePlace(dynamic place) {
+  Place? _parsePlace(PlaceWebResult? place) {
     if (place == null) {
       return null;
     }
@@ -192,34 +192,34 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       address: place.adr_address,
       addressComponents: place.address_components
           ?.map(_parseAddressComponent)
-          ?.cast<AddressComponent>()
-          ?.toList(growable: false),
+          .cast<AddressComponent>()
+          .toList(growable: false),
       businessStatus: _parseBusinessStatus(place.business_status),
-      attributions: place.html_attributions.cast<String>(),
+      attributions: place.html_attributions?.cast<String>(),
       latLng: _parseLatLang(place.geometry?.location),
       name: place.name,
       openingHours: _parseOpeningHours(place.opening_hours),
       phoneNumber: place.international_phone_number,
       photoMetadatas: place.photos
           ?.map((photo) => _parsePhotoMetadata(photo))
-          ?.cast<PhotoMetadata>()
-          ?.toList(growable: false),
+          .cast<PhotoMetadata>()
+          .toList(growable: false),
       plusCode: _parsePlusCode(place.plus_code),
       priceLevel: place.price_level,
       rating: place.rating,
       types: place.types
           ?.map(_parsePlaceType)
-          ?.where((item) => item != null)
-          ?.cast<PlaceType>()
-          ?.toList(growable: false),
+          .where((item) => item != null)
+          .cast<PlaceType>()
+          .toList(growable: false),
       userRatingsTotal: place.user_ratings_total,
       utcOffsetMinutes: place.utc_offset_minutes,
       viewport: _parseLatLngBounds(place.geometry?.viewport),
-      websiteUri: place.website == null ? null : Uri.parse(place.website),
+      websiteUri: place.website == null ? null : Uri.parse(place.website!),
     );
   }
 
-  PlaceType? _parsePlaceType(dynamic placeType) {
+  PlaceType? _parsePlaceType(String? placeType) {
     if (placeType == null) {
       return null;
     }
@@ -230,7 +230,8 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
         orElse: () => null);
   }
 
-  AddressComponent? _parseAddressComponent(dynamic addressComponent) {
+  AddressComponent? _parseAddressComponent(
+      PlaceWebAddressComponent? addressComponent) {
     if (addressComponent == null) {
       return null;
     }
@@ -245,7 +246,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     );
   }
 
-  LatLng? _parseLatLang(dynamic location) {
+  LatLng? _parseLatLang(PlaceWebLatLng? location) {
     if (location == null) {
       return null;
     }
@@ -256,20 +257,19 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     );
   }
 
-  PhotoMetadata? _parsePhotoMetadata(dynamic photo) {
+  PhotoMetadata? _parsePhotoMetadata(PlaceWebPhoto? photo) {
     if (photo == null) {
       return null;
     }
 
+    final htmlAttrs = photo.html_attributions ?? [];
     return PhotoMetadata(
-        attributions: photo.html_attributions.length == 1
-            ? photo.html_attributions[0]
-            : null,
+        attributions: htmlAttrs.length == 1 ? htmlAttrs[0] : null,
         width: photo.width,
         height: photo.height);
   }
 
-  LatLngBounds? _parseLatLngBounds(dynamic viewport) {
+  LatLngBounds? _parseLatLngBounds(PlaceWebViewport? viewport) {
     if (viewport == null) {
       return null;
     }
@@ -279,7 +279,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
         northeast: _parseLatLang(viewport.getNorthEast())!);
   }
 
-  PlusCode? _parsePlusCode(dynamic plusCode) {
+  PlusCode? _parsePlusCode(PlaceWebPlusCode? plusCode) {
     if (plusCode == null) {
       return null;
     }
@@ -288,7 +288,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
         compoundCode: plusCode.compound_code, globalCode: plusCode.global_code);
   }
 
-  BusinessStatus? _parseBusinessStatus(dynamic businessStatus) {
+  BusinessStatus? _parseBusinessStatus(String? businessStatus) {
     if (businessStatus == null) {
       return null;
     }
@@ -299,27 +299,27 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
         orElse: () => null);
   }
 
-  OpeningHours? _parseOpeningHours(dynamic openingHours) {
+  OpeningHours? _parseOpeningHours(PlaceWebOpeningHours? openingHours) {
     if (openingHours == null) {
       return null;
     }
 
     return OpeningHours(
         periods: openingHours.periods
-            ?.map(_parsePeriod)
-            ?.cast<Period>()
-            ?.toList(growable: false),
+            .map(_parsePeriod)
+            .cast<Period>()
+            .toList(growable: false),
         weekdayText:
             openingHours.weekday_text.cast<String>().toList(growable: false));
   }
 
-  Period _parsePeriod(dynamic period) {
+  Period _parsePeriod(PlaceWebPeriod period) {
     return Period(
         open: _parseTimeOfWeek(period.open),
         close: _parseTimeOfWeek(period.close));
   }
 
-  TimeOfWeek? _parseTimeOfWeek(dynamic timeOfWeek) {
+  TimeOfWeek? _parseTimeOfWeek(PlaceWebTimeOfWeek? timeOfWeek) {
     if (timeOfWeek == null) {
       return null;
     }

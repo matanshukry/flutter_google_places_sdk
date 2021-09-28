@@ -1,3 +1,7 @@
+## 0.1.0+4
+
+* Using literal objects rather than dynamic for js interpo
+
 ## 0.1.0+3
 
 * Corrected link to tests
