@@ -84,12 +84,18 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   Future<FindAutocompletePredictionsResponse> findAutocompletePredictions(
     String query, {
     List<String>? countries,
+    PlaceTypeFilter placeTypeFilter = PlaceTypeFilter.ALL,
     bool? newSessionToken,
     LatLng? origin,
   }) async {
     await _completer;
-    final prom = _svcAutoComplete!
-        .getPlacePredictions(AutocompletionRequest(input: query));
+    final typeFilterStr = _placeTypeToStr(placeTypeFilter);
+    final prom = _svcAutoComplete!.getPlacePredictions(
+      AutocompletionRequest(
+          input: query,
+          types: typeFilterStr == null ? null : [typeFilterStr],
+          componentRestrictions: ComponentRestrictions(country: countries)),
+    );
     final resp = (await promiseToFuture(prom)) as AutocompleteResponse?;
     if (resp == null) {
       return FindAutocompletePredictionsResponse([]);
@@ -98,6 +104,23 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     final predictions =
         resp.predictions.map(_translatePrediction).toList(growable: false);
     return FindAutocompletePredictionsResponse(predictions);
+  }
+
+  String? _placeTypeToStr(PlaceTypeFilter placeTypeFilter) {
+    switch (placeTypeFilter) {
+      case PlaceTypeFilter.ADDRESS:
+        return "address";
+      case PlaceTypeFilter.CITIES:
+        return "(cities)";
+      case PlaceTypeFilter.ESTABLISHMENT:
+        return "establishment";
+      case PlaceTypeFilter.GEOCODE:
+        return "geocode";
+      case PlaceTypeFilter.REGIONS:
+        return "(regions)";
+      case PlaceTypeFilter.ALL:
+        return null;
+    }
   }
 
   AutocompletePrediction _translatePrediction(

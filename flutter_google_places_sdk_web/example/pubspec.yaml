@@ -10,7 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_google_places_sdk: 0.2.1+1
+  flutter_google_places_sdk:
+    path: ../../flutter_google_places_sdk
   flutter_google_places_sdk_web:
     path: ../
 

@@ -1,3 +1,7 @@
+## 0.1.1
+
+* Upgrading platform interface to 0.2.2
+
 ## 0.1.0+4
 
 * Using literal objects rather than dynamic for js interpo

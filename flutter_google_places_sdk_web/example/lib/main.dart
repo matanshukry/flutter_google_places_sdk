@@ -1,17 +1,20 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 
+/// The title of the app
 const title = 'Flutter Google Places SDK Example';
 
-// note: do NOT store your api key in here or in the code at all.
-// use an external source such as file or firebase remote config
-const API_KEY = 'my-key';
+/// note: do NOT store your api key in here or in the code at all.
+/// use an external source such as file or firebase remote config
+const API_KEY = 'AIzaSyCDmreBQZA45-b2lfRtPqUhQstzGlbfybw';
 
 void main() {
   runApp(MyApp());
 }
 
+/// The main app
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -25,6 +28,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// The main (and only) page of the app
 class MyHomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _MyHomePageState();
@@ -35,6 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //
   String? _predictLastText;
+  List<String> _countries = ['il'];
+  PlaceTypeFilter _placeTypeFilter = PlaceTypeFilter.ESTABLISHMENT;
 
   bool _predicting = false;
   dynamic _predictErr;
@@ -93,6 +99,41 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _onPlaceTypeFilterChanged(PlaceTypeFilter? value) {
+    if (value != null) {
+      setState(() {
+        _placeTypeFilter = value;
+      });
+    }
+  }
+
+  String? _countriesValidator(String? input) {
+    if (input == null || input.length == 0) {
+      return null; // valid
+    }
+
+    return input
+        .split(",")
+        .map((part) => part.trim())
+        .map((part) {
+          if (part.length != 2) {
+            return "Country part '${part}' must be 2 characters";
+          }
+          return null;
+        })
+        .where((item) => item != null)
+        .firstOrNull;
+  }
+
+  void _onCountriesTextChanged(String countries) {
+    _countries = (countries == "")
+        ? []
+        : countries
+            .split(",")
+            .map((item) => item.trim())
+            .toList(growable: false);
+  }
+
   void _onPredictTextChanged(String value) {
     _predictLastText = value;
   }
@@ -149,7 +190,8 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       final result = await _places.findAutocompletePredictions(
         _predictLastText!,
-        countries: ['il'],
+        countries: _countries,
+        placeTypeFilter: _placeTypeFilter,
         newSessionToken: false,
         origin: LatLng(lat: 43.12, lng: 95.20),
       );
@@ -208,6 +250,23 @@ class _MyHomePageState extends State<MyHomePage> {
       // --
       TextFormField(
         onChanged: _onPredictTextChanged,
+        decoration: InputDecoration(label: Text("Query")),
+      ),
+      // _countries
+      TextFormField(
+        onChanged: _onCountriesTextChanged,
+        decoration: InputDecoration(label: Text("Countries")),
+        validator: _countriesValidator,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        initialValue: _countries.join(","),
+      ),
+      DropdownButton<PlaceTypeFilter>(
+        items: PlaceTypeFilter.values
+            .map((item) => DropdownMenuItem<PlaceTypeFilter>(
+                child: Text(item.value), value: item))
+            .toList(growable: false),
+        value: _placeTypeFilter,
+        onChanged: _onPlaceTypeFilterChanged,
       ),
       ElevatedButton(
         onPressed: _predicting == true ? null : _predict,
