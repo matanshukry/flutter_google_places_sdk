@@ -27,6 +27,8 @@ export 'package:flutter_google_places_sdk_platform_interface/flutter_google_plac
         PlaceType,
         PlaceTypeDescriptor,
         PlaceTypeEnumParser,
+        PlaceTypeFilter,
+        PlaceTypeFilterDescriptor,
         PlusCode,
         TimeOfWeek;
 
@@ -112,12 +114,14 @@ class FlutterGooglePlacesSdk {
   Future<FindAutocompletePredictionsResponse> findAutocompletePredictions(
     String query, {
     List<String>? countries,
+    PlaceTypeFilter placeTypeFilter = PlaceTypeFilter.ALL,
     bool? newSessionToken,
     LatLng? origin,
   }) {
     return _addMethodCall(() => platform.findAutocompletePredictions(
           query,
           countries: countries,
+          placeTypeFilter: placeTypeFilter,
           newSessionToken: newSessionToken,
           origin: origin,
         ));

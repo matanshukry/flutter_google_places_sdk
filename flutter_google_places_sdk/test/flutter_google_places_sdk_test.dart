@@ -100,10 +100,12 @@ void main() {
       test('default behavior', () async {
         const queryTest = 'my-query-text';
         const countriesTest = ['c5', 'c32'];
+        const placeTypeFilterTest = PlaceTypeFilter.ESTABLISHMENT;
         final origin = LatLng(lat: 32.51, lng: 95.31);
         final result = await flutterGooglePlacesSdk.findAutocompletePredictions(
             queryTest,
             countries: countriesTest,
+            placeTypeFilter: placeTypeFilterTest,
             newSessionToken: false,
             origin: origin);
 
@@ -115,6 +117,7 @@ void main() {
                 arguments: <String, dynamic>{
                   'query': queryTest,
                   'countries': countriesTest,
+                  "typeFilter": "ESTABLISHMENT",
                   'newSessionToken': false,
                   'origin': origin.toMap(),
                 }),

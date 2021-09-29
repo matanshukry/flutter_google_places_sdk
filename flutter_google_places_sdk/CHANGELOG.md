@@ -1,3 +1,8 @@
+## 0.2.4
+
+* Upgrading platform interface to 0.2.2
+* Upgrading web endorsement to 0.1.1+1
+
 ## 0.2.3
 
 * Implemented iOS
