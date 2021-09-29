@@ -1,3 +1,7 @@
+## 0.2.1
+
+* Adding PlaceType to the auto complete request filter
+
 ## 0.2.0+2
 
 * Added Doc
