@@ -63,6 +63,7 @@ void main() {
       await places.findAutocompletePredictions(
         testQuery,
         countries: testCountries,
+        placeTypeFilter: PlaceTypeFilter.CITIES,
         newSessionToken: newSessionToken,
         origin: origin,
       );
@@ -73,6 +74,7 @@ void main() {
               arguments: <String, Object>{
                 'query': testQuery,
                 'countries': testCountries,
+                'typeFilter': 'CITIES',
                 'newSessionToken': newSessionToken,
                 'origin': origin.toMap()
               })
