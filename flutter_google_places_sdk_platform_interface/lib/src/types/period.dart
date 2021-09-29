@@ -13,10 +13,10 @@ class Period {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Period &&
-              runtimeType == other.runtimeType &&
-              open == other.open &&
-              close == other.close;
+      other is Period &&
+          runtimeType == other.runtimeType &&
+          open == other.open &&
+          close == other.close;
 
   @override
   int get hashCode => open.hashCode ^ close.hashCode;
@@ -27,7 +27,7 @@ class Period {
   Map<String, dynamic> toMap() => {'open': open, 'close': close};
 
   static Period fromMap(Map<String, dynamic> map) => Period(
-    open: TimeOfWeek.fromMap(toJsonMap(map['open'])),
-    close: TimeOfWeek.fromMap(toJsonMap(map['close'])),
-  );
+        open: TimeOfWeek.fromMap(toJsonMap(map['open'])),
+        close: TimeOfWeek.fromMap(toJsonMap(map['close'])),
+      );
 }

@@ -39,11 +39,11 @@ class FlutterGooglePlacesSdkMethodChannel
 
   /* Client methods */
 
-
   @override
   Future<FindAutocompletePredictionsResponse> findAutocompletePredictions(
     String query, {
     List<String>? countries,
+    PlaceTypeFilter placeTypeFilter = PlaceTypeFilter.ALL,
     bool? newSessionToken,
     LatLng? origin,
   }) {
@@ -55,6 +55,7 @@ class FlutterGooglePlacesSdkMethodChannel
       {
         'query': query,
         'countries': countries ?? [],
+        'typeFilter': placeTypeFilter.value,
         'newSessionToken': newSessionToken,
         'origin': origin?.toMap(),
       },

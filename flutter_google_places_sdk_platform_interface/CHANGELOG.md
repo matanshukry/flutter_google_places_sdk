@@ -1,3 +1,7 @@
+## 0.2.2
+
+* Added support for placeTypeFilter in autoComplete request
+
 ## 0.2.1
 
 * Adding PlaceType to the auto complete request filter

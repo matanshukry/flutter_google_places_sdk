@@ -15,11 +15,11 @@ class PhotoMetadata {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is PhotoMetadata &&
-              runtimeType == other.runtimeType &&
-              attributions == other.attributions &&
-              width == other.width &&
-              height == other.height;
+      other is PhotoMetadata &&
+          runtimeType == other.runtimeType &&
+          attributions == other.attributions &&
+          width == other.width &&
+          height == other.height;
 
   @override
   int get hashCode => attributions.hashCode ^ width.hashCode ^ height.hashCode;
@@ -31,10 +31,11 @@ class PhotoMetadata {
   Map<String, dynamic> toMap() =>
       {'attributions': attributions, 'width': width, 'height': height};
 
-  static PhotoMetadata? fromMap(Map<String, dynamic>? map) =>
-      map == null ? null : PhotoMetadata(
-        attributions: map['attributions'],
-        width: map['width'],
-        height: map['height'],
-      );
+  static PhotoMetadata? fromMap(Map<String, dynamic>? map) => map == null
+      ? null
+      : PhotoMetadata(
+          attributions: map['attributions'],
+          width: map['width'],
+          height: map['height'],
+        );
 }

@@ -13,5 +13,6 @@ export 'place.dart';
 export 'place_field.dart';
 export 'place_local_time.dart';
 export 'place_type.dart';
+export 'place_type_filter.dart';
 export 'plus_code.dart';
 export 'time_of_week.dart';

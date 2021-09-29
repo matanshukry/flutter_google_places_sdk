@@ -1,4 +1,3 @@
-
 /// Creates a map from the value, if not null.
 /// If value is null, the return value is null.
 Map<String, dynamic>? toJsonMap(dynamic value) {
