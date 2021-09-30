@@ -43,8 +43,6 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ env.flutter_version }}
-      - name: Dart version
-        run: dart --version
       - name: Flutter version
         run: flutter --version
       - name: Install dependencies
