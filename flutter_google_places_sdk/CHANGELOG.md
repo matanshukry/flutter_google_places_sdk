@@ -1,3 +1,7 @@
+## 0.2.4+1
+
+* iOS implementation for typeFilter
+
 ## 0.2.4
 
 * Upgrading platform interface to 0.2.2
