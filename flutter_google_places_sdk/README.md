@@ -7,8 +7,6 @@
 A Flutter plugin for google places sdk that uses the native libraries on each platform.
 Check out [Rational](##RATIONAL) below to understand why you should use this plugin.
 
-Note: Currently only support Android
-
 ## Usage
 
 To use this plugin, add `flutter_google_places_sdk` as a [dependency in your pubspec.yaml file](https://flutter.dev/platform-plugins/).
