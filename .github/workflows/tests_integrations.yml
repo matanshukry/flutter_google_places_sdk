@@ -9,7 +9,7 @@ on:
 
 env:
   flutter_version: "2.5.1"
-  java_version: "16.x"
+  java_version: "11.x"
   dir: "flutter_google_places_sdk"
 
 jobs:
@@ -31,7 +31,9 @@ jobs:
 
   tests_ios:
     name: Run iOS tests on [${{ matrix.os }}] - [${{ matrix.device }}]
+    if: ${{ false }}
     runs-on: ${{ matrix.os }}
+    needs: setup
 
     strategy:
       fail-fast: false
@@ -40,7 +42,6 @@ jobs:
           - iPhone 8 (14.5)
           # - iPhone 11 Pro Max (13.1)
         os: [ macos-latest ]
-        needs: setup
         include:
           - os: macos-latest
             flutter_path: /Users/runner/hostedtoolcache/flutter
@@ -72,23 +73,25 @@ jobs:
           flutter-version: ${{ env.flutter_version }}
       - name: Flutter version
         run: flutter --version
+      - name: Build
+        run: flutter build ios --no-codesign
+        working-directory: ${{ env.dir }}/example
       - name: Integration Test
-        run: flutter test integration_test/
+        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/flutter_google_places_sdk_it_test.dart
         working-directory: ${{ env.dir }}/example
         env:
           PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
 
-
   tests_android:
-    name: Run android tests on [${{ matrix.os }}] - [${{ matrix.device }}]
+    name: Run android tests on [${{ matrix.os }}] - [${{ matrix.api-level }}] [${{ matrix.target }}]
     runs-on: macos-latest
+    needs: setup
 
     strategy:
       fail-fast: false
       matrix:
-        api-level: [ 21, 29 ]
+        api-level: [ 21 ] #, 29 ]
         target: [ default ]
-        needs: setup
         include:
           - os: macos-latest
             flutter_path: /Users/runner/hostedtoolcache/flutter
@@ -101,21 +104,33 @@ jobs:
         with:
           path: ${{ matrix.flutter_path }}
           key: ${{ runner.os }}-flutter-${{ env.flutter_version }}
+#      - uses: actions/setup-java@v1
+#        with:
+#          java-version: ${{ env.java_version }}
+      - name: Android NDK toolchain Setup
+        uses: ravinderjangra/android-ndk-toolchain-setup@0.2
+        with:
+          api: '20'
+          arch: 'arm'
+          install-location: 'toolchains'
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ env.flutter_version }}
       - name: Flutter version
         run: flutter --version
+      - name: Build
+        run: flutter build apk
+        working-directory: ${{ env.dir }}/example
       - name: Integration Test
-      - name: Run Flutter Driver tests
-        uses: reactivecircus/android-emulator-runner@v1
+        uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
           arch: x86_64
+          ndk: 21.0.6113669
           profile: Nexus 6
-          script: flutter test integration_test
+          script: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/flutter_google_places_sdk_it_test.dart
           working-directory: ${{ env.dir }}/example
-          env:
-            PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+        env:
+          PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
 
