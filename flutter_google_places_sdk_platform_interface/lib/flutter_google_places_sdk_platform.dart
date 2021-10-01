@@ -20,10 +20,10 @@ abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
       'assets/google/powered_by_google_on_non_white.png',
       package: 'flutter_google_places_sdk_platform_interface');
 
+  static final Object _token = Object();
+
   static FlutterGooglePlacesSdkPlatform _instance =
       FlutterGooglePlacesSdkMethodChannel();
-
-  static final Object _token = Object();
 
   /// Singleton instance to the platform
   static FlutterGooglePlacesSdkPlatform get instance => _instance;
