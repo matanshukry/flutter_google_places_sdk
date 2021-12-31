@@ -3,7 +3,7 @@ name: FlutterIntegrationTests
 on:
   workflow_dispatch:
   push:
-    branches: [ integ-test ]
+    branches: [ ios ]
   pull_request:
     branches: [ master ]
 
@@ -27,16 +27,14 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
         working-directory: ${{ env.dir }}/example
-#        commented out for quicker testing of the integration test process. Uncomment when done
-#      - name: Flutter Analyze
-#        run: flutter analyze
-#        working-directory: ${{ env.dir }}
+      - name: Flutter Analyze
+        run: flutter analyze
+        working-directory: ${{ env.dir }}
 
   tests_ios:
     name: Run iOS tests on [${{ matrix.os }}] - [${{ matrix.device }}]
-    if: ${{ false }}
     runs-on: ${{ matrix.os }}
-    needs: setup
+    # needs: setup
 
     strategy:
       fail-fast: false
@@ -88,7 +86,8 @@ jobs:
   tests_android:
     name: Run android tests on [${{ matrix.os }}] - [${{ matrix.api-level }}] [${{ matrix.target }}]
     runs-on: ubuntu-latest # macos-latest
-    # needs: setup
+    if: ${{ false }}
+    needs: setup
 
     strategy:
       fail-fast: false
