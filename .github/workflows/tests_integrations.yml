@@ -16,6 +16,7 @@ jobs:
   setup:
     name: Checkout and analyze
     runs-on: macos-latest
+    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -25,9 +26,10 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
         working-directory: ${{ env.dir }}/example
-      - name: Flutter Analyze
-        run: flutter analyze
-        working-directory: ${{ env.dir }}
+#        commented out for quicker testing of the integration test process. Uncomment when done
+#      - name: Flutter Analyze
+#        run: flutter analyze
+#        working-directory: ${{ env.dir }}
 
   tests_ios:
     name: Run iOS tests on [${{ matrix.os }}] - [${{ matrix.device }}]
@@ -84,8 +86,8 @@ jobs:
 
   tests_android:
     name: Run android tests on [${{ matrix.os }}] - [${{ matrix.api-level }}] [${{ matrix.target }}]
-    runs-on: macos-latest
-    needs: setup
+    runs-on: ubuntu-latest # macos-latest
+    # needs: setup
 
     strategy:
       fail-fast: false
@@ -93,8 +95,10 @@ jobs:
         api-level: [ 21 ] #, 29 ]
         target: [ default ]
         include:
-          - os: macos-latest
-            flutter_path: /Users/runner/hostedtoolcache/flutter
+#          - os: macos-latest
+#            flutter_path: /Users/runner/hostedtoolcache/flutter
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
 
     steps:
       - name: Checkout code
@@ -104,21 +108,24 @@ jobs:
         with:
           path: ${{ matrix.flutter_path }}
           key: ${{ runner.os }}-flutter-${{ env.flutter_version }}
-#      - uses: actions/setup-java@v1
-#        with:
-#          java-version: ${{ env.java_version }}
-      - name: Android NDK toolchain Setup
-        uses: ravinderjangra/android-ndk-toolchain-setup@0.2
+      - uses: actions/setup-java@v1
         with:
-          api: '20'
-          arch: 'arm'
-          install-location: 'toolchains'
+          java-version: ${{ env.java_version }}
+      - name: Setup Android SDK # needs java
+        uses: android-actions/setup-android@v2
+#      - name: Android NDK toolchain Setup
+#        uses: nttld/setup-ndk@v1
+#        with:
+#          ndk-version: r20b
+#          api: '20'
+#          arch: 'arm'
+#          install-location: 'toolchains'
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ env.flutter_version }}
       - name: Flutter version
         run: flutter --version
-      - name: Build
+      - name: Build # needs android sdk
         run: flutter build apk
         working-directory: ${{ env.dir }}/example
       - name: Integration Test
