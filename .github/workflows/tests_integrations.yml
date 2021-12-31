@@ -11,6 +11,7 @@ env:
   flutter_version: "2.5.1"
   java_version: "11.x"
   dir: "flutter_google_places_sdk"
+  ndk_version: "21.4.7075529"
 
 jobs:
   setup:
@@ -113,16 +114,6 @@ jobs:
           java-version: ${{ env.java_version }}
       - name: Setup Android SDK # needs java
         uses: android-actions/setup-android@v2
-#      - name: Android NDK toolchain Setup
-#        id: setup_ndk
-#        uses: nttld/setup-ndk@v1
-#        with:
-#          ndk-version: r20b
-#          api: '20'
-#          arch: 'arm'
-#          install-location: 'toolchains'
-      - name: Echo Ndk output
-        run: echo "${{ steps.setup_ndk.outputs.ndk-path }}"
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ env.flutter_version }}
@@ -137,7 +128,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
           arch: x86_64
-          ndk: 21.0.6113669
+          ndk: ${{ env.ndk_version }}
           profile: Nexus 6
           script: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/flutter_google_places_sdk_it_test.dart
           working-directory: ${{ env.dir }}/example
