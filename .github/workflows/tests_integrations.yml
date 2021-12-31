@@ -113,10 +113,10 @@ jobs:
           java-version: ${{ env.java_version }}
       - name: Setup Android SDK # needs java
         uses: android-actions/setup-android@v2
-#      - name: Android NDK toolchain Setup
-#        uses: nttld/setup-ndk@v1
-#        with:
-#          ndk-version: r20b
+      - name: Android NDK toolchain Setup
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r20b
 #          api: '20'
 #          arch: 'arm'
 #          install-location: 'toolchains'
