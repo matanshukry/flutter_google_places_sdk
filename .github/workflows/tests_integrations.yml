@@ -114,12 +114,15 @@ jobs:
       - name: Setup Android SDK # needs java
         uses: android-actions/setup-android@v2
       - name: Android NDK toolchain Setup
+        id: setup_ndk
         uses: nttld/setup-ndk@v1
         with:
           ndk-version: r20b
 #          api: '20'
 #          arch: 'arm'
 #          install-location: 'toolchains'
+      - name: Echo Ndk output
+        run: echo "${{ steps.setup_ndk.outputs.ndk-path }}"
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ env.flutter_version }}
