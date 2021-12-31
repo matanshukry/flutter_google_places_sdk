@@ -3,7 +3,7 @@ name: FlutterIntegrationTests
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [ integ-test ]
   pull_request:
     branches: [ master ]
 
