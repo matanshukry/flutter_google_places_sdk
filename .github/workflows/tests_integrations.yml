@@ -1,0 +1,137 @@
+name: FlutterIntegrationTests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ integ-test ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  flutter_version: "2.5.1"
+  java_version: "11.x"
+  dir: "flutter_google_places_sdk"
+  ndk_version: "21.4.7075529"
+
+jobs:
+  setup:
+    name: Checkout and analyze
+    runs-on: macos-latest
+    if: ${{ false }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ env.flutter_version }}
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: ${{ env.dir }}/example
+#        commented out for quicker testing of the integration test process. Uncomment when done
+#      - name: Flutter Analyze
+#        run: flutter analyze
+#        working-directory: ${{ env.dir }}
+
+  tests_ios:
+    name: Run iOS tests on [${{ matrix.os }}] - [${{ matrix.device }}]
+    if: ${{ false }}
+    runs-on: ${{ matrix.os }}
+    needs: setup
+
+    strategy:
+      fail-fast: false
+      matrix:
+        device:
+          - iPhone 8 (14.5)
+          # - iPhone 11 Pro Max (13.1)
+        os: [ macos-latest ]
+        include:
+          - os: macos-latest
+            flutter_path: /Users/runner/hostedtoolcache/flutter
+
+    steps:
+      - name: List all simulators
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: xcrun instruments -s
+      - name: Start Simulator
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          UDID=$(
+            xcrun instruments -s |
+            awk \
+              -F ' *[][]' \
+              -v 'device=${{ matrix.device }}' \
+              '$1 == device { print $2 }'
+          )
+          xcrun simctl boot "${UDID:?No Simulator with this name found}"
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ matrix.flutter_path }}
+          key: ${{ runner.os }}-flutter-${{ env.flutter_version }}
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ env.flutter_version }}
+      - name: Flutter version
+        run: flutter --version
+      - name: Build
+        run: flutter build ios --no-codesign
+        working-directory: ${{ env.dir }}/example
+      - name: Integration Test
+        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/flutter_google_places_sdk_it_test.dart
+        working-directory: ${{ env.dir }}/example
+        env:
+          PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+
+  tests_android:
+    name: Run android tests on [${{ matrix.os }}] - [${{ matrix.api-level }}] [${{ matrix.target }}]
+    runs-on: ubuntu-latest # macos-latest
+    # needs: setup
+
+    strategy:
+      fail-fast: false
+      matrix:
+        api-level: [ 21 ] #, 29 ]
+        target: [ default ]
+        include:
+#          - os: macos-latest
+#            flutter_path: /Users/runner/hostedtoolcache/flutter
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ matrix.flutter_path }}
+          key: ${{ runner.os }}-flutter-${{ env.flutter_version }}
+      - uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.java_version }}
+      - name: Setup Android SDK # needs java
+        uses: android-actions/setup-android@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ env.flutter_version }}
+      - name: Flutter version
+        run: flutter --version
+      - name: Build # needs android sdk
+        run: flutter build apk
+        working-directory: ${{ env.dir }}/example
+      - name: Integration Test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
+          arch: x86_64
+          ndk: ${{ env.ndk_version }}
+          profile: Nexus 6
+          script: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/flutter_google_places_sdk_it_test.dart
+          working-directory: ${{ env.dir }}/example
+        env:
+          PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+

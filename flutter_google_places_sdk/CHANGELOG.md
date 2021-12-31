@@ -1,3 +1,11 @@
+## 0.3.0+1
+
+* Added correct plugin information to pubspec.yaml
+
+## 0.3.0
+
+* Separated android and ios implementation to their own packages
+
 ## 0.2.4+1
 
 * iOS implementation for typeFilter
