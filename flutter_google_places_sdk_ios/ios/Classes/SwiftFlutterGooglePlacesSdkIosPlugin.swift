@@ -34,12 +34,12 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
         case METHOD_IS_INITIALIZE:
             result(placesClient != nil)
         case METHOD_FIND_AUTOCOMPLETE_PREDICTIONS:
-            let args = call.arguments as? Dictionary<String,Any>
-            let query = args?["query"] as! String
-            let countries = args?["countries"] as! [String]? ?? [String]()
-            let placeTypeFilter = args?["typeFilter"] as! String?
-            let origin = latLngFromMap(argument: args?["origin"] as? Dictionary<String, Any?>)
-            let newSessionToken = args?["newSessionToken"] as! Bool
+            let args = call.arguments as! Dictionary<String,Any>
+            let query = args["query"] as! String
+            let countries = args["countries"] as? [String]? ?? [String]()
+            let placeTypeFilter = args["typeFilter"] as? String
+            let origin = latLngFromMap(argument: args["origin"] as? Dictionary<String, Any?>)
+            let newSessionToken = args["newSessionToken"] as? Bool
             let sessionToken = getSessionToken(force: newSessionToken == true)
             
             // Create a type filter.
@@ -65,14 +65,14 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
                     }
                 })
         case METHOD_FETCH_PLACE:
-            let args = call.arguments as? Dictionary<String,Any>
-            let placeId = args?["placeId"] as! String
-            let fields = ((args?["fields"] as! [String]?)?.map {
+            let args = call.arguments as! Dictionary<String,Any>
+            let placeId = args["placeId"] as! String
+            let fields = ((args["fields"] as? [String])?.map {
                 (item) in return placeFieldFromStr(it: item)
             })?.reduce(GMSPlaceField(), { partialResult, field in
                 return GMSPlaceField(rawValue: partialResult.rawValue | field.rawValue)
             })
-            let newSessionToken = args?["newSessionToken"] as? Bool ?? false
+            let newSessionToken = args["newSessionToken"] as? Bool ?? false
             let sessionToken = getSessionToken(force: newSessionToken == true)
             
             placesClient.fetchPlace(fromPlaceID: placeId,

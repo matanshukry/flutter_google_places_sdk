@@ -1,3 +1,7 @@
+## 0.1.1
+
+* Upgraded platform interface to 0.2.3 and implemented
+
 ## 0.1.0
 
 * Initial implementation for iOS - extracted
