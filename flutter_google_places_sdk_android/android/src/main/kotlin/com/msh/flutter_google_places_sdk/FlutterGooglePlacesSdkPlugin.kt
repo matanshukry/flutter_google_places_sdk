@@ -62,10 +62,14 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                 val newSessionToken = call.argument<Boolean>("newSessionToken")
 
                 val origin = latLngFromMap(call.argument<Map<String, Any?>>("origin"))
+                val locationBias = rectangularBoundsFromMap(call.argument<Map<String, Any?>>("locationBias"))
+                val locationRestriction = rectangularBoundsFromMap(call.argument<Map<String, Any?>>("locationRestriction"))
                 val sessionToken = getSessionToken(newSessionToken == true)
                 val typeFilter = makeTypeFilter(placeTypeFilter)
                 val request = FindAutocompletePredictionsRequest.builder()
                         .setQuery(query)
+                        .setLocationBias(locationBias)
+                        .setLocationRestriction(locationRestriction)
                         .setCountries(countries)
                         .setTypeFilter(typeFilter)
                         .setSessionToken(sessionToken)
@@ -112,6 +116,27 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                 result.notImplemented()
             }
         }
+    }
+
+    private fun rectangularBoundsFromMap(argument: Map<String, Any?>?): RectangularBounds? {
+        if (argument == null) {
+            return null
+        }
+
+        val latLngBounds = latLngBoundsFromMap(argument) ?: return null
+        return RectangularBounds.newInstance(latLngBounds)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun latLngBoundsFromMap(argument: Map<String, Any?>?): LatLngBounds? {
+        if (argument == null) {
+            return null
+        }
+
+        val southWest = latLngFromMap(argument["southwest"] as? Map<String, Any?>) ?: return null
+        val northEast = latLngFromMap(argument["northeast"] as? Map<String, Any?>) ?: return null
+
+        return LatLngBounds(southWest, northEast)
     }
 
     private fun makeTypeFilter(typeFilterStr: String?): TypeFilter? {
