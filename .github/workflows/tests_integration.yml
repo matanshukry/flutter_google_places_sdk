@@ -2,10 +2,6 @@ name: FlutterIntegrationTests
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 env:
   flutter_version: "2.5.1"
