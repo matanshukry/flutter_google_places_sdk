@@ -1,0 +1,59 @@
+name: FlutterTests-Web
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths: ['flutter_google_places_sdk_android/**']
+  pull_request:
+    branches: [master]
+    paths: ['flutter_google_places_sdk_android/**']
+
+env:
+  flutter_version: "2.5.1"
+  java_version: "16.x"
+  dir: "flutter_google_places_sdk_android"
+
+jobs:
+  setup_pi:
+    name: Run tests on [${{ matrix.os }}]
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest] #, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+#          - os: macos-latest
+#            flutter_path: /Users/runner/hostedtoolcache/flutter
+#          - os: windows-latest
+#            flutter_path: C:\hostedtoolcache\flutter
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ matrix.flutter_path }}
+          key: ${{ runner.os }}-flutter-${{ env.flutter_version }}
+      - uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.java_version }}
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ env.flutter_version }}
+      - name: Flutter version
+        run: flutter --version
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: ${{ env.dir }}
+      - name: Flutter Analyze
+        run: flutter analyze
+        working-directory: ${{ env.dir }}
+      - name: Test
+        run: flutter test
+        working-directory: ${{ env.dir }}
+
