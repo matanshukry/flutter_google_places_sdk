@@ -2,6 +2,7 @@
 library places;
 
 import 'dart:async';
+import 'dart:developer';
 import 'dart:html' as html;
 import 'dart:ui';
 
@@ -11,6 +12,7 @@ import 'package:flutter_google_places_sdk_web/types/autocomplete_response_web.da
 import 'package:flutter_google_places_sdk_web/types/autocomplete_service.dart';
 import 'package:flutter_google_places_sdk_web/types/autocomplete_session_token.dart';
 import 'package:flutter_google_places_sdk_web/types/autocompletion_request.dart';
+import 'package:flutter_google_places_sdk_web/types/map.dart' as map;
 import 'package:flutter_google_places_sdk_web/types/place_details_request.dart';
 import 'package:flutter_google_places_sdk_web/types/places_service.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
@@ -87,14 +89,21 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     PlaceTypeFilter placeTypeFilter = PlaceTypeFilter.ALL,
     bool? newSessionToken,
     LatLng? origin,
+    LatLngBounds? locationBias,
+    LatLngBounds? locationRestriction,
   }) async {
     await _completer;
     final typeFilterStr = _placeTypeToStr(placeTypeFilter);
+    if (locationRestriction != null) {
+      // https://issuetracker.google.com/issues/36219203
+      log("locationRestriction is not supported: https://issuetracker.google.com/issues/36219203");
+    }
     final prom = _svcAutoComplete!.getPlacePredictions(
       AutocompletionRequest(
           input: query,
           types: typeFilterStr == null ? null : [typeFilterStr],
-          componentRestrictions: ComponentRestrictions(country: countries)),
+          componentRestrictions: ComponentRestrictions(country: countries),
+          bounds: _boundsToWeb(locationBias)),
     );
     final resp = (await promiseToFuture(prom)) as AutocompleteResponse?;
     if (resp == null) {
@@ -356,6 +365,18 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
 
   DayOfWeek _parseDayOfWeek(int day) {
     return DayOfWeek.values[day];
+  }
+
+  map.LatLngBounds? _boundsToWeb(LatLngBounds? bounds) {
+    if (bounds == null) {
+      return null;
+    }
+    return map.LatLngBounds(
+        _latLngToWeb(bounds.southwest), _latLngToWeb(bounds.northeast));
+  }
+
+  map.LatLng _latLngToWeb(LatLng latLng) {
+    return map.LatLng(latLng.lat, latLng.lng);
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
+import 'package:flutter_google_places_sdk_web/flutter_google_places_sdk_web.dart';
 
 /// The title of the app
 const title = 'Flutter Google Places SDK Example';
@@ -34,12 +35,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late final FlutterGooglePlacesSdk _places;
+  late final FlutterGooglePlacesSdkWebPlugin _places;
 
   //
   String? _predictLastText;
   List<String> _countries = ['il'];
   PlaceTypeFilter _placeTypeFilter = PlaceTypeFilter.ESTABLISHMENT;
+
+  LatLngBounds _locationBias = LatLngBounds(
+    southwest: LatLng(lat: 32.0810305, lng: 34.785707),
+    northeast: LatLng(lat: 32.0935937, lng: 34.8013896),
+  );
 
   bool _predicting = false;
   dynamic _predictErr;
@@ -72,29 +78,49 @@ class _MyHomePageState extends State<MyHomePage> {
   dynamic _fetchingErr;
 
   Place? _place;
+  late Future<void> _loading;
 
   @override
   void initState() {
     super.initState();
 
-    _places = FlutterGooglePlacesSdk(API_KEY);
+    _places = FlutterGooglePlacesSdkWebPlugin();
+    _loading = _places.initialize(API_KEY);
   }
 
   @override
   Widget build(BuildContext context) {
-    final predictionsWidgets = _buildPredictionWidgets();
-    final fetchPlaceWidgets = _buildFetchPlaceWidgets();
     return Scaffold(
       appBar: AppBar(title: const Text(title)),
-      body: Padding(
-        padding: EdgeInsets.all(30),
-        child: ListView(
-            children: predictionsWidgets +
-                [
-                  SizedBox(height: 16),
-                ] +
-                fetchPlaceWidgets),
+      body: FutureBuilder(
+        future: _loading,
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Center(child: Text(snapshot.error?.toString() ?? "N/A"));
+            }
+
+            return _buildBody();
+          }
+
+          return Center(child: CircularProgressIndicator());
+        },
       ),
+    );
+  }
+
+  Widget _buildBody() {
+    final predictionsWidgets = _buildPredictionWidgets();
+    final fetchPlaceWidgets = _buildFetchPlaceWidgets();
+
+    return Padding(
+      padding: EdgeInsets.all(30),
+      child: ListView(
+          children: predictionsWidgets +
+              [
+                SizedBox(height: 16),
+              ] +
+              fetchPlaceWidgets),
     );
   }
 
@@ -193,6 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
         placeTypeFilter: _placeTypeFilter,
         newSessionToken: false,
         origin: LatLng(lat: 43.12, lng: 95.20),
+        locationBias: _locationBias,
       );
 
       setState(() {
@@ -281,7 +308,7 @@ class _MyHomePageState extends State<MyHomePage> {
             .toList(growable: false),
       ),
       Image(
-        image: FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
+        image: FlutterGooglePlacesSdkPlatform.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
       ),
     ];
   }

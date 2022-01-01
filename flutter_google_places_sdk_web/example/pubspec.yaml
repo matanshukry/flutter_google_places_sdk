@@ -10,15 +10,10 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_google_places_sdk: ^0.2.4
   flutter_google_places_sdk_web:
     path: ../
 
   cupertino_icons: ^1.0.3
-
-dependency_overrides:
-  flutter_google_places_sdk_web:
-    path: ../
 
 dev_dependencies:
   flutter_test:

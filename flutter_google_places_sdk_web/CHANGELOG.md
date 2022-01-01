@@ -1,3 +1,7 @@
+## 0.1.2
+
+* Upgraded platform interface to 0.2.3
+
 ## 0.1.1+1
 
 * Fixed example test

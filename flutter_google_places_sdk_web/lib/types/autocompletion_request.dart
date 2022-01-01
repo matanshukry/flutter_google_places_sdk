@@ -1,6 +1,7 @@
 @JS('google.maps.places')
 library places;
 
+import 'package:flutter_google_places_sdk_web/types/map.dart';
 import 'package:js/js.dart';
 
 /// google.maps.places.AutocompletionRequest interface
@@ -13,7 +14,8 @@ class AutocompletionRequest {
   external factory AutocompletionRequest(
       {String input,
       List<String>? types,
-      ComponentRestrictions? componentRestrictions});
+      ComponentRestrictions? componentRestrictions,
+      LatLngBounds? bounds});
 
   /// The user entered input string.
   external String get input;
@@ -24,6 +26,10 @@ class AutocompletionRequest {
   /// The component restrictions. Component restrictions are used to restrict
   /// predictions to only those within the parent component. For example, the country.
   external ComponentRestrictions? get componentRestriction;
+
+  /// Bounds for prediction biasing. Predictions will be biased towards,
+  /// but not restricted to, the given bounds. Both location and radius will be ignored if bounds is set.
+  external LatLngBounds? get bounds;
 }
 
 /// google.maps.places.ComponentRestrictions interface
