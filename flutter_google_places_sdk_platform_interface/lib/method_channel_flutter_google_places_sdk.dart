@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
-import 'package:flutter_google_places_sdk_platform_interface/src/types/fetch_place_response.dart';
 
 const String _CHANNEL_NAME = 'plugins.msh.com/flutter_google_places_sdk';
 

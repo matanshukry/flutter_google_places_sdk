@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
 import 'package:flutter_google_places_sdk_platform_interface/method_channel_flutter_google_places_sdk.dart';
-import 'package:flutter_google_places_sdk_platform_interface/src/types/fetch_place_response.dart';
-import 'package:flutter_google_places_sdk_platform_interface/src/types/find_autocomplete_predictions_response.dart';
-import 'package:flutter_google_places_sdk_platform_interface/src/types/place_field.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 /// A [PlatformInterface] for flutter google places sdk

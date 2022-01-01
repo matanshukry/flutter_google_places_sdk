@@ -16,6 +16,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mockito: ^5.0.11
+  flutter_lints: ^1.0.4
 
 flutter:
   plugin:
