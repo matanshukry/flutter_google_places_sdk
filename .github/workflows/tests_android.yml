@@ -1,4 +1,4 @@
-name: FlutterTests-Web
+name: FlutterTests-android
 
 on:
   workflow_dispatch:
