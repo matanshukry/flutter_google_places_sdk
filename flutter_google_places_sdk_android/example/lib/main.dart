@@ -96,8 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
         body: FutureBuilder(
           future: _loading,
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done)
-            {
+            if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasError) {
                 return Center(child: Text(snapshot.error?.toString() ?? "N/A"));
               }
