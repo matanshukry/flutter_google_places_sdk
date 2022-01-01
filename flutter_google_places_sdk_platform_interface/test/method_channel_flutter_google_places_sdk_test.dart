@@ -60,13 +60,19 @@ void main() {
       const testCountries = ['c1', 'c2'];
       const newSessionToken = true;
       const origin = LatLng(lat: 325.21, lng: -952.52);
-      await places.findAutocompletePredictions(
-        testQuery,
-        countries: testCountries,
-        placeTypeFilter: PlaceTypeFilter.CITIES,
-        newSessionToken: newSessionToken,
-        origin: origin,
-      );
+      const locationBias = LatLngBounds(
+          southwest: LatLng(lat: 125.43, lng: 38.32),
+          northeast: LatLng(lat: -38.271, lng: 312.53));
+      const locationRestriction = LatLngBounds(
+          southwest: LatLng(lat: 49.28, lng: 3921.38),
+          northeast: LatLng(lat: 38.64, lng: 23.32));
+      await places.findAutocompletePredictions(testQuery,
+          countries: testCountries,
+          placeTypeFilter: PlaceTypeFilter.CITIES,
+          newSessionToken: newSessionToken,
+          origin: origin,
+          locationBias: locationBias,
+          locationRestriction: locationRestriction);
       expect(
         log,
         <Matcher>[
@@ -76,7 +82,9 @@ void main() {
                 'countries': testCountries,
                 'typeFilter': 'CITIES',
                 'newSessionToken': newSessionToken,
-                'origin': origin.toMap()
+                'origin': origin.toMap(),
+                'locationBias': locationBias.toMap(),
+                'locationRestriction': locationRestriction.toMap(),
               })
         ],
       );

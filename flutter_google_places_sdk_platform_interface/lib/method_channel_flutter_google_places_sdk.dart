@@ -45,6 +45,8 @@ class FlutterGooglePlacesSdkMethodChannel
     PlaceTypeFilter placeTypeFilter = PlaceTypeFilter.ALL,
     bool? newSessionToken,
     LatLng? origin,
+    LatLngBounds? locationBias,
+    LatLngBounds? locationRestriction,
   }) {
     if (query.isEmpty) {
       throw ArgumentError('Argument query can not be empty');
@@ -57,6 +59,8 @@ class FlutterGooglePlacesSdkMethodChannel
         'typeFilter': placeTypeFilter.value,
         'newSessionToken': newSessionToken,
         'origin': origin?.toMap(),
+        'locationBias': locationBias?.toMap(),
+        'locationRestriction': locationRestriction?.toMap(),
       },
     ).then(_responseFromResult);
   }

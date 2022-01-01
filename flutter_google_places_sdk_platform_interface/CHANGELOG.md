@@ -1,3 +1,7 @@
+## 0.2.3
+
+* Added support for location bias and location restriction
+
 ## 0.2.2
 
 * Added support for placeTypeFilter in autoComplete request

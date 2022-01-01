@@ -77,6 +77,8 @@ abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
     PlaceTypeFilter placeTypeFilter = PlaceTypeFilter.ALL,
     bool? newSessionToken,
     LatLng? origin,
+    LatLngBounds? locationBias,
+    LatLngBounds? locationRestriction,
   }) {
     throw UnimplementedError(
         'findAutocompletePredictions() has not been implemented.');

@@ -26,7 +26,7 @@ class LatLngBounds {
       'LatLngBounds{southwest: $southwest, northeast: $northeast}';
 
   Map<String, dynamic> toMap() =>
-      {'southwest': southwest, 'northeast': northeast};
+      {'southwest': southwest.toMap(), 'northeast': northeast.toMap()};
 
   static LatLngBounds? fromMap(Map<String, dynamic>? map) => map == null
       ? null
