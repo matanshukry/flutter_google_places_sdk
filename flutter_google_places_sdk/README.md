@@ -17,6 +17,9 @@ When using the web support you also need to enable the Maps JavaScript API in go
 
 https://developers.google.com/maps/documentation/javascript/get-api-key
 
+Limits:
+* Location restriction is not supported. See google issue tracker for more info: https://issuetracker.google.com/issues/36219203
+
 ## Rational
 
 By now you probably found some other plugins, and wondering why this one was even created.

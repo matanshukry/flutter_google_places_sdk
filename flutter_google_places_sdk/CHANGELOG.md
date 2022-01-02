@@ -1,3 +1,8 @@
+## 0.3.1+1
+
+* Upgraded android to 0.1.1+1
+* Added limit info in README for web about location restriction
+
 ## 0.3.1
 
 * Upgraded platform interface to 0.2.3
