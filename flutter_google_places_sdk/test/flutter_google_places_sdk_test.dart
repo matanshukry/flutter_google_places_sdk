@@ -117,6 +117,8 @@ void main() {
                   "typeFilter": "ESTABLISHMENT",
                   'newSessionToken': false,
                   'origin': origin.toMap(),
+                  'locationBias': null,
+                  'locationRestriction': null,
                 }),
           ],
         );

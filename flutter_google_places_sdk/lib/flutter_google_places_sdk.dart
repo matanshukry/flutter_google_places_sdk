@@ -117,6 +117,8 @@ class FlutterGooglePlacesSdk {
     PlaceTypeFilter placeTypeFilter = PlaceTypeFilter.ALL,
     bool? newSessionToken,
     LatLng? origin,
+    LatLngBounds? locationBias,
+    LatLngBounds? locationRestriction,
   }) {
     return _addMethodCall(() => platform.findAutocompletePredictions(
           query,
@@ -124,6 +126,8 @@ class FlutterGooglePlacesSdk {
           placeTypeFilter: placeTypeFilter,
           newSessionToken: newSessionToken,
           origin: origin,
+          locationBias: locationBias,
+          locationRestriction: locationRestriction,
         ));
   }
 

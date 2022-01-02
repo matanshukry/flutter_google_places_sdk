@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 
 /// Title
@@ -38,8 +39,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //
   String? _predictLastText;
-  List<String> _countries = ['il'];
+
   PlaceTypeFilter _placeTypeFilter = PlaceTypeFilter.ESTABLISHMENT;
+
+  bool _locationBiasEnabled = true;
+  LatLngBounds _locationBias = LatLngBounds(
+      southwest: LatLng(lat: 32.0810305, lng: 34.785707),
+      northeast: LatLng(lat: 32.0935937, lng: 34.8013896));
+
+  bool _locationRestrictionEnabled = false;
+  LatLngBounds _locationRestriction = LatLngBounds(
+      southwest: LatLng(lat: 32.0583974, lng: 34.7633473),
+      northeast: LatLng(lat: 32.0876885, lng: 34.8040563));
+
+  List<String> _countries = ['il'];
+  bool _countriesEnabled = true;
 
   bool _predicting = false;
   dynamic _predictErr;
@@ -189,10 +203,13 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       final result = await _places.findAutocompletePredictions(
         _predictLastText!,
-        countries: _countries,
+        countries: _countriesEnabled ? _countries : null,
         placeTypeFilter: _placeTypeFilter,
         newSessionToken: false,
         origin: LatLng(lat: 43.12, lng: 95.20),
+        locationBias: _locationBiasEnabled ? _locationBias : null,
+        locationRestriction:
+            _locationRestrictionEnabled ? _locationRestriction : null,
       );
 
       setState(() {
@@ -244,6 +261,22 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
   }
 
+  Widget _buildEnabledOption(
+      bool value, void Function(bool) callback, Widget child) {
+    return Row(
+      children: [
+        Checkbox(
+            value: value,
+            onChanged: (value) {
+              setState(() {
+                callback(value ?? false);
+              });
+            }),
+        Flexible(child: child),
+      ],
+    );
+  }
+
   List<Widget> _buildPredictionWidgets() {
     return [
       // --
@@ -251,13 +284,17 @@ class _MyHomePageState extends State<MyHomePage> {
         onChanged: _onPredictTextChanged,
         decoration: InputDecoration(label: Text("Query")),
       ),
-      // _countries
-      TextFormField(
-        onChanged: _onCountriesTextChanged,
-        decoration: InputDecoration(label: Text("Countries")),
-        validator: _countriesValidator,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        initialValue: _countries.join(","),
+      _buildEnabledOption(
+        _countriesEnabled,
+        (value) => _countriesEnabled = value,
+        TextFormField(
+          enabled: _countriesEnabled,
+          onChanged: _onCountriesTextChanged,
+          decoration: InputDecoration(label: Text("Countries")),
+          validator: _countriesValidator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          initialValue: _countries.join(","),
+        ),
       ),
       DropdownButton<PlaceTypeFilter>(
         items: PlaceTypeFilter.values
@@ -266,6 +303,34 @@ class _MyHomePageState extends State<MyHomePage> {
             .toList(growable: false),
         value: _placeTypeFilter,
         onChanged: _onPlaceTypeFilterChanged,
+      ),
+      _buildEnabledOption(
+        _locationBiasEnabled,
+        (value) => _locationBiasEnabled = value,
+        LocationField(
+          label: "Location Bias",
+          enabled: _locationBiasEnabled,
+          value: _locationBias,
+          onChanged: (bounds) {
+            setState(() {
+              _locationBias = bounds;
+            });
+          },
+        ),
+      ),
+      _buildEnabledOption(
+        _locationRestrictionEnabled,
+        (value) => _locationRestrictionEnabled = value,
+        LocationField(
+          label: "Location Restriction",
+          enabled: _locationRestrictionEnabled,
+          value: _locationRestriction,
+          onChanged: (bounds) {
+            setState(() {
+              _locationRestriction = bounds;
+            });
+          },
+        ),
       ),
       ElevatedButton(
         onPressed: _predicting == true ? null : _predict,
@@ -284,5 +349,107 @@ class _MyHomePageState extends State<MyHomePage> {
         image: FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
       ),
     ];
+  }
+}
+
+/// Callback function with LatLngBounds
+typedef void ActionWithBounds(LatLngBounds);
+
+/// Location widget used to display and edit a LatLngBounds type
+class LocationField extends StatefulWidget {
+  /// Label associated with this field
+  final String label;
+
+  /// If true the field is enabled. If false it is disabled and user can not interact with it
+  /// Value is retained even when the field is disabled
+  final bool enabled;
+
+  /// The current value in the field
+  final LatLngBounds value;
+
+  /// Callback for when the value has changed by the user.
+  final ActionWithBounds onChanged;
+
+  /// Create a LocationField
+  const LocationField(
+      {Key? key,
+      required this.label,
+      required this.enabled,
+      required this.value,
+      required this.onChanged})
+      : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _LocationFieldState();
+}
+
+class _LocationFieldState extends State<LocationField> {
+  late TextEditingController _ctrlNeLat;
+  late TextEditingController _ctrlNeLng;
+  late TextEditingController _ctrlSwLat;
+  late TextEditingController _ctrlSwLng;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _ctrlNeLat = TextEditingController.fromValue(
+        TextEditingValue(text: widget.value.northeast.lat.toString()));
+    _ctrlNeLng = TextEditingController.fromValue(
+        TextEditingValue(text: widget.value.northeast.lng.toString()));
+    _ctrlSwLat = TextEditingController.fromValue(
+        TextEditingValue(text: widget.value.southwest.lat.toString()));
+    _ctrlSwLng = TextEditingController.fromValue(
+        TextEditingValue(text: widget.value.southwest.lng.toString()));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(5.0),
+      child: InputDecorator(
+        decoration: InputDecoration(
+          enabled: widget.enabled,
+          labelText: widget.label,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+        child: Row(children: [
+          _buildField("NE/Lat", _ctrlNeLat),
+          _buildField("NE/Lng", _ctrlNeLng),
+          _buildField("SW/Lat", _ctrlSwLat),
+          _buildField("SW/Lng", _ctrlSwLng),
+        ]),
+      ),
+    );
+  }
+
+  Widget _buildField(String label, TextEditingController controller) {
+    return Flexible(
+      child: TextFormField(
+        enabled: widget.enabled,
+        keyboardType:
+            TextInputType.numberWithOptions(signed: true, decimal: true),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9\.]')),
+        ],
+        onChanged: (value) => _onValueChanged(controller, value),
+        decoration: InputDecoration(label: Text(label)),
+        // validator: _boundsValidator,
+        // autovalidateMode: AutovalidateMode.onUserInteraction,
+        controller: controller,
+      ),
+    );
+  }
+
+  void _onValueChanged(TextEditingController ctrlNELat, String value) {
+    final neLat = double.parse(ctrlNELat.value.text);
+
+    LatLngBounds bounds = LatLngBounds(
+        southwest: LatLng(lat: 0.0, lng: 0.0),
+        northeast: LatLng(lat: neLat, lng: 0.0));
+
+    widget.onChanged(bounds);
   }
 }

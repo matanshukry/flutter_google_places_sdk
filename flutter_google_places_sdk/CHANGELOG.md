@@ -1,3 +1,11 @@
+## 0.3.1
+
+* Upgraded platform interface to 0.2.3
+* Upgraded android to 0.1.1
+* Upgraded ios to 0.1.1
+* Upgraded web to 0.1.2
+* Added location bias and restriction to example
+
 ## 0.3.0+1
 
 * Added correct plugin information to pubspec.yaml
