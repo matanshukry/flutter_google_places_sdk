@@ -1,3 +1,7 @@
+## 0.1.2
+
+* Upgraded platform interface to 0.2.4 and implemented fetchPlacePhoto
+
 ## 0.1.1+1
 
 * Upgraded google map places version to 2.5.0
