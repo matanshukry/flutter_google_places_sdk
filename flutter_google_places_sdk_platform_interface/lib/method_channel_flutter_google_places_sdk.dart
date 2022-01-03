@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -96,5 +97,31 @@ class FlutterGooglePlacesSdkMethodChannel
     final Place? place =
         value == null ? null : Place.fromMap(value.cast<String, dynamic>());
     return FetchPlaceResponse(place);
+  }
+
+  @override
+  Future<FetchPlacePhotoResponse> fetchPlacePhoto(
+    PhotoMetadata photoMetadata, {
+    int? maxWidth,
+    int? maxHeight,
+  }) {
+    return _channel.invokeMethod(
+      'fetchPlacePhoto',
+      {
+        'photoMetadata': {
+          'photoReference': photoMetadata.photoReference,
+          'width': photoMetadata.width,
+          'height': photoMetadata.height,
+        },
+        'maxWidth': maxWidth,
+        'maxHeight': maxHeight,
+      },
+    ).then(_responseFromPlacePhoto);
+  }
+
+  FetchPlacePhotoResponse _responseFromPlacePhoto(dynamic value) {
+    final bytes = value as Uint8List;
+    final image = Image.memory(bytes);
+    return FetchPlacePhotoResponse(image);
   }
 }

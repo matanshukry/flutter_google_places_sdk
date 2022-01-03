@@ -98,4 +98,18 @@ abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
   }) {
     throw UnimplementedError('fetchPlaceDetails() has not been implemented.');
   }
+
+  /// Fetches a photo of a place.
+  ///
+  /// Before fetching a place photo the place it self must be fetched,
+  /// together with the [PlaceField.PhotoMetadatas] field
+  ///
+  /// For more info: https://developers.google.com/maps/documentation/places/android-sdk/photos
+  Future<FetchPlacePhotoResponse> fetchPlacePhoto(
+    PhotoMetadata photoMetadata, {
+    int? maxWidth,
+    int? maxHeight,
+  }) {
+    throw UnimplementedError('fetchPlacePhoto() has not been implemented.');
+  }
 }

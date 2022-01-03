@@ -3,39 +3,51 @@
 /// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/PhotoMetadata
 class PhotoMetadata {
   const PhotoMetadata({
-    required this.attributions,
+    required this.photoReference,
     required this.width,
     required this.height,
+    required this.attributions,
   });
 
-  final String attributions;
+  final String photoReference;
   final int width;
   final int height;
+  final String attributions;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is PhotoMetadata &&
           runtimeType == other.runtimeType &&
-          attributions == other.attributions &&
+          photoReference == other.photoReference &&
           width == other.width &&
-          height == other.height;
+          height == other.height &&
+          attributions == other.attributions;
 
   @override
-  int get hashCode => attributions.hashCode ^ width.hashCode ^ height.hashCode;
+  int get hashCode =>
+      photoReference.hashCode ^
+      width.hashCode ^
+      height.hashCode ^
+      attributions.hashCode;
 
   @override
   String toString() =>
-      'PhotoMetadata{attributions: $attributions, width: $width, height: $height}';
+      'PhotoMetadata{photoReference: $photoReference, width: $width, height: $height, attributions: $attributions}';
 
-  Map<String, dynamic> toMap() =>
-      {'attributions': attributions, 'width': width, 'height': height};
+  Map<String, dynamic> toMap() => {
+        'photoReference': photoReference,
+        'width': width,
+        'height': height,
+        'attributions': attributions
+      };
 
   static PhotoMetadata? fromMap(Map<String, dynamic>? map) => map == null
       ? null
       : PhotoMetadata(
-          attributions: map['attributions'],
+          photoReference: map['photoReference'],
           width: map['width'],
           height: map['height'],
+          attributions: map['attributions'],
         );
 }

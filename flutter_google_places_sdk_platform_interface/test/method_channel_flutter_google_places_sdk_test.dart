@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
 import 'package:flutter_google_places_sdk_platform_interface/method_channel_flutter_google_places_sdk.dart';
@@ -10,10 +12,18 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('$FlutterGooglePlacesSdkMethodChannel', () {
+    final handlers = <Future<dynamic>? Function(MethodCall call)>[];
+
     const channel = MethodChannel('plugins.msh.com/flutter_google_places_sdk');
     final List<MethodCall> log = <MethodCall>[];
     channel.setMockMethodCallHandler((MethodCall methodCall) async {
       log.add(methodCall);
+      for (final callback in handlers) {
+        final result = callback(methodCall);
+        if (result != null) {
+          return result;
+        }
+      }
     });
 
     final places = FlutterGooglePlacesSdkMethodChannel();
@@ -109,6 +119,62 @@ void main() {
           })
         ],
       );
+    });
+
+    Future<Uint8List> _createImage() async {
+      final paint = Paint();
+      final recorder = PictureRecorder();
+      final Canvas canvas = Canvas(recorder);
+      canvas.drawPaint(paint); // etc
+
+      final picture = recorder.endRecording();
+      final image = await picture.toImage(100, 100);
+      final byteData = await image.toByteData(format: ImageByteFormat.png);
+      final buffer = byteData!.buffer;
+      return buffer.asUint8List();
+    }
+
+    test('fetchPlacePhoto', () async {
+      const photoRef = 'http://google.com/photo/ref/1';
+      const photoMetadata = PhotoMetadata(
+          photoReference: photoRef,
+          width: 100,
+          height: 100,
+          attributions: 'attr');
+      const maxWidth = 50;
+
+      // Mock
+      final handler = (methodCall) async {
+        log.add(methodCall);
+        if (methodCall.method == 'fetchPlacePhoto') {
+          return await _createImage();
+        }
+        return null;
+      };
+
+      handlers.add(handler);
+      try {
+        // call
+        await places.fetchPlacePhoto(photoMetadata,
+            maxWidth: maxWidth, maxHeight: null);
+
+        expect(
+          log,
+          <Matcher>[
+            isMethodCall('fetchPlacePhoto', arguments: <String, Object?>{
+              'photoMetadata': {
+                'photoReference': photoMetadata.photoReference,
+                'width': photoMetadata.width,
+                'height': photoMetadata.height,
+              },
+              'maxWidth': maxWidth,
+              'maxHeight': null,
+            })
+          ],
+        );
+      } catch (err) {
+        handlers.remove(handler);
+      }
     });
   });
 }

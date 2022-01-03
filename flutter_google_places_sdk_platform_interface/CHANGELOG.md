@@ -1,3 +1,7 @@
+## 0.2.4
+
+* Added support for new method: fetchPlacePhoto
+
 ## 0.2.3
 
 * Added support for location bias and location restriction
