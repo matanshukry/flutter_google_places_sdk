@@ -1,3 +1,7 @@
+## 0.2.4+1
+
+* fetchPlacePhoto response can also include url, to support web
+
 ## 0.2.4
 
 * Added support for new method: fetchPlacePhoto

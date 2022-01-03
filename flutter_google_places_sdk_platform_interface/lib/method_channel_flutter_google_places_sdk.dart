@@ -120,8 +120,19 @@ class FlutterGooglePlacesSdkMethodChannel
   }
 
   FetchPlacePhotoResponse _responseFromPlacePhoto(dynamic value) {
-    final bytes = value as Uint8List;
-    final image = Image.memory(bytes);
-    return FetchPlacePhotoResponse(image);
+    if (value is Uint8List) {
+      final image = Image.memory(value);
+      return FetchPlacePhotoResponse.image(image);
+    }
+
+    if (value is String) {
+      return FetchPlacePhotoResponse.imageUrl(value);
+    }
+
+    throw PlatformException(
+      code: 'API_ERROR_PHOTO',
+      message: 'Invalid platform response from fetchPlacePhoto',
+      details: 'Response: $value',
+    );
   }
 }
