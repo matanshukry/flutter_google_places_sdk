@@ -4,9 +4,9 @@ library places;
 import 'dart:async';
 import 'dart:developer';
 import 'dart:html' as html;
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
 import 'package:flutter_google_places_sdk_web/types/autocomplete_response_web.dart';
 import 'package:flutter_google_places_sdk_web/types/autocomplete_service.dart';
@@ -38,9 +38,13 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   PlacesService? _svcPlaces;
   AutocompleteSessionToken? _lastSessionToken;
 
+  // Cache for photos
+  final _photosCache = <String, PlaceWebPhoto>{};
+  var _runningUid = 1;
+
   @override
-  Future<void> deinitialize() {
-    throw UnimplementedError('deinitialize() has not been implemented.');
+  Future<void> deinitialize() async {
+    // Nothing to do; there is no de-initialize for web
   }
 
   @override
@@ -295,10 +299,20 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     }
 
     final htmlAttrs = photo.html_attributions ?? [];
-    return PhotoMetadata(
-        attributions: htmlAttrs.length == 1 ? htmlAttrs[0] : null,
+    final photoMetadata = PhotoMetadata(
+        photoReference: _getPhotoMetadataReference(photo),
         width: photo.width,
-        height: photo.height);
+        height: photo.height,
+        attributions: htmlAttrs.length == 1 ? htmlAttrs[0] : null);
+
+    _photosCache[photoMetadata.photoReference] = photo;
+
+    return photoMetadata;
+  }
+
+  String _getPhotoMetadataReference(PlaceWebPhoto photo) {
+    final num = _runningUid++;
+    return "id_${num.toString()}";
   }
 
   LatLngBounds? _parseLatLngBounds(PlaceWebViewport? viewport) {
@@ -377,6 +391,27 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
 
   map.LatLng _latLngToWeb(LatLng latLng) {
     return map.LatLng(latLng.lat, latLng.lng);
+  }
+
+  @override
+  Future<FetchPlacePhotoResponse> fetchPlacePhoto(
+    PhotoMetadata photoMetadata, {
+    int? maxWidth,
+    int? maxHeight,
+  }) async {
+    final value = _photosCache[photoMetadata.photoReference];
+    if (value == null) {
+      throw PlatformException(
+        code: 'API_ERROR_PHOTO',
+        message: 'PhotoMetadata must be initially fetched with fetchPlace',
+        details: '',
+      );
+    }
+
+    final url =
+        value.getUrl(PhotoWebOptions(maxWidth: maxWidth, maxHeight: maxHeight));
+
+    return FetchPlacePhotoResponse.imageUrl(url);
   }
 }
 

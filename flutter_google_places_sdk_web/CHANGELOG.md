@@ -1,3 +1,7 @@
+## 0.1.3
+
+* Upgraded platform interface to 0.2.4+1 and implemented fetchPlacePhoto
+
 ## 0.1.2
 
 * Upgraded platform interface to 0.2.3

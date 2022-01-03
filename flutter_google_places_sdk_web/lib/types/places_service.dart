@@ -118,6 +118,25 @@ class PlaceWebPhoto {
 
   /// The height of the photo in pixels.
   external int height;
+
+  /// Returns the image URL corresponding to the specified options.
+  external String getUrl(PhotoWebOptions? photoWebOptions);
+}
+
+///Defines photo-requesting options.
+///
+/// Ref: https://developers.google.com/maps/documentation/javascript/reference/places-service#PhotoOptions
+@JS()
+@anonymous
+class PhotoWebOptions {
+  /// Create a PhotoWebOptions
+  external factory PhotoWebOptions({int? maxWidth, int? maxHeight});
+
+  /// The maximum width in pixels of the returned image.
+  external int? maxWidth;
+
+  /// The maximum height in pixels of the returned image.
+  external int? maxHeight;
 }
 
 /// Defines information about the opening hours of a Place.
