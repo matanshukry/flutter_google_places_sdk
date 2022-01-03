@@ -9,10 +9,13 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
     let METHOD_IS_INITIALIZE = "isInitialized"
     let METHOD_FIND_AUTOCOMPLETE_PREDICTIONS = "findAutocompletePredictions"
     let METHOD_FETCH_PLACE = "fetchPlace"
+    let METHOD_FETCH_PLACE_PHOTO = "fetchPlacePhoto"
     
     private var placesClient: GMSPlacesClient!
     private var lastSessionToken: GMSAutocompleteSessionToken?
-
+    
+    private var photosCache: Dictionary<String, GMSPlacePhotoMetadata> = [:]
+    private var runningUid: Int = 1
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: CHANNEL_NAME, binaryMessenger: registrar.messenger())
@@ -89,6 +92,32 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
                     let mappedPlace = self.placeToMap(place: place)
                     result(mappedPlace)
                 }
+            }
+        case METHOD_FETCH_PLACE_PHOTO:
+            let args = call.arguments as! Dictionary<String,Any>
+            let photoMetadataMap = args["photoMetadata"] as! Dictionary<String,Any>
+            let photoRef = photoMetadataMap["photoReference"] as! String
+            
+            if let photoMetadata = photosCache[photoRef] {
+                placesClient.loadPlacePhoto(photoMetadata, callback: { (photo, error) -> Void in
+                    if let error = error {
+                        print("fetchPlacePhoto error: \(error)")
+                        result(FlutterError(
+                            code: "API_ERROR_PHOTO",
+                            message: error.localizedDescription,
+                            details: nil
+                        ))
+                    } else {
+                        let data = photo?.pngData()
+                        result(data)
+                    }
+                })
+            } else {
+                result(FlutterError(
+                    code: "API_ERROR_PHOTO",
+                    message: "PhotoMetadata must be initially fetched with fetchPlace",
+                    details: ""
+                ))
             }
         default:
             result(FlutterMethodNotImplemented)
@@ -167,11 +196,22 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
     }
     
     private func photoMetadataToMap(photoMetadata: GMSPlacePhotoMetadata) -> Dictionary<String, Any?> {
+        let photoRef = _getPhotoReference()
+        
+        photosCache[photoRef] = photoMetadata
+        
         return [
+            "photoReference": photoRef,
             "width": Int(photoMetadata.maxSize.width),
             "height": Int(photoMetadata.maxSize.height),
             "attributions": photoMetadata.attributions?.string
         ]
+    }
+    
+    private func _getPhotoReference() -> String {
+        let num = runningUid
+        runningUid += 1
+        return "id_" + String(num);
     }
     
     private func openingHoursToMap(openingHours: GMSOpeningHours?) -> Dictionary<String, Any?>? {
