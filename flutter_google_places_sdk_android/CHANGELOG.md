@@ -1,3 +1,7 @@
+## 0.1.2+2
+
+* maxHeight in fetchPlacePhoto will now parsed correctly
+
 ## 0.1.2+1
 
 * Upgraded platform interface to 0.2.4+1

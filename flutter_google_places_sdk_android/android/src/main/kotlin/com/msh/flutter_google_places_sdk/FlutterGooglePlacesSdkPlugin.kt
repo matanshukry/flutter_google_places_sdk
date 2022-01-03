@@ -120,7 +120,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                 val photoMetadata =
                     photoMetadataFromMap(call.argument<Map<String, Any?>>("photoMetadata")!!)
                 val maxWidth = call.argument<Int?>("maxWidth")
-                val maxHeight = call.argument<Int?>("maxWidth")
+                val maxHeight = call.argument<Int?>("maxHeight")
 
                 val request = FetchPhotoRequest.builder(photoMetadata)
                     .setMaxWidth(maxWidth)
