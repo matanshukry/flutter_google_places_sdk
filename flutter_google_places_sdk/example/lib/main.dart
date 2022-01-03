@@ -2,6 +2,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:flutter_google_places_sdk_example/google_places_img.dart'
+    if (dart.library.html) 'package:flutter_google_places_sdk_example/google_places_img_web.dart'
+    as gpi;
 
 /// Title
 const title = 'Flutter Google Places SDK Example';
@@ -82,10 +85,15 @@ class _MyHomePageState extends State<MyHomePage> {
     PlaceField.WebsiteUri,
   ];
 
-  bool _fetching = false;
-  dynamic _fetchingErr;
+  bool _fetchingPlace = false;
+  dynamic _fetchingPlaceErr;
+
+  bool _fetchingPlacePhoto = false;
+  dynamic _fetchingPlacePhotoErr;
 
   Place? _place;
+  FetchPlacePhotoResponse? _placePhoto;
+  PhotoMetadata? _placePhotoMetadata;
 
   @override
   void initState() {
@@ -98,16 +106,22 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final predictionsWidgets = _buildPredictionWidgets();
     final fetchPlaceWidgets = _buildFetchPlaceWidgets();
+    final fetchPlacePhotoWidgets = _buildFetchPlacePhotoWidgets();
     return Scaffold(
       appBar: AppBar(title: const Text(title)),
       body: Padding(
         padding: EdgeInsets.all(30),
         child: ListView(
-            children: predictionsWidgets +
-                [
-                  SizedBox(height: 16),
-                ] +
-                fetchPlaceWidgets),
+          children: predictionsWidgets +
+              [
+                SizedBox(height: 16),
+              ] +
+              fetchPlaceWidgets +
+              [
+                SizedBox(height: 16),
+              ] +
+              fetchPlacePhotoWidgets,
+        ),
       ),
     );
   }
@@ -151,8 +165,8 @@ class _MyHomePageState extends State<MyHomePage> {
     _predictLastText = value;
   }
 
-  void _fetch() async {
-    if (_fetching) {
+  void _fetchPlace() async {
+    if (_fetchingPlace) {
       return;
     }
 
@@ -160,8 +174,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final hasContent = text.isNotEmpty;
 
     setState(() {
-      _fetching = hasContent;
-      _fetchingErr = null;
+      _fetchingPlace = hasContent;
+      _fetchingPlaceErr = null;
     });
 
     if (!hasContent) {
@@ -174,12 +188,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
       setState(() {
         _place = result.place;
-        _fetching = false;
+        _fetchingPlace = false;
       });
     } catch (err) {
       setState(() {
-        _fetchingErr = err;
-        _fetching = false;
+        _fetchingPlaceErr = err;
+        _fetchingPlace = false;
       });
     }
   }
@@ -246,17 +260,71 @@ class _MyHomePageState extends State<MyHomePage> {
         style: theme.textTheme.caption?.copyWith(color: theme.errorColor));
   }
 
+  List<Widget> _buildFetchPlacePhotoWidgets() {
+    return [
+      // --
+      // TextFormField(controller: _fetchPlaceIdController),
+      ElevatedButton(
+        onPressed: (_fetchingPlacePhoto == true || _place == null)
+            ? null
+            : _fetchPlacePhoto,
+        child: const Text('Fetch Place Photo'),
+      ),
+
+      // -- Error widget + Result
+      _buildErrorWidget(_fetchingPlacePhotoErr),
+      _buildPhotoWidget(_placePhoto),
+    ];
+  }
+
+  void _fetchPlacePhoto() async {
+    final place = _place;
+    if (_fetchingPlacePhoto || place == null) {
+      return;
+    }
+
+    if ((place.photoMetadatas?.length ?? 0) == 0) {
+      setState(() {
+        _fetchingPlacePhoto = false;
+        _fetchingPlacePhotoErr = "No photos for place";
+      });
+      return;
+    }
+
+    setState(() {
+      _fetchingPlacePhoto = true;
+      _fetchingPlacePhotoErr = null;
+    });
+
+    try {
+      final metadata = place.photoMetadatas![0];
+
+      final result = await _places.fetchPlacePhoto(metadata);
+
+      setState(() {
+        _placePhoto = result;
+        _placePhotoMetadata = metadata;
+        _fetchingPlacePhoto = false;
+      });
+    } catch (err) {
+      setState(() {
+        _fetchingPlacePhotoErr = err;
+        _fetchingPlacePhoto = false;
+      });
+    }
+  }
+
   List<Widget> _buildFetchPlaceWidgets() {
     return [
       // --
       TextFormField(controller: _fetchPlaceIdController),
       ElevatedButton(
-        onPressed: _fetching == true ? null : _fetch,
+        onPressed: _fetchingPlace == true ? null : _fetchPlace,
         child: const Text('Fetch Place'),
       ),
 
       // -- Error widget + Result
-      _buildErrorWidget(_fetchingErr),
+      _buildErrorWidget(_fetchingPlaceErr),
       Text('Result: ' + (_place?.toString() ?? 'N/A')),
     ];
   }
@@ -349,6 +417,15 @@ class _MyHomePageState extends State<MyHomePage> {
         image: FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
       ),
     ];
+  }
+
+  Widget _buildPhotoWidget(FetchPlacePhotoResponse? placePhoto) {
+    if (placePhoto == null) {
+      return Container();
+    }
+
+    return gpi.GooglePlacesImg(
+        photoMetadata: _placePhotoMetadata!, placePhotoResponse: placePhoto);
   }
 }
 

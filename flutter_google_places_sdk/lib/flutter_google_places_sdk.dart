@@ -14,6 +14,7 @@ export 'package:flutter_google_places_sdk_platform_interface/flutter_google_plac
         DayOfWeekDescriptor,
         DayOfWeekEnumParser,
         FetchPlaceResponse,
+        FetchPlacePhotoResponse,
         FindAutocompletePredictionsResponse,
         LatLng,
         LatLngBounds,
@@ -141,6 +142,18 @@ class FlutterGooglePlacesSdk {
   Future<FetchPlaceResponse> fetchPlace(String placeId,
       {List<PlaceField>? fields}) {
     return _addMethodCall(() => platform.fetchPlace(placeId, fields: fields));
+  }
+
+  /// Fetches a photo of a place.
+  ///
+  /// Before fetching a place photo the place it self must be fetched,
+  /// together with the [PlaceField.PhotoMetadatas] field
+  ///
+  /// For more info: https://developers.google.com/maps/documentation/places/android-sdk/photos
+  Future<FetchPlacePhotoResponse> fetchPlacePhoto(PhotoMetadata photoMetadata,
+      {int? maxWidth, int? maxHeight}) {
+    return _addMethodCall(() => platform.fetchPlacePhoto(photoMetadata,
+        maxWidth: maxWidth, maxHeight: maxHeight));
   }
 
   /// Returns whether or not the client has been initialized.

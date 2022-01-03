@@ -1,3 +1,12 @@
+## 0.3.2
+
+* Now supports fetchPlacePhoto with example
+
+* Upgraded platform_interface to 0.2.4+1
+* Upgraded android to 0.1.2+2
+* Upgraded ios to 0.1.2
+* Upgraded web to 0.1.3
+
 ## 0.3.1+1
 
 * Upgraded android to 0.1.1+1
