@@ -1,3 +1,7 @@
+## 0.1.3
+
+* replacing jcenter for mavinCentral
+
 ## 0.1.2+2
 
 * maxHeight in fetchPlacePhoto will now parsed correctly
