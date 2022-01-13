@@ -1,3 +1,7 @@
+## 0.1.2+3
+
+* replacing jcenter for mavenCentral
+
 ## 0.1.2+2
 
 * maxHeight in fetchPlacePhoto will now parsed correctly
