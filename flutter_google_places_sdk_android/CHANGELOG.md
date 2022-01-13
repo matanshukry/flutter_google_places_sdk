@@ -1,6 +1,6 @@
-## 0.1.3
+## 0.1.2+3
 
-* replacing jcenter for mavinCentral
+* replacing jcenter for mavenCentral
 
 ## 0.1.2+2
 
