@@ -1,3 +1,8 @@
+## 0.3.2+1
+
+* Upgrade android to 0.1.2+3
+* Replacing jcenter dependency repository with mavenCentral
+
 ## 0.3.2
 
 * Now supports fetchPlacePhoto with example
