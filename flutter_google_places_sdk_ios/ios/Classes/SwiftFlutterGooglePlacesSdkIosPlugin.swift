@@ -166,9 +166,22 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
             "types": place.types?.map { (it) in return it.uppercased() },
             "userRatingsTotal": place.userRatingsTotal,
             "utcOffsetMinutes": place.utcOffsetMinutes,
-            // "viewport": latLngBoundsToMap(viewport: place.viewportInfo),
+            "viewport": latLngBoundsToMap(viewport: place.viewportInfo!),
             "websiteUri": place.website?.absoluteString
         ]
+    }
+    
+    private func latLngBoundsToMap(viewport: GMSPlaceViewportInfo) -> [String: [String: Double]] {
+        return [
+            "southwest": [
+                "lat": viewport.southWest.latitude,
+                "lng": viewport.southWest.longitude,
+                ],
+            "northeast": [
+                "lat": viewport.northEast.latitude,
+                "lng": viewport.northEast.longitude,
+                ]
+        ];
     }
     
     private func businessStatusToStr(it: GMSPlacesBusinessStatus) -> String? {
