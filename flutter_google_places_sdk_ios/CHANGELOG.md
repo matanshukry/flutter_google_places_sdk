@@ -1,3 +1,7 @@
+## 0.1.2+1
+
+* Send viewport parameter
+
 ## 0.1.2
 
 * Upgraded platform interface to 0.2.4+ and implemented fetchPlacePhoto
