@@ -1,3 +1,10 @@
+## 0.3.2+2
+
+* Upgrade iOS to 0.1.2+1
+  * Send viewport parameter
+* Upgrade web to 0.1.3+1
+  * Using locale input correctly now
+
 ## 0.3.2+1
 
 * Upgrade android to 0.1.2+3
