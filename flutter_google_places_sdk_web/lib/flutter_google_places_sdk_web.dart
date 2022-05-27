@@ -63,10 +63,14 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       _doInit();
     } else {
       final body = html.window.document.querySelector('body')!;
+      var src =
+          'https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap';
+      if (locale?.languageCode != null) {
+        src = src + "&language=${locale?.languageCode}";
+      }
       body.append(html.ScriptElement()
         ..id = _SCRIPT_ID
-        ..src =
-            'https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap'
+        ..src = src
         ..async = true
         ..type = 'application/javascript');
     }
@@ -107,9 +111,6 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       ..componentRestrictions = (ComponentRestrictions()..country = countries)
       ..bounds = _boundsToWeb(locationBias));
     final resp = await prom;
-    // if (resp == null) {
-    //   return FindAutocompletePredictionsResponse([]);
-    // }
 
     final predictions = resp.predictions
             ?.whereNotNull()

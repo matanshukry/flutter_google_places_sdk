@@ -15,6 +15,7 @@ dependencies:
   flutter_google_places_sdk_platform_interface: ^0.2.4+1
   js: ^0.6.3
   google_maps: ^6.1.0
+  collection: ^1.15.0
 
 dev_dependencies:
   flutter_lints: ^1.0.4
