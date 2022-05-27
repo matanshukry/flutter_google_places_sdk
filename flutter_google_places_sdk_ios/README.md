@@ -4,4 +4,4 @@
 
 ![Tests](https://github.com/matanshukry/flutter_google_places_sdk/actions/workflows/tests_ios.yml/badge.svg)
 
-iOS implementation for flutter google places sdk
+The iOS implementation of [`flutter_google_places_web`](https://pub.dartlang.org/packages/flutter_google_places_sdk).
