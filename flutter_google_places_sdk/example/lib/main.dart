@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
@@ -99,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    _places = FlutterGooglePlacesSdk(API_KEY);
+    _places = FlutterGooglePlacesSdk(API_KEY, locale: Locale('en'));
   }
 
   @override
@@ -325,7 +326,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       // -- Error widget + Result
       _buildErrorWidget(_fetchingPlaceErr),
-      Text('Result: ' + (_place?.toString() ?? 'N/A')),
+      WebSelectableText('Result: ' + (_place?.toString() ?? 'N/A')),
     ];
   }
 
@@ -352,6 +353,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onChanged: _onPredictTextChanged,
         decoration: InputDecoration(label: Text("Query")),
       ),
+      // -- Countries
       _buildEnabledOption(
         _countriesEnabled,
         (value) => _countriesEnabled = value,
@@ -364,6 +366,7 @@ class _MyHomePageState extends State<MyHomePage> {
           initialValue: _countries.join(","),
         ),
       ),
+      // -- Place Types
       DropdownButton<PlaceTypeFilter>(
         items: PlaceTypeFilter.values
             .map((item) => DropdownMenuItem<PlaceTypeFilter>(
@@ -372,6 +375,7 @@ class _MyHomePageState extends State<MyHomePage> {
         value: _placeTypeFilter,
         onChanged: _onPlaceTypeFilterChanged,
       ),
+      // -- Location Bias
       _buildEnabledOption(
         _locationBiasEnabled,
         (value) => _locationBiasEnabled = value,
@@ -386,6 +390,7 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
       ),
+      // -- Location Restrictions
       _buildEnabledOption(
         _locationRestrictionEnabled,
         (value) => _locationRestrictionEnabled = value,
@@ -400,6 +405,7 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
       ),
+      // -- Predict
       ElevatedButton(
         onPressed: _predicting == true ? null : _predict,
         child: const Text('Predict'),
@@ -528,5 +534,30 @@ class _LocationFieldState extends State<LocationField> {
         northeast: LatLng(lat: neLat, lng: 0.0));
 
     widget.onChanged(bounds);
+  }
+}
+
+/// Creates a web-selectable text widget.
+///
+/// If the platform is web, the widget created is [SelectableText].
+/// Otherwise, it's a [Text].
+class WebSelectableText extends StatelessWidget {
+  /// The text to display.
+  ///
+  /// This will be null if a [textSpan] is provided instead.
+  final String data;
+
+  /// Creates a web-selectable text widget.
+  ///
+  /// If the platform is web, the widget created is [SelectableText].
+  /// Otherwise, it's a [Text].
+  const WebSelectableText(this.data, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return SelectableText(data);
+    }
+    return Text(data);
   }
 }
