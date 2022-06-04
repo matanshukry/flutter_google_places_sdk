@@ -14,7 +14,7 @@ final _kLogPrefix = 'flutter_google_place_sdk_windows_plugin :: WARN -';
 class FlutterGooglePlacesSdkWindowsPlugin
     extends inter.FlutterGooglePlacesSdkPlatform {
   /// Registers this class as the default instance of [FlutterGooglePlacesSdkPlatform].
-  static void registerWith(Registrar registrar) {
+  static void registerWith() {
     inter.FlutterGooglePlacesSdkPlatform.instance =
         FlutterGooglePlacesSdkWindowsPlugin();
   }
