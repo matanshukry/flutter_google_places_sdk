@@ -12,7 +12,7 @@ const title = 'Flutter Google Places SDK Example';
 
 /// note: do NOT store your api key in here or in the code at all.
 /// use an external source such as file or firebase remote config
-const API_KEY = '';
+const API_KEY = 'AIzaSyBWWFuNhl-PWYt9Slo6jpjQR3g8xsJESR4';
 
 void main() {
   runApp(MyApp());
@@ -101,6 +101,9 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     _places = FlutterGooglePlacesSdk(API_KEY, locale: Locale('en'));
+    _places.isInitialized().then((value) {
+      debugPrint('Places Initialized: $value');
+    });
   }
 
   @override

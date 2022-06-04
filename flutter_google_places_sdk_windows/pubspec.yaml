@@ -1,0 +1,23 @@
+name: flutter_google_places_sdk_windows
+description: The windows implementation of Flutter plugin for google places sdk
+version: 0.1.0
+homepage: https://github.com/matanshukry/flutter_google_places_sdk/tree/master/flutter_google_places_sdk_windows
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  http: ^0.13.4
+  latlong2: ^0.8.1
+  flutter_google_places_sdk_platform_interface: ^0.2.4+1
+
+dev_dependencies:
+  flutter_lints: ^1.0.4
+  mockito: ^5.0.11
+
+flutter:
+  plugin:
+    platforms:
+      windows:
+        fileName: flutter_google_places_sdk_windows.dart
+        dartPluginClass: FlutterGooglePlacesSdkWindowsPlugin
