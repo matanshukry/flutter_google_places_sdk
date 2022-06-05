@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart'
     as inter;
+import 'package:flutter_google_places_sdk_windows/types/places_autocomplete_response.dart';
+import 'package:flutter_google_places_sdk_windows/types/places_autocomplete_status.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart' as latlnglib;
 
@@ -21,7 +22,7 @@ class FlutterGooglePlacesSdkWindowsPlugin
 
   static const _kAPI_HOST = 'https://maps.googleapis.com';
 
-  static const _kAPI_PLACES = '${_kAPI_HOST}/maps/api/place/';
+  static const _kAPI_PLACES = '${_kAPI_HOST}/maps/api/place';
 
   String? _apiKey;
   Locale? _locale;
@@ -63,9 +64,18 @@ class FlutterGooglePlacesSdkWindowsPlugin
     final url = _buildAutocompleteUrl(query, countries, placeTypeFilter,
         sessionToken, origin, locationBias, locationRestriction);
 
-    final inter.FindAutocompletePredictionsResponse result = await _doGet(url);
+    final PlacesAutocompleteResponse response =
+        await _doGet(url, (json) => PlacesAutocompleteResponse.fromJson(json));
 
-    return result;
+    if (response.status != PlacesAutocompleteStatus.OK &&
+        response.status != PlacesAutocompleteStatus.ZERO_RESULTS) {
+      throw response;
+    }
+
+    final predictions = response.predictions
+        .map((e) => e.toInterface())
+        .toList(growable: false);
+    return inter.FindAutocompletePredictionsResponse(predictions);
 
     // await _completer;
     // final typeFilterStr = _placeTypeToStr(placeTypeFilter);
@@ -410,12 +420,12 @@ class FlutterGooglePlacesSdkWindowsPlugin
     inter.LatLngBounds? locationBias,
     inter.LatLngBounds? locationRestriction,
   ) {
-    var url = '${_kAPI_PLACES}/autocomplete/json?input=${query}';
+    var url = '${_kAPI_PLACES}/autocomplete/json?input=${query}&key=${_apiKey}';
 
     // -- Language (from _locale)
     final langCode = _locale?.languageCode;
     if (langCode != null) {
-      url += 'language=$langCode';
+      url += '&language=$langCode';
     }
 
     // -- Countries (to Components)
@@ -427,7 +437,7 @@ class FlutterGooglePlacesSdkWindowsPlugin
 
     // -- Place Type
     if (placeTypeFilter != inter.PlaceTypeFilter.ALL) {
-      url += '&types=${placeTypeFilter.value}';
+      url += '&types=${placeTypeFilter.value.toLowerCase()}';
     }
 
     // -- Session Token
@@ -437,7 +447,7 @@ class FlutterGooglePlacesSdkWindowsPlugin
 
     // -- Origin
     if (origin != null) {
-      url += '&origin=${origin.lat},${origin.lng}';
+      url += _addUrlParam('origin', origin);
     }
 
     // -- Location Bias/Restrictions
@@ -448,7 +458,8 @@ class FlutterGooglePlacesSdkWindowsPlugin
 
     final loc = locationRestriction ?? locationBias;
     if (loc != null) {
-      url += '&location=${loc.center}&radius=${loc.radius}';
+      url += _addUrlParam('location', loc.center);
+      url += '&radius=${loc.radius}';
       if (locationRestriction != null) {
         url += '&strictbounds=true';
       }
@@ -457,26 +468,31 @@ class FlutterGooglePlacesSdkWindowsPlugin
     return url;
   }
 
-  Future<T> _doGet<T>(String url) async {
+  Future<T> _doGet<T>(
+      String url, T Function(Map<String, Object?>) jsonParser) async {
     final response = await http.get(Uri.parse(url));
-    final strBody = _decodeBody(response.bodyBytes);
-    if (response.statusCode < 200 || response.statusCode >= 300) {
+
+    String? strBody = null;
+    String strBodyErr = '';
+    try {
+      strBody = utf8.decode(response.bodyBytes);
+    } catch (err) {
+      strBodyErr = 'Failed decoding body! ' + err.toString();
+    }
+    if (response.statusCode < 200 ||
+        response.statusCode >= 300 ||
+        strBody == null) {
       final err =
-          "Bad result on call to $url. Status code (${response.statusCode}), body: $strBody";
+          "Bad result on call to $url. Status code (${response.statusCode}), body: $strBody, bodyFetchErr (if any): $strBodyErr";
       throw err;
     }
 
-    return jsonDecode(strBody) as T;
+    final Map<String, Object?> jsonBody = jsonDecode(strBody);
+    return jsonParser(jsonBody);
   }
 
-  String _decodeBody(Uint8List body) {
-    try {
-      return utf8.decode(body);
-    } catch (err) {
-      print('Failed decoding body!' + err.toString());
-    } finally {
-      return 'N/A';
-    }
+  String _addUrlParam(String name, inter.LatLng point) {
+    return '&$name=${point.lat}%2C${point.lng}';
   }
 }
 

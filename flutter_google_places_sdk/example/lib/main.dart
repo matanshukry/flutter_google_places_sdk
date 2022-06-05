@@ -12,7 +12,7 @@ const title = 'Flutter Google Places SDK Example';
 
 /// note: do NOT store your api key in here or in the code at all.
 /// use an external source such as file or firebase remote config
-const API_KEY = 'AIzaSyBWWFuNhl-PWYt9Slo6jpjQR3g8xsJESR4';
+const API_KEY = 'AIzaSyA_94E67UVMbh1r_Q7BxVohgBUkLu8O3r0';
 
 void main() {
   runApp(MyApp());
