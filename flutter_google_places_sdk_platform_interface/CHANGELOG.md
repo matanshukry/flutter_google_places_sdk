@@ -1,3 +1,7 @@
+## 0.2.4+2
+
+* updated types to use freezed, including rename toMap/fromMap to toJson/fromJson
+
 ## 0.2.4+1
 
 * fetchPlacePhoto response can also include url, to support web

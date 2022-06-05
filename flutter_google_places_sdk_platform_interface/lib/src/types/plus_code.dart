@@ -1,34 +1,23 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'plus_code.freezed.dart';
+part 'plus_code.g.dart';
+
 /// Plus Code, or Open Location Code (OLC), is a geocode system for identifying any geographical area on Earth, even when a street address does not exist.
 ///
 /// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/PlusCode
-class PlusCode {
-  const PlusCode({required this.compoundCode, required this.globalCode});
+@freezed
+class PlusCode with _$PlusCode {
+  /// Constructs a [PlusCode] object.
+  const factory PlusCode({
+    /// The compound plus code, e.g. "9G8F+5W Zurich, Switzerland".
+    required String compoundCode,
 
-  final String compoundCode;
-  final String globalCode;
+    /// The geo plus code, e.g. "8FVC9G8F+5W".
+    required String globalCode,
+  }) = _PlusCode;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PlusCode &&
-          runtimeType == other.runtimeType &&
-          compoundCode == other.compoundCode &&
-          globalCode == other.globalCode;
-
-  @override
-  int get hashCode => compoundCode.hashCode ^ globalCode.hashCode;
-
-  @override
-  String toString() =>
-      'PlusCode{compoundCode: $compoundCode, globalCode: $globalCode}';
-
-  Map<String, dynamic> toMap() =>
-      {'compoundCode': compoundCode, 'globalCode': globalCode};
-
-  static PlusCode? fromMap(Map<String, dynamic>? map) => map == null
-      ? null
-      : PlusCode(
-          compoundCode: map['compoundCode'],
-          globalCode: map['globalCode'],
-        );
+  /// Parse an [PlusCode] from json.
+  factory PlusCode.fromJson(Map<String, Object?> json) =>
+      _$PlusCodeFromJson(json);
 }

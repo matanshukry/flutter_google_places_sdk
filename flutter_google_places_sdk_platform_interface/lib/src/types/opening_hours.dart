@@ -1,41 +1,24 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_google_places_sdk_platform_interface/src/types/period.dart';
-import 'package:flutter_google_places_sdk_platform_interface/src/types/utils.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'opening_hours.freezed.dart';
+part 'opening_hours.g.dart';
 
 /// Represents information on when a [Place] will be open during the week.
 ///
 /// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/OpeningHours
-class OpeningHours {
-  const OpeningHours({required this.periods, required this.weekdayText});
+@freezed
+class OpeningHours with _$OpeningHours {
+  /// constructs an [OpeningHours] object.
+  const factory OpeningHours({
+    /// A list of Period objects that provide more detailed information that is equivalent to the data provided by getWeekdayText().
+    required List<Period> periods,
 
-  final List<Period> periods;
-  final List<String> weekdayText;
+    /// Returns a list of strings that represent opening and closing hours in human readable form.
+    required List<String> weekdayText,
+  }) = _OpeningHours;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is OpeningHours &&
-          runtimeType == other.runtimeType &&
-          listEquals(periods, other.periods) &&
-          listEquals(weekdayText, other.weekdayText);
-
-  @override
-  int get hashCode => periods.hashCode ^ weekdayText.hashCode;
-
-  @override
-  String toString() =>
-      'OpeningHours{periods: $periods, weekdayText: $weekdayText}';
-
-  Map<String, dynamic> toMap() =>
-      {'periods': periods, 'weekdayText': weekdayText};
-
-  static OpeningHours? fromMap(Map<String, dynamic>? map) => map == null
-      ? null
-      : OpeningHours(
-          periods: map['periods']
-              .map((entry) => Period.fromMap(toJsonMap(entry)!))
-              .toList()
-              .cast<Period>(),
-          weekdayText: map['weekdayText'].cast<String>(),
-        );
+  /// Parse an [OpeningHours] from json.
+  factory OpeningHours.fromJson(Map<String, Object?> json) =>
+      _$OpeningHoursFromJson(json);
 }

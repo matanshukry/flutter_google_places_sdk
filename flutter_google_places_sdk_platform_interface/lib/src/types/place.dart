@@ -6,7 +6,10 @@ import 'package:flutter_google_places_sdk_platform_interface/src/types/opening_h
 import 'package:flutter_google_places_sdk_platform_interface/src/types/photo_metadata.dart';
 import 'package:flutter_google_places_sdk_platform_interface/src/types/place_type.dart';
 import 'package:flutter_google_places_sdk_platform_interface/src/types/plus_code.dart';
-import 'package:flutter_google_places_sdk_platform_interface/src/types/utils.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'place.freezed.dart';
+part 'place.g.dart';
 
 /// Represents a particular physical place.
 ///
@@ -15,140 +18,61 @@ import 'package:flutter_google_places_sdk_platform_interface/src/types/utils.dar
 /// Note: In general, some fields will be inapplicable to certain places, or the information may not exist.
 ///
 /// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/Place
-class Place {
-  const Place({
-    this.address,
-    this.addressComponents,
-    this.businessStatus,
-    this.attributions,
-    this.latLng,
-    this.name,
-    this.openingHours,
-    this.phoneNumber,
-    this.photoMetadatas,
-    this.plusCode,
-    this.priceLevel,
-    this.rating,
-    this.types,
-    this.userRatingsTotal,
-    this.utcOffsetMinutes,
-    this.viewport,
-    this.websiteUri,
-  });
+@freezed
+class Place with _$Place {
+  const factory Place({
+    required String? address,
+    required List<AddressComponent>? addressComponents,
+    required BusinessStatus? businessStatus,
+    required List<String>? attributions,
+    required LatLng? latLng,
+    required String? name,
+    required OpeningHours? openingHours,
+    required String? phoneNumber,
+    required List<PhotoMetadata>? photoMetadatas,
+    required PlusCode? plusCode,
+    required int? priceLevel,
+    required double? rating,
+    required List<PlaceType>? types,
+    required int? userRatingsTotal,
+    required int? utcOffsetMinutes,
+    required LatLngBounds? viewport,
+    required Uri? websiteUri,
+  }) = _Place;
 
-  final String? address;
-  final List<AddressComponent>? addressComponents;
-  final BusinessStatus? businessStatus;
-  final List<String>? attributions;
-  final LatLng? latLng;
-  final String? name;
-  final OpeningHours? openingHours;
-  final String? phoneNumber;
-  final List<PhotoMetadata>? photoMetadatas;
-  final PlusCode? plusCode;
-  final int? priceLevel;
-  final double? rating;
-  final List<PlaceType>? types;
-  final int? userRatingsTotal;
-  final int? utcOffsetMinutes;
-  final LatLngBounds? viewport;
-  final Uri? websiteUri;
+  /// Parse an [Place] from json.
+  factory Place.fromJson(Map<String, Object?> json) =>
+      _$PlaceFromJson(json);
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Place &&
-          runtimeType == other.runtimeType &&
-          address == other.address &&
-          addressComponents == other.addressComponents &&
-          businessStatus == other.businessStatus &&
-          attributions == other.attributions &&
-          latLng == other.latLng &&
-          name == other.name &&
-          openingHours == other.openingHours &&
-          phoneNumber == other.phoneNumber &&
-          photoMetadatas == other.photoMetadatas &&
-          plusCode == other.plusCode &&
-          priceLevel == other.priceLevel &&
-          rating == other.rating &&
-          types == other.types &&
-          userRatingsTotal == other.userRatingsTotal &&
-          utcOffsetMinutes == other.utcOffsetMinutes &&
-          viewport == other.viewport &&
-          websiteUri == other.websiteUri;
-
-  @override
-  int get hashCode =>
-      address.hashCode ^
-      addressComponents.hashCode ^
-      businessStatus.hashCode ^
-      attributions.hashCode ^
-      latLng.hashCode ^
-      name.hashCode ^
-      openingHours.hashCode ^
-      phoneNumber.hashCode ^
-      photoMetadatas.hashCode ^
-      plusCode.hashCode ^
-      priceLevel.hashCode ^
-      rating.hashCode ^
-      types.hashCode ^
-      userRatingsTotal.hashCode ^
-      utcOffsetMinutes.hashCode ^
-      viewport.hashCode ^
-      websiteUri.hashCode;
-
-  @override
-  String toString() =>
-      'Place{address: $address, addressComponents: $addressComponents, businessStatus: $businessStatus, attributions: $attributions, latLng: $latLng, name: $name, openingHours: $openingHours, phoneNumber: $phoneNumber, photoMetadatas: $photoMetadatas, plusCode: $plusCode, priceLevel: $priceLevel, rating: $rating, types: $types, userRatingsTotal: $userRatingsTotal, utcOffsetMinutes: $utcOffsetMinutes, viewport: $viewport, websiteUri: $websiteUri}';
-
-  Map<String, dynamic> toMap() => {
-        'address': address,
-        'addressComponents': addressComponents?.map((e) => e.toMap()),
-        'businessStatus': businessStatus?.value,
-        'attributions': attributions,
-        'latLng': latLng?.toMap(),
-        'name': name,
-        'openingHours': openingHours?.toMap(),
-        'phoneNumber': phoneNumber,
-        'photoMetadatas': photoMetadatas?.map((e) => e.toMap()),
-        'plusCode': plusCode?.toMap(),
-        'priceLevel': priceLevel,
-        'rating': rating,
-        'types': types?.map((e) => e.value),
-        'userRatingsTotal': userRatingsTotal,
-        'utcOffsetMinutes': utcOffsetMinutes,
-        'viewport': viewport?.toMap(),
-        'websiteUri': websiteUri?.toString(),
-      };
-
-  static Place fromMap(Map<String, dynamic> map) => Place(
-        address: map['address'],
-        addressComponents: map['addressComponents']
-            ?.map((entry) =>
-                AddressComponent.fromMap(entry.cast<String, dynamic>()))
-            ?.toList()
-            ?.cast<AddressComponent>(),
-        businessStatus: (map['businessStatus'] as String?)?.toBusinessStatus(),
-        attributions: map['attributions']?.cast<String>(),
-        latLng: LatLng.fromMap(toJsonMap(map['latLng'])),
-        name: map['name'],
-        openingHours: OpeningHours.fromMap(toJsonMap(map['openingHours'])),
-        phoneNumber: map['phoneNumber'],
-        photoMetadatas: map['photoMetadatas']
-            ?.map((entry) => PhotoMetadata.fromMap(toJsonMap(entry)))
-            ?.toList()
-            ?.cast<PhotoMetadata>(),
-        plusCode: PlusCode.fromMap(toJsonMap(map['plusCode'])),
-        priceLevel: map['priceLevel'],
-        rating: map['rating'],
-        types: map['types']
-            ?.map((entry) => (entry as String?)?.toPlaceType())
-            ?.toList()
-            ?.cast<PlaceType>(),
-        userRatingsTotal: map['userRatingsTotal'],
-        utcOffsetMinutes: map['utcOffsetMinutes'],
-        viewport: LatLngBounds.fromMap(toJsonMap(map['viewport'])),
-        websiteUri:
-            map['websiteUri'] == null ? null : Uri.parse(map['websiteUri']),
-      );
+//
+// static Place fromMap(Map<String, Object> map) => Place(
+//       address: map['address'],
+//       addressComponents: map['addressComponents']
+//           ?.map((entry) =>
+//               AddressComponent.fromJson(entry.cast<String, Object>()))
+//           ?.toList()
+//           ?.cast<AddressComponent>(),
+//       businessStatus: (map['businessStatus'] as String?)?.toBusinessStatus(),
+//       attributions: map['attributions']?.cast<String>(),
+//       latLng: LatLng.fromMap(toJsonMap(map['latLng'])),
+//       name: map['name'],
+//       openingHours: OpeningHours.fromMap(toJsonMap(map['openingHours'])),
+//       phoneNumber: map['phoneNumber'],
+//       photoMetadatas: map['photoMetadatas']
+//           ?.map((entry) => PhotoMetadata.fromMap(toJsonMap(entry)))
+//           ?.toList()
+//           ?.cast<PhotoMetadata>(),
+//       plusCode: PlusCode.fromMap(toJsonMap(map['plusCode'])),
+//       priceLevel: map['priceLevel'],
+//       rating: map['rating'],
+//       types: map['types']
+//           ?.map((entry) => (entry as String?)?.toPlaceType())
+//           ?.toList()
+//           ?.cast<PlaceType>(),
+//       userRatingsTotal: map['userRatingsTotal'],
+//       utcOffsetMinutes: map['utcOffsetMinutes'],
+//       viewport: LatLngBounds.fromMap(toJsonMap(map['viewport'])),
+//       websiteUri:
+//           map['websiteUri'] == null ? null : Uri.parse(map['websiteUri']),
+//     );
 }

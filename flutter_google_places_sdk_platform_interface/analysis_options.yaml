@@ -37,6 +37,8 @@ analyzer:
     - "bin/cache/**"
     - "lib/l10n/messages_*.dart"
     - "lib/src/http/**"
+    - "**.g.dart"
+    - "**.freezed.dart"
 
 linter:
   rules:

@@ -59,9 +59,9 @@ class FlutterGooglePlacesSdkMethodChannel
         'countries': countries ?? [],
         'typeFilter': placeTypeFilter.value,
         'newSessionToken': newSessionToken,
-        'origin': origin?.toMap(),
-        'locationBias': locationBias?.toMap(),
-        'locationRestriction': locationRestriction?.toMap(),
+        'origin': origin?.toJson(),
+        'locationBias': locationBias?.toJson(),
+        'locationRestriction': locationRestriction?.toJson(),
       },
     ).then(_responseFromResult);
   }
@@ -71,7 +71,7 @@ class FlutterGooglePlacesSdkMethodChannel
   ) {
     final items = value
             ?.map((item) => item.cast<String, dynamic>())
-            .map((map) => AutocompletePrediction.fromMap(map))
+            .map((map) => AutocompletePrediction.fromJson(map))
             .toList(growable: false) ??
         [];
     return FindAutocompletePredictionsResponse(items);
@@ -95,7 +95,7 @@ class FlutterGooglePlacesSdkMethodChannel
 
   FetchPlaceResponse _responseFromPlaceDetails(dynamic value) {
     final Place? place =
-        value == null ? null : Place.fromMap(value.cast<String, dynamic>());
+        value == null ? null : Place.fromJson(value.cast<String, dynamic>());
     return FetchPlaceResponse(place);
   }
 
