@@ -1,8 +1,3 @@
-## 0.3.2+3
-
-* Upgrade iOS to 0.1.2+2
-  * Using locationBias and locationRestriction 
-
 ## 0.3.2+2
 
 * Upgrade iOS to 0.1.2+1
