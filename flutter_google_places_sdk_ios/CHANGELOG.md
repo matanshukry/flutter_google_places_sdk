@@ -1,3 +1,8 @@
+## 0.1.2+2
+
+* Using locationBias and locationRestriction
+
+
 ## 0.1.2+1
 
 * Send viewport parameter
