@@ -1,3 +1,7 @@
+## 0.2.4+3
+
+* Introducing new method: `updateSettings`
+
 ## 0.2.4+2
 
 * Changing `fields` property in `fetchPlace` method to required
