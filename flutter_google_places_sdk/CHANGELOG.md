@@ -1,3 +1,7 @@
+## 0.3.2+5
+
+* Sdk `updateSettings` method argument apiKey is now optional and will use the last apiKey if null.
+
 ## 0.3.2+4
 
 * Updating platform interface to 0.2.4+3

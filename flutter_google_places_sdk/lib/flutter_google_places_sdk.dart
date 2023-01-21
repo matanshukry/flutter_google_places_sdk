@@ -167,11 +167,13 @@ class FlutterGooglePlacesSdk {
   }
 
   /// Updates the settings of the places client with the given API key and locale.
-  Future<void> updateSettings(String apiKey, {Locale? locale}) {
-    _apiKey = apiKey;
+  /// If apiKey is null, the last key will be used.
+  /// If locale is null, it will not be updated.
+  Future<void> updateSettings({String? apiKey, Locale? locale}) {
+    _apiKey = apiKey ?? this.apiKey;
     _locale = locale;
 
     return _addMethodCall(
-        () => platform.updateSettings(apiKey, locale: locale));
+        () => platform.updateSettings(_apiKey, locale: locale));
   }
 }
