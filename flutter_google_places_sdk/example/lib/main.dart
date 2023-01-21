@@ -3,16 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:flutter_google_places_sdk_example/constants.dart';
 import 'package:flutter_google_places_sdk_example/google_places_img.dart'
     if (dart.library.html) 'package:flutter_google_places_sdk_example/google_places_img_web.dart'
     as gpi;
+import 'package:flutter_google_places_sdk_example/settings_page.dart';
 
 /// Title
 const title = 'Flutter Google Places SDK Example';
-
-/// note: do NOT store your api key in here or in the code at all.
-/// use an external source such as file or firebase remote config
-const API_KEY = '';
 
 void main() {
   runApp(MyApp());
@@ -100,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    _places = FlutterGooglePlacesSdk(API_KEY, locale: Locale('en'));
+    _places = FlutterGooglePlacesSdk(INITIAL_API_KEY, locale: INITIAL_LOCALE);
   }
 
   @override
@@ -109,7 +107,13 @@ class _MyHomePageState extends State<MyHomePage> {
     final fetchPlaceWidgets = _buildFetchPlaceWidgets();
     final fetchPlacePhotoWidgets = _buildFetchPlacePhotoWidgets();
     return Scaffold(
-      appBar: AppBar(title: const Text(title)),
+      appBar: AppBar(
+        title: const Text(title),
+        actions: [
+          new IconButton(
+              onPressed: _openSettingsModal, icon: const Icon(Icons.settings)),
+        ],
+      ),
       body: Padding(
         padding: EdgeInsets.all(30),
         child: ListView(
@@ -433,6 +437,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return gpi.GooglePlacesImg(
         photoMetadata: _placePhotoMetadata!, placePhotoResponse: placePhoto);
   }
+
+  void _openSettingsModal() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => SettingsPage(_places)));
+  }
 }
 
 /// Callback function with LatLngBounds
@@ -515,7 +524,7 @@ class _LocationFieldState extends State<LocationField> {
         keyboardType:
             TextInputType.numberWithOptions(signed: true, decimal: true),
         inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'[0-9\.]')),
+          FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
         ],
         onChanged: (value) => _onValueChanged(controller, value),
         decoration: InputDecoration(label: Text(label)),

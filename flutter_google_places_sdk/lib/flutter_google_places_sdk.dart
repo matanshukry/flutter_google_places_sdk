@@ -36,7 +36,8 @@ export 'package:flutter_google_places_sdk_platform_interface/flutter_google_plac
 /// Client used to call methods on the native google places sdk
 class FlutterGooglePlacesSdk {
   /// Construct a FlutterGooglePlacesSdk using the specific api key and locale
-  FlutterGooglePlacesSdk(this.apiKey, {this.locale});
+  FlutterGooglePlacesSdk(this._apiKey, {Locale? locale})
+      : this._locale = locale;
 
   /// "Powered by google" image that should be used when background is white
   static const AssetImage ASSET_POWERED_BY_GOOGLE_ON_WHITE =
@@ -52,10 +53,14 @@ class FlutterGooglePlacesSdk {
 
   /// The Places API key
   /// https://developers.google.com/maps/documentation/places/android-sdk/get-api-key
-  final String apiKey;
+  String get apiKey => _apiKey;
+
+  String _apiKey;
 
   /// The locale in which Places API responses will be localized. If null, the device locale at the point of request is used.
-  final Locale? locale;
+  Locale? get locale => _locale;
+
+  Locale? _locale;
 
   Future<void>? _lastMethodCall;
   Future<void>? _initialization;
@@ -140,7 +145,7 @@ class FlutterGooglePlacesSdk {
   ///
   /// For more info about billing: https://developers.google.com/maps/documentation/places/web-service/usage-and-billing
   Future<FetchPlaceResponse> fetchPlace(String placeId,
-      {List<PlaceField>? fields}) {
+      {required List<PlaceField> fields}) {
     return _addMethodCall(() => platform.fetchPlace(placeId, fields: fields));
   }
 
@@ -159,5 +164,14 @@ class FlutterGooglePlacesSdk {
   /// Returns whether or not the client has been initialized.
   Future<bool?> isInitialized() {
     return _addMethodCall(platform.isInitialized);
+  }
+
+  /// Updates the settings of the places client with the given API key and locale.
+  Future<void> updateSettings(String apiKey, {Locale? locale}) {
+    _apiKey = apiKey;
+    _locale = locale;
+
+    return _addMethodCall(
+        () => platform.updateSettings(apiKey, locale: locale));
   }
 }

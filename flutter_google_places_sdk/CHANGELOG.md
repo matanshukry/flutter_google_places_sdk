@@ -1,3 +1,11 @@
+## 0.3.2+4
+
+* Updating platform interface to 0.2.4+3
+* Updating ios to 0.1.2+3
+* Updating web to 0.1.3+3
+* Updating android to 0.1.2+5
+* Example changes, including settings page for updateSettings method
+
 ## 0.3.2+3
 
 * Upgrade iOS to 0.1.2+2
