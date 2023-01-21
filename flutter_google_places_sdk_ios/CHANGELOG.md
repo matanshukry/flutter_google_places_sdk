@@ -1,7 +1,10 @@
+## 0.1.2+3
+
+* Updating platform interface to 0.2.4+3
+
 ## 0.1.2+2
 
 * Using locationBias and locationRestriction
-
 
 ## 0.1.2+1
 

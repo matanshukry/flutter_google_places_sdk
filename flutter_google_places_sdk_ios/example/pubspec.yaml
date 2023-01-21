@@ -9,11 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   flutter_google_places_sdk_ios:
     path: ../
-
-  cupertino_icons: ^1.0.3
 
 dev_dependencies:
 
