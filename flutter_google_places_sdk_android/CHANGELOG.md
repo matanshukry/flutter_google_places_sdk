@@ -1,3 +1,8 @@
+## 0.1.2+5
+
+* Updating interface version to 0.2.4+3
+* Implementing `updateSettings` interface method
+
 ## 0.1.2+4
 
 * Allowing android locale to pass null country (will use current locale country as default)
