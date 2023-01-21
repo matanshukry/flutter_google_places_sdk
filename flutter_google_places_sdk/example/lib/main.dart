@@ -99,6 +99,9 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     _places = FlutterGooglePlacesSdk(INITIAL_API_KEY, locale: INITIAL_LOCALE);
+    _places.isInitialized().then((value) {
+      debugPrint('Places Initialized: $value');
+    });
   }
 
   @override
