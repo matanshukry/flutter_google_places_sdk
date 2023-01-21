@@ -1,6 +1,11 @@
+## 0.2.4+3
+
+* Introducing new method: `updateSettings`
+
 ## 0.2.4+2
 
-* updated types to use freezed, including rename toMap/fromMap to toJson/fromJson
+* Changing `fields` property in `fetchPlace` method to required
+* Updating `plugin_platform_interface` dependency version to 2.1.3
 
 ## 0.2.4+1
 

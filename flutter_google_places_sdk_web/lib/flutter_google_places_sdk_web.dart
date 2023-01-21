@@ -4,6 +4,7 @@ library places;
 import 'dart:async';
 import 'dart:developer';
 import 'dart:html' as html;
+import 'dart:js_util';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,9 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   PlacesService? _svcPlaces;
   AutocompleteSessionToken? _lastSessionToken;
 
+  // Language
+  String? _language;
+
   // Cache for photos
   final _photosCache = <String, PlacePhoto>{};
   var _runningUid = 1;
@@ -66,7 +70,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       var src =
           'https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap';
       if (locale?.languageCode != null) {
-        src = src + "&language=${locale?.languageCode}";
+        _language = locale?.languageCode;
       }
       body.append(html.ScriptElement()
         ..id = _SCRIPT_ID
@@ -76,6 +80,13 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     }
 
     return completer.future.then((_) {});
+  }
+
+  @override
+  Future<void> updateSettings(String apiKey, {Locale? locale}) async {
+    if (locale != null) {
+      _language = locale.languageCode;
+    }
   }
 
   void _doInit() {
@@ -107,9 +118,11 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     }
     final prom = _svcAutoComplete!.getPlacePredictions(AutocompletionRequest()
       ..input = query
+      ..origin = origin == null ? null : core.LatLng(origin.lat, origin.lng)
       ..types = typeFilterStr == null ? null : [typeFilterStr]
       ..componentRestrictions = (ComponentRestrictions()..country = countries)
-      ..bounds = _boundsToWeb(locationBias));
+      ..bounds = _boundsToWeb(locationBias)
+      ..language = _language);
     final resp = await prom;
 
     final predictions = resp.predictions
@@ -159,7 +172,8 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     final prom = _getDetails(PlaceDetailsRequest()
       ..placeId = placeId
       ..fields = fields?.map(this._mapField).toList(growable: false)
-      ..sessionToken = _lastSessionToken);
+      ..sessionToken = _lastSessionToken
+      ..language = _language);
 
     final resp = await prom;
     return FetchPlaceResponse(resp.place);
@@ -229,7 +243,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
           ?.map(_parseAddressComponent)
           .cast<AddressComponent>()
           .toList(growable: false),
-      businessStatus: _parseBusinessStatus(place.businessStatus),
+      businessStatus: _parseBusinessStatus(getProperty(place, 'business_status')),
       attributions: place.htmlAttributions?.cast<String>(),
       latLng: _parseLatLang(place.geometry?.location),
       name: place.name,
@@ -338,8 +352,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     );
   }
 
-  inter.BusinessStatus? _parseBusinessStatus(
-      places.BusinessStatus? businessStatus) {
+  inter.BusinessStatus? _parseBusinessStatus(String? businessStatus) {
     if (businessStatus == null) {
       return null;
     }

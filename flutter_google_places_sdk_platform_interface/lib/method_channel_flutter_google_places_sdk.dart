@@ -21,20 +21,28 @@ class FlutterGooglePlacesSdkMethodChannel
 
   @override
   Future<void> initialize(String apiKey, {Locale? locale}) {
-    return _channel.invokeMethod<void>('initialize', {
-      'apiKey': apiKey,
-      'locale': locale == null
-          ? null
-          : {
-              'country': locale.countryCode,
-              'language': locale.languageCode,
-            },
-    });
+    return _invokeForSettings('initialize', apiKey, locale);
   }
 
   @override
   Future<void> deinitialize() {
     return _channel.invokeMethod<void>('deinitialize');
+  }
+
+  Future<void> updateSettings(String apiKey, {Locale? locale}) {
+    return _invokeForSettings('updateSettings', apiKey, locale);
+  }
+
+  Future<void> _invokeForSettings(String methodName, String apiKey, Locale? locale) {
+    return _channel.invokeMethod<void>(methodName, {
+      'apiKey': apiKey,
+      'locale': locale == null
+          ? null
+          : {
+        'country': locale.countryCode,
+        'language': locale.languageCode,
+      },
+    });
   }
 
   /* Client methods */
@@ -80,7 +88,7 @@ class FlutterGooglePlacesSdkMethodChannel
   @override
   Future<FetchPlaceResponse> fetchPlace(
     String placeId, {
-    List<PlaceField>? fields,
+    required List<PlaceField> fields,
     bool? newSessionToken,
   }) {
     return _channel.invokeMapMethod(

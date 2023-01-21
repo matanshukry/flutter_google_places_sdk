@@ -48,6 +48,13 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                 initialize(apiKey, locale)
                 result.success(null)
             }
+            METHOD_UPDATE_SETTINGS -> {
+                val apiKey = call.argument<String>("apiKey")
+                val localeMap = call.argument<Map<String, Any>>("locale")
+                val locale = readLocale(localeMap)
+                updateSettings(apiKey, locale)
+                result.success(null)
+            }
             METHOD_DEINITIALIZE -> {
                 Places.deinitialize()
                 result.success(null)
@@ -402,14 +409,21 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
             return null
         }
 
-        val language = localeMap["language"] as String
-        val country = localeMap["country"] as String
+        val language = localeMap["language"] as? String ?: return null
+        var country = localeMap["country"] as? String
+        if (country == null) {
+            country = Locale.getDefault().country;
+        }
         return Locale(language, country)
     }
 
     private fun initialize(apiKey: String?, locale: Locale?) {
-        Places.initialize(applicationContext, apiKey ?: "", locale)
+        updateSettings(apiKey, locale);
         client = Places.createClient(applicationContext)
+    }
+
+    private fun updateSettings(apiKey: String?, locale: Locale?) {
+        Places.initialize(applicationContext, apiKey ?: "", locale)
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -418,6 +432,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
 
     companion object {
         private const val METHOD_INITIALIZE = "initialize"
+        private const val METHOD_UPDATE_SETTINGS = "updateSettings"
         private const val METHOD_DEINITIALIZE = "deinitialize"
         private const val METHOD_IS_INITIALIZE = "isInitialized"
         private const val METHOD_FIND_AUTOCOMPLETE_PREDICTIONS = "findAutocompletePredictions"
