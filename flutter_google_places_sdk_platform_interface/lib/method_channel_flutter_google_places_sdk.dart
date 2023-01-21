@@ -80,7 +80,7 @@ class FlutterGooglePlacesSdkMethodChannel
   @override
   Future<FetchPlaceResponse> fetchPlace(
     String placeId, {
-    List<PlaceField>? fields,
+    required List<PlaceField> fields,
     bool? newSessionToken,
   }) {
     return _channel.invokeMapMethod(

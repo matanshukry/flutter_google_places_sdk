@@ -93,7 +93,7 @@ abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
   /// For more info about billing: https://developers.google.com/maps/documentation/places/web-service/usage-and-billing
   Future<FetchPlaceResponse> fetchPlace(
     String placeId, {
-    List<PlaceField>? fields,
+    required List<PlaceField> fields,
     bool? newSessionToken,
   }) {
     throw UnimplementedError('fetchPlaceDetails() has not been implemented.');

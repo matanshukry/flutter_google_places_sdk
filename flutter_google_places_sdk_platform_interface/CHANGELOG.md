@@ -1,3 +1,8 @@
+## 0.2.4+2
+
+* Changing `fields` property in `fetchPlace` method to required
+* Updating `plugin_platform_interface` dependency version to 2.1.3
+
 ## 0.2.4+1
 
 * fetchPlacePhoto response can also include url, to support web
