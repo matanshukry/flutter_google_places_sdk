@@ -4,6 +4,7 @@ library places;
 import 'dart:async';
 import 'dart:developer';
 import 'dart:html' as html;
+import 'dart:js_util';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -230,7 +231,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
           ?.map(_parseAddressComponent)
           .cast<AddressComponent>()
           .toList(growable: false),
-      businessStatus: _parseBusinessStatus(place.businessStatus),
+      businessStatus: _parseBusinessStatus(getProperty(place, 'business_status')),
       attributions: place.htmlAttributions?.cast<String>(),
       latLng: _parseLatLang(place.geometry?.location),
       name: place.name,
@@ -339,8 +340,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     );
   }
 
-  inter.BusinessStatus? _parseBusinessStatus(
-      places.BusinessStatus? businessStatus) {
+  inter.BusinessStatus? _parseBusinessStatus(String? businessStatus) {
     if (businessStatus == null) {
       return null;
     }
