@@ -1,3 +1,7 @@
+## 0.1.3+2
+
+* Fix: pass `origin` parameter in the request, that enables distance calculation
+
 ## 0.1.3+1
 
 * Using locale input correctly now

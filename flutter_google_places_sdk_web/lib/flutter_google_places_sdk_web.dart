@@ -107,6 +107,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     }
     final prom = _svcAutoComplete!.getPlacePredictions(AutocompletionRequest()
       ..input = query
+      ..origin = origin == null ? null : core.LatLng(origin.lat, origin.lng)
       ..types = typeFilterStr == null ? null : [typeFilterStr]
       ..componentRestrictions = (ComponentRestrictions()..country = countries)
       ..bounds = _boundsToWeb(locationBias));
