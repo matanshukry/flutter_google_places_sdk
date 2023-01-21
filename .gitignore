@@ -43,3 +43,7 @@ build/
 .project
 .classpath
 .settings
+
+#
+*.g.dart
+*.freezed.dart
