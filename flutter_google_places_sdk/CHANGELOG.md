@@ -1,3 +1,7 @@
+## 0.3.2+6
+
+* Adding windows implementation.
+
 ## 0.3.2+5
 
 * Sdk `updateSettings` method argument apiKey is now optional and will use the last apiKey if null.
