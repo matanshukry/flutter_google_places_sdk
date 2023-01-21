@@ -1,53 +1,28 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'photo_metadata.freezed.dart';
+part 'photo_metadata.g.dart';
+
 /// The metadata corresponding to a single photo associated with a place.
 ///
 /// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/PhotoMetadata
-class PhotoMetadata {
-  const PhotoMetadata({
-    required this.photoReference,
-    required this.width,
-    required this.height,
-    required this.attributions,
-  });
+@freezed
+class PhotoMetadata with _$PhotoMetadata {
+  const factory PhotoMetadata({
+    /// Non-empty String used to identify the underlying photo.
+    required String photoReference,
 
-  final String photoReference;
-  final int width;
-  final int height;
-  final String attributions;
+    /// The maximum width in which this photo is available.
+    required int width,
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PhotoMetadata &&
-          runtimeType == other.runtimeType &&
-          photoReference == other.photoReference &&
-          width == other.width &&
-          height == other.height &&
-          attributions == other.attributions;
+    /// The maximum height in which this photo is available.
+    required int height,
 
-  @override
-  int get hashCode =>
-      photoReference.hashCode ^
-      width.hashCode ^
-      height.hashCode ^
-      attributions.hashCode;
+    /// The attributions that must be shown to the user if this photo is displayed.
+    required String attributions,
+  }) = _PhotoMetadata;
 
-  @override
-  String toString() =>
-      'PhotoMetadata{photoReference: $photoReference, width: $width, height: $height, attributions: $attributions}';
-
-  Map<String, dynamic> toMap() => {
-        'photoReference': photoReference,
-        'width': width,
-        'height': height,
-        'attributions': attributions
-      };
-
-  static PhotoMetadata? fromMap(Map<String, dynamic>? map) => map == null
-      ? null
-      : PhotoMetadata(
-          photoReference: map['photoReference'],
-          width: map['width'],
-          height: map['height'],
-          attributions: map['attributions'],
-        );
+  /// Parse an [PhotoMetadata] from json.
+  factory PhotoMetadata.fromJson(Map<String, Object?> json) =>
+      _$PhotoMetadataFromJson(json);
 }
