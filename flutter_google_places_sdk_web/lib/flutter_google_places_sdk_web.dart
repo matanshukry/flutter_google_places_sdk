@@ -38,6 +38,9 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   PlacesService? _svcPlaces;
   AutocompleteSessionToken? _lastSessionToken;
 
+  // Language
+  String? _language;
+
   // Cache for photos
   final _photosCache = <String, PlacePhoto>{};
   var _runningUid = 1;
@@ -67,7 +70,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       var src =
           'https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap';
       if (locale?.languageCode != null) {
-        src = src + "&language=${locale?.languageCode}";
+        _language = locale?.languageCode;
       }
       body.append(html.ScriptElement()
         ..id = _SCRIPT_ID
@@ -77,6 +80,13 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     }
 
     return completer.future.then((_) {});
+  }
+
+  @override
+  Future<void> updateSettings(String apiKey, {Locale? locale}) async {
+    if (locale != null) {
+      _language = locale.languageCode;
+    }
   }
 
   void _doInit() {
@@ -111,7 +121,8 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       ..origin = origin == null ? null : core.LatLng(origin.lat, origin.lng)
       ..types = typeFilterStr == null ? null : [typeFilterStr]
       ..componentRestrictions = (ComponentRestrictions()..country = countries)
-      ..bounds = _boundsToWeb(locationBias));
+      ..bounds = _boundsToWeb(locationBias)
+      ..language = _language);
     final resp = await prom;
 
     final predictions = resp.predictions
@@ -161,7 +172,8 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     final prom = _getDetails(PlaceDetailsRequest()
       ..placeId = placeId
       ..fields = fields?.map(this._mapField).toList(growable: false)
-      ..sessionToken = _lastSessionToken);
+      ..sessionToken = _lastSessionToken
+      ..language = _language);
 
     final resp = await prom;
     return FetchPlaceResponse(resp.place);
