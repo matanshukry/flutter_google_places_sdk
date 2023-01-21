@@ -402,8 +402,11 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
             return null
         }
 
-        val language = localeMap["language"] as String
-        val country = localeMap["country"] as String
+        val language = localeMap["language"] as? String ?: return null
+        var country = localeMap["country"] as? String
+        if (country == null) {
+            country = Locale.getDefault().country;
+        }
         return Locale(language, country)
     }
 
