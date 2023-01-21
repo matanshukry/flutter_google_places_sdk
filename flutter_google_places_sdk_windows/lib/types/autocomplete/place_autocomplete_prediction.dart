@@ -1,12 +1,12 @@
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart'
     as inter;
-import 'package:flutter_google_places_sdk_windows/types/place_autocomplete_matched_substring.dart';
-import 'package:flutter_google_places_sdk_windows/types/place_autocomplete_structured_format.dart';
-import 'package:flutter_google_places_sdk_windows/types/place_autocomplete_term.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'place_autocomplete_prediction.freezed.dart';
+import 'place_autocomplete_matched_substring.dart';
+import 'place_autocomplete_structured_format.dart';
+import 'place_autocomplete_term.dart';
 
+part 'place_autocomplete_prediction.freezed.dart';
 part 'place_autocomplete_prediction.g.dart';
 
 /// Prediction result from google maps api.

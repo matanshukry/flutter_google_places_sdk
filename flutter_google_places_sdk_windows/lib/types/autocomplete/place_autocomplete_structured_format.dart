@@ -1,12 +1,14 @@
-import 'package:flutter_google_places_sdk_windows/types/place_autocomplete_matched_substring.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'place_autocomplete_matched_substring.dart';
 
 part 'place_autocomplete_structured_format.freezed.dart';
 part 'place_autocomplete_structured_format.g.dart';
 
 /// Autocomplete Structured Format as returned from the google maps api.
 @freezed
-class PlaceAutocompleteStructuredFormat with _$PlaceAutocompleteStructuredFormat {
+class PlaceAutocompleteStructuredFormat
+    with _$PlaceAutocompleteStructuredFormat {
   /// Construct a [PlaceAutocompleteStructuredFormat ] object.
   const factory PlaceAutocompleteStructuredFormat({
     /// Contains the main text of a prediction, usually the name of the place.
