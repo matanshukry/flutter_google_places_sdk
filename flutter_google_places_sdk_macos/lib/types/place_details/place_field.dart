@@ -7,28 +7,27 @@ part 'place_field.g.dart';
 /// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/Place.Field
 @JsonEnum(fieldRename: FieldRename.snake, alwaysCreate: true)
 enum PlaceField {
-  Address,
-  FormattedAddress,
-  AddressComponents,
-  BusinessStatus,
-  Id,
+  address,
+  formattedAddress,
+  addressComponents,
+  businessStatus,
+  id,
   @JsonValue('geometry/location')
-  Location,
-  Name,
-  OpeningHours,
-  PhoneNumber,
-  PhotoMetadatas,
-  PlusCode,
-  Photos,
-  PriceLevel,
-  Rating,
-  Types,
-  UserRatingsTotal,
-  @JsonValue('UTC_OFFSET')
-  UTCOffset,
+  location,
+  name,
+  openingHours,
+  phoneNumber,
+  photoMetadatas,
+  plusCode,
+  photos,
+  priceLevel,
+  rating,
+  types,
+  userRatingsTotal,
+  utcOffset,
   @JsonValue('geometry/viewport')
-  Viewport,
-  WebsiteUri,
+  viewport,
+  websiteUri,
 }
 
 extension PlaceFieldValue on PlaceField {

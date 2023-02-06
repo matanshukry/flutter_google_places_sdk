@@ -6,7 +6,7 @@ import 'package:flutter_google_places_sdk_macos/types/place_details/photo_metada
 import 'package:flutter_google_places_sdk_macos/types/place_details/place_type.dart';
 import 'package:flutter_google_places_sdk_macos/types/place_details/plus_code.dart';
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart'
-    as intern;
+    as inter;
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'place.freezed.dart';
@@ -46,46 +46,46 @@ class Place with _$Place {
     Uri? websiteUri,
   }) = _Place;
 
-  intern.Place toInterface() {
-    return intern.Place(
+  inter.Place toInterface() {
+    return inter.Place(
       addressComponents: addressComponents
-          .map((e) => intern.AddressComponent(
+          .map((e) => inter.AddressComponent(
               name: e.name, shortName: e.shortName, types: e.types))
           .toList(),
       businessStatus: businessStatus == null
           ? null
-          : intern.BusinessStatus.values[businessStatus!.index],
+          : inter.BusinessStatus.values[businessStatus!.index],
       address: formattedAddress,
       attributions: attributions,
-      latLng: intern.LatLng(
+      latLng: inter.LatLng(
           lat: geometry?.location?.lat ?? -180,
           lng: geometry?.location?.lng ?? -180),
       name: name,
       openingHours: _parseOpeningHours(),
       phoneNumber: formattedPhoneNumber,
       photoMetadatas: photos
-          .map((e) => intern.PhotoMetadata(
+          .map((e) => inter.PhotoMetadata(
                 height: e.height,
                 width: e.width,
                 attributions: e.attributions.reduce((a, b) => '$a|$b'),
                 photoReference: e.photoReference,
               ))
           .toList(),
-      plusCode: intern.PlusCode(
+      plusCode: inter.PlusCode(
         compoundCode: plusCode?.compoundCode ?? '',
         globalCode: plusCode?.globalCode ?? '',
       ),
       priceLevel: priceLevel,
       rating: rating,
       types: types.map((e) {
-        return intern.PlaceType.values[e.index];
+        return inter.PlaceType.values[e.index];
       }).toList(),
-      viewport: intern.LatLngBounds(
-        northeast: intern.LatLng(
+      viewport: inter.LatLngBounds(
+        northeast: inter.LatLng(
           lat: geometry?.viewport?.northeast.lat ?? -180,
           lng: geometry?.viewport?.northeast.lng ?? -180,
         ),
-        southwest: intern.LatLng(
+        southwest: inter.LatLng(
           lat: geometry?.viewport?.southwest.lat ?? -180,
           lng: geometry?.viewport?.southwest.lng ?? -180,
         ),
@@ -96,29 +96,29 @@ class Place with _$Place {
     );
   }
 
-  intern.OpeningHours _parseOpeningHours() {
-    return intern.OpeningHours(
+  inter.OpeningHours _parseOpeningHours() {
+    return inter.OpeningHours(
       periods: openingHours?.periods.map((e) {
             final openHour = int.parse(e.open.time.substring(0, 2));
             final openMinutes =
                 int.parse(e.open.time.substring(2, e.open.time.length));
-            intern.TimeOfWeek? close;
+            inter.TimeOfWeek? close;
             if (e.close != null) {
               final closeTimes =
                   e.close!.time.split(':').map((e) => int.parse(e)).toList();
 
-              close = intern.TimeOfWeek(
-                day: intern.DayOfWeek.values[e.close?.day ?? 0],
-                time: intern.PlaceLocalTime(
+              close = inter.TimeOfWeek(
+                day: inter.DayOfWeek.values[e.close?.day ?? 0],
+                time: inter.PlaceLocalTime(
                   hours: closeTimes[0],
                   minutes: closeTimes[1],
                 ),
               );
             }
-            return intern.Period(
-              open: intern.TimeOfWeek(
-                day: intern.DayOfWeek.values[e.open.day],
-                time: intern.PlaceLocalTime(
+            return inter.Period(
+              open: inter.TimeOfWeek(
+                day: inter.DayOfWeek.values[e.open.day],
+                time: inter.PlaceLocalTime(
                   hours: openHour,
                   minutes: openMinutes,
                 ),
