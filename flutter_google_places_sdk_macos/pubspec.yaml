@@ -1,10 +1,11 @@
 name: flutter_google_places_sdk_macos
 description: The macos implementation of Flutter plugin for google places sdk
-publish_to: none
+version: 0.1.0+0
+homepage: https://github.com/matanshukry/flutter_google_places_sdk/tree/master/flutter_google_places_sdk_macos
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
-  flutter: '>=1.20.0'
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.20.0"
 
 dependencies:
   flutter:

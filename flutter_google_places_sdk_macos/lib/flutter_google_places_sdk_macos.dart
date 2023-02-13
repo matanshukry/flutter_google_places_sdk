@@ -13,7 +13,7 @@ import 'types/types.dart';
 
 final _kLogPrefix = 'flutter_google_place_sdk_macos_plugin :: WARN -';
 
-/// Web implementation plugin for flutter google places sdk
+/// macOS implementation plugin for flutter google places sdk
 class FlutterGooglePlacesSdkMacosPlugin
     extends inter.FlutterGooglePlacesSdkPlatform {
   /// Registers this class as the default instance of [FlutterGooglePlacesSdkPlatform].

@@ -4,8 +4,8 @@ version: 0.3.2+6
 homepage: https://github.com/matanshukry/flutter_google_places_sdk/tree/master/flutter_google_places_sdk
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
-  flutter: '>=1.20.0'
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.20.0"
 
 dependencies:
   flutter:
@@ -15,8 +15,7 @@ dependencies:
   flutter_google_places_sdk_web: ^0.1.3+3
   flutter_google_places_sdk_android: ^0.1.2+5
   flutter_google_places_sdk_windows: ^0.1.0+1
-  flutter_google_places_sdk_macos:
-    path: '../flutter_google_places_sdk_macos'
+  flutter_google_places_sdk_macos: ^0.1.0+0
 
 dev_dependencies:
   flutter_test:
