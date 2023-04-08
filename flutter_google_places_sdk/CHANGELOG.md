@@ -1,3 +1,7 @@
+## 0.3.2+7
+
+* Adding linux implementation.
+
 ## 0.3.2+6
 
 * Adding windows implementation.
