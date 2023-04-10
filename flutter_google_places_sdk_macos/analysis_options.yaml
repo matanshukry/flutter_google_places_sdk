@@ -1,0 +1,7 @@
+linter:
+  rules:
+    - public_member_api_docs
+    - package_api_docs
+analyzer:
+  errors:
+    invalid_annotation_target: ignore
