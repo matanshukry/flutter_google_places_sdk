@@ -1,3 +1,7 @@
+## 0.3.2+8
+
+* Adding macos implementation.
+
 ## 0.3.2+7
 
 * Adding linux implementation.
