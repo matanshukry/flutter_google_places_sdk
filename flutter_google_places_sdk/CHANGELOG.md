@@ -1,3 +1,8 @@
+## 0.3.3
+
+* Upgrades iOS to 0.1.3
+  * Fixes viewport always being null on iOS (#15)
+
 ## 0.3.2+7
 
 * Adding linux implementation.
