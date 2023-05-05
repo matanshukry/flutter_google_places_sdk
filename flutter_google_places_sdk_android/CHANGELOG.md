@@ -1,3 +1,9 @@
+## 0.1.2+7
+
+* Updating kotlin version to 1.8.21
+* Updating gradle version to 8.1.1
+* Updating mockito version to 5.4.0
+
 ## 0.1.2+6
 
 * Updating kotlin version to 1.7.21
