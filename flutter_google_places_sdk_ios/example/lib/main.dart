@@ -253,7 +253,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final theme = Theme.of(context);
     final errorText = err == null ? '' : err.toString();
     return Text(errorText,
-        style: theme.textTheme.caption?.copyWith(color: theme.errorColor));
+        style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error));
   }
 
   List<Widget> _buildFetchPlaceWidgets() {

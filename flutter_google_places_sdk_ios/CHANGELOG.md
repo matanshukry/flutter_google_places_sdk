@@ -1,3 +1,7 @@
+## 0.1.2+4
+
+* Implements latLngBoundsToMap
+
 ## 0.1.2+3
 
 * Updating platform interface to 0.2.4+3
