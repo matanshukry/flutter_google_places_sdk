@@ -1,3 +1,10 @@
+## 0.3.2+9
+
+* Updating ios to 0.1.2+4
+  - Implements latLngBoundsToMap 
+* Updating ios to 0.1.2+6
+  - Updating kotlin version to 1.7.21
+
 ## 0.3.2+8
 
 * Adding macos implementation.
