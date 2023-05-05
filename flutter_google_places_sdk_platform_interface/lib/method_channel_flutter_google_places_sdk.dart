@@ -95,7 +95,7 @@ class FlutterGooglePlacesSdkMethodChannel
       'fetchPlace',
       {
         'placeId': placeId,
-        'fields': fields?.map((e) => e.value).toList() ?? [],
+        'fields': fields.map((e) => e.value).toList() ?? [],
         'newSessionToken': newSessionToken,
       },
     ).then(_responseFromPlaceDetails);
