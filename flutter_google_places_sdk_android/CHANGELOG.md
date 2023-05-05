@@ -1,3 +1,7 @@
+## 0.1.2+6
+
+* Updating kotlin version to 1.7.21
+
 ## 0.1.2+5
 
 * Updating interface version to 0.2.4+3
