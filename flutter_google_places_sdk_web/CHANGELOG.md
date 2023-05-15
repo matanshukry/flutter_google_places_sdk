@@ -1,3 +1,7 @@
+## 0.1.3+4
+
+* Use formatted adrress instead of adr_address
+
 ## 0.1.3+3
 
 * Updating js dependency to 0.6.4
