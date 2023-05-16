@@ -1,3 +1,7 @@
+## 0.2.4+4
+
+* Added types property to the Autocomplete predictions
+
 ## 0.2.4+3
 
 * Introducing new method: `updateSettings`

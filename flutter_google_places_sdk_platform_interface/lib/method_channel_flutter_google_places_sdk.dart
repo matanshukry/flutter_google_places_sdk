@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +28,7 @@ class FlutterGooglePlacesSdkMethodChannel
     return _channel.invokeMethod<void>('deinitialize');
   }
 
+  @override
   Future<void> updateSettings(String apiKey, {Locale? locale}) {
     return _invokeForSettings('updateSettings', apiKey, locale);
   }
@@ -95,7 +95,7 @@ class FlutterGooglePlacesSdkMethodChannel
       'fetchPlace',
       {
         'placeId': placeId,
-        'fields': fields.map((e) => e.value).toList() ?? [],
+        'fields': fields.map((e) => e.value).toList(),
         'newSessionToken': newSessionToken,
       },
     ).then(_responseFromPlaceDetails);
