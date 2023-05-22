@@ -1,5 +1,9 @@
 ## 0.1.3+4
 
+* Fix session token usage
+
+## 0.1.3+4
+
 * Use formatted adrress instead of adr_address
 
 ## 0.1.3+3

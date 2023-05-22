@@ -116,7 +116,13 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       // https://issuetracker.google.com/issues/36219203
       log("locationRestriction is not supported: https://issuetracker.google.com/issues/36219203");
     }
+
+    final sessionToken = (newSessionToken ?? false) || _lastSessionToken == null
+        ? _lastSessionToken = AutocompleteSessionToken()
+        : _lastSessionToken;
+
     final prom = _svcAutoComplete!.getPlacePredictions(AutocompletionRequest()
+      ..sessionToken = sessionToken
       ..input = query
       ..origin = origin == null ? null : core.LatLng(origin.lat, origin.lng)
       ..types = typeFilterStr == null ? null : [typeFilterStr]
@@ -169,10 +175,13 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     List<PlaceField>? fields,
     bool? newSessionToken,
   }) async {
+    final sessionToken = (newSessionToken ?? false) ? null : _lastSessionToken;
+    _lastSessionToken = null;
+
     final prom = _getDetails(PlaceDetailsRequest()
+      ..sessionToken = sessionToken
       ..placeId = placeId
       ..fields = fields?.map(this._mapField).toList(growable: false)
-      ..sessionToken = _lastSessionToken
       ..language = _language);
 
     final resp = await prom;
