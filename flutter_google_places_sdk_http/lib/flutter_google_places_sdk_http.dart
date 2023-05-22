@@ -6,6 +6,7 @@ import 'package:flutter_google_places_sdk_platform_interface/flutter_google_plac
     as inter;
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart' as latlnglib;
+import 'package:collection/collection.dart';
 
 import 'types/types.dart';
 
@@ -80,7 +81,17 @@ class FlutterGooglePlacesSdkHttpPlugin
     List<inter.PlaceField>? fields,
     bool? newSessionToken,
   }) async {
-    throw UnimplementedError();
+    final sessionToken = (newSessionToken ?? false) ? null : _lastSessionToken;
+    final url = _buildDetailsUrl(placeId, fields, sessionToken);
+
+    final PlaceDetailsResponse response =
+        await _doGet(url, (json) => PlaceDetailsResponse.fromJson(json));
+
+    if (response.status != PlaceDetailsStatus.OK) {
+      throw response;
+    }
+
+    return inter.FetchPlaceResponse(_parsePlace(response.result));
   }
 
   @override
@@ -149,6 +160,71 @@ class FlutterGooglePlacesSdkHttpPlugin
     return url;
   }
 
+  String _buildDetailsUrl(
+    String placeId, 
+    List<inter.PlaceField>? fields,
+    String? sessionToken,
+  ) {
+    var url = '${_kAPI_PLACES}/details/json?place_id=${placeId}&key=${_apiKey}';
+
+    // -- Language (from _locale)
+    final langCode = _locale?.languageCode;
+    if (langCode != null) {
+      url += '&language=$langCode';
+    }
+
+    // -- Fields
+    if (fields != null) {
+      final strFields =
+          fields.map(this._mapField).join(',');
+      url += '&fields=${strFields}';
+    }
+
+    // -- Session Token
+    if (sessionToken != null) {
+      url += '&sessionToken=${sessionToken}';
+    }
+
+    return url;
+  }
+
+  String _mapField(inter.PlaceField field) {
+    switch (field) {
+      case inter.PlaceField.Address:
+        return 'formatted_address';
+      case inter.PlaceField.AddressComponents:
+        return 'address_components';
+      case inter.PlaceField.BusinessStatus:
+        return 'business_status';
+      case inter.PlaceField.Id:
+        return 'place_id';
+      case inter.PlaceField.Name:
+        return 'name';
+      case inter.PlaceField.PhoneNumber:
+        return 'international_phone_number';
+      case inter.PlaceField.PriceLevel:
+        return 'price_level';
+      case inter.PlaceField.Rating:
+        return 'rating';
+      case inter.PlaceField.Types:
+        return 'types';
+      case inter.PlaceField.UserRatingsTotal:
+        return 'user_ratings_total';
+      case inter.PlaceField.UTCOffset:
+        return 'utc_offset';
+      case inter.PlaceField.WebsiteUri:
+        return 'website';
+      // Not Implemented
+      case inter.PlaceField.Location: // geometry
+      case inter.PlaceField.Viewport: // geometry
+      case inter.PlaceField.PlusCode: // plus_code
+      case inter.PlaceField.PhotoMetadatas: // photos
+      case inter.PlaceField.OpeningHours: // opening_hours
+      default:
+        throw ArgumentError('Unsupported place field: $this');
+    }
+  }
+
   Future<T> _doGet<T>(
       String url, T Function(Map<String, Object?>) jsonParser) async {
     final response = await http.get(Uri.parse(url));
@@ -174,6 +250,70 @@ class FlutterGooglePlacesSdkHttpPlugin
 
   String _addUrlParam(String name, inter.LatLng point) {
     return '&$name=${point.lat}%2C${point.lng}';
+  }
+
+  inter.Place? _parsePlace(PlaceResult? place) {
+    if (place == null) {
+      return null;
+    }
+
+    return inter.Place(
+      address: place.formatted_address,
+      addressComponents: place.address_components
+          ?.map(_parseAddressComponent)
+          .cast<inter.AddressComponent>()
+          .toList(growable: false),
+      businessStatus: _parseBusinessStatus(place.business_status),
+      name: place.name,
+      phoneNumber: place.international_phone_number,
+      priceLevel: place.price_level,
+      rating: place.rating?.toDouble(),
+      types: place.types
+          ?.map(_parsePlaceType)
+          .where((item) => item != null)
+          .cast<inter.PlaceType>()
+          .toList(growable: false),
+      userRatingsTotal: place.user_ratings_total,
+      utcOffsetMinutes: place.utc_offset,
+      websiteUri: place.website,
+    );
+  }
+
+  inter.PlaceType? _parsePlaceType(String? placeType) {
+    if (placeType == null) {
+      return null;
+    }
+
+    placeType = placeType.toUpperCase();
+    return inter.PlaceType.values.cast<inter.PlaceType?>().firstWhere(
+        (element) => element!.value == placeType,
+        orElse: () => null);
+  }
+
+  inter.AddressComponent? _parseAddressComponent(
+      PlaceAddressComponent? addressComponent) {
+    if (addressComponent == null) {
+      return null;
+    }
+
+    return inter.AddressComponent(
+      name: addressComponent.long_name ?? '',
+      shortName: addressComponent.short_name ?? '',
+      types: addressComponent.types
+              ?.whereNotNull()
+              .map((e) => e.toString())
+              .cast<String>()
+              .toList(growable: false) ??
+          [],
+    );
+  }
+
+  inter.BusinessStatus? _parseBusinessStatus(String? businessStatus) {
+    if (businessStatus == null) {
+      return null;
+    }
+
+    return businessStatus.toString().toBusinessStatus();
   }
 }
 
