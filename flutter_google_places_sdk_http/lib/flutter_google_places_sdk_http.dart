@@ -7,6 +7,7 @@ import 'package:flutter_google_places_sdk_platform_interface/flutter_google_plac
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart' as latlnglib;
 import 'package:collection/collection.dart';
+import 'package:uuid/uuid.dart';
 
 import 'types/types.dart';
 
@@ -57,7 +58,10 @@ class FlutterGooglePlacesSdkHttpPlugin
     inter.LatLngBounds? locationBias,
     inter.LatLngBounds? locationRestriction,
   }) async {
-    final sessionToken = (newSessionToken ?? false) ? null : _lastSessionToken;
+    final sessionToken = (newSessionToken ?? false) || _lastSessionToken == null
+        ? _lastSessionToken = const Uuid().v4()
+        : _lastSessionToken;
+
     final url = _buildAutocompleteUrl(query, countries, placeTypeFilter,
         sessionToken, origin, locationBias, locationRestriction);
 
@@ -82,6 +86,8 @@ class FlutterGooglePlacesSdkHttpPlugin
     bool? newSessionToken,
   }) async {
     final sessionToken = (newSessionToken ?? false) ? null : _lastSessionToken;
+    _lastSessionToken = null;
+
     final url = _buildDetailsUrl(placeId, fields, sessionToken);
 
     final PlaceDetailsResponse response =
