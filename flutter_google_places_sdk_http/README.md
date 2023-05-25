@@ -10,5 +10,8 @@ An http implementation of [`flutter_google_places`](https://pub.dartlang.org/pac
 
 The following methods are not yet implemented:
 
-* `fetchPlace`
 * `fetchPlacePhoto`
+
+The following methods are partially implemented:
+
+* `fetchPlace` . Fields not supported: `Location`, `Viewport`, `PlusCode`, `PhotoMetadatas`, `OpeningHours`
