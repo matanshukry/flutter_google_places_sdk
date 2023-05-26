@@ -58,9 +58,7 @@ class FlutterGooglePlacesSdkHttpPlugin
     inter.LatLngBounds? locationBias,
     inter.LatLngBounds? locationRestriction,
   }) async {
-    final sessionToken = (newSessionToken ?? false) || _lastSessionToken == null
-        ? _lastSessionToken = const Uuid().v4()
-        : _lastSessionToken;
+    final sessionToken = _getSessionToken(newSessionToken ?? false);
 
     final url = _buildAutocompleteUrl(query, countries, placeTypeFilter,
         sessionToken, origin, locationBias, locationRestriction);
@@ -85,8 +83,8 @@ class FlutterGooglePlacesSdkHttpPlugin
     List<inter.PlaceField>? fields,
     bool? newSessionToken,
   }) async {
-    final sessionToken = (newSessionToken ?? false) ? null : _lastSessionToken;
-    _lastSessionToken = null;
+    final sessionToken = _getSessionToken(newSessionToken ?? false);
+    _cleanSessionToken();
 
     final url = _buildDetailsUrl(placeId, fields, sessionToken);
 
@@ -164,6 +162,15 @@ class FlutterGooglePlacesSdkHttpPlugin
     }
 
     return url;
+  }
+
+  String _getSessionToken(bool newSessionToken) {
+    final sessionToken = !newSessionToken ? _lastSessionToken : null;
+    return sessionToken ?? (_lastSessionToken = const Uuid().v4());
+  }
+
+  void _cleanSessionToken() {
+    _lastSessionToken = null;
   }
 
   String _buildDetailsUrl(
