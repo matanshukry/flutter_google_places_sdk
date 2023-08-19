@@ -28,14 +28,14 @@ void main() {
     fullText: 'ftext6cad',
   );
 
-  const kPlace = const Place(latLng: LatLng(lat: 542.13, lng: -32.43));
+  const kPlace = const Place(latLng: LatLng(lat: 542.13, lng: -32.43), address: '', addressComponents: [], businessStatus: null, attributions: [], name: '', openingHours: null, phoneNumber: '', photoMetadatas: [], plusCode: null, priceLevel: null, rating: null, types: [], userRatingsTotal: null, utcOffsetMinutes: null, viewport: null, websiteUri: null);
 
   final kDefaultResponses = <dynamic, dynamic>{
     'findAutocompletePredictions': <dynamic>[
-      kPrediction1.toMap(),
-      kPrediction2.toMap()
+      kPrediction1.toJson(),
+      kPrediction2.toJson()
     ],
-    'fetchPlace': kPlace.toMap(),
+    'fetchPlace': kPlace.toJson(),
   };
 
   const String kDefaultApiKey = 'test-api-key-23';
@@ -97,12 +97,12 @@ void main() {
       test('default behavior', () async {
         const queryTest = 'my-query-text';
         const countriesTest = ['c5', 'c32'];
-        const placeTypeFilterTest = PlaceTypeFilter.ESTABLISHMENT;
+        const placeTypeFilterTest = [PlaceTypeFilter.ESTABLISHMENT];
         final origin = LatLng(lat: 32.51, lng: 95.31);
         final result = await flutterGooglePlacesSdk.findAutocompletePredictions(
             queryTest,
             countries: countriesTest,
-            placeTypeFilter: placeTypeFilterTest,
+            placeTypesFilter: placeTypeFilterTest,
             newSessionToken: false,
             origin: origin);
 
@@ -116,7 +116,7 @@ void main() {
                   'countries': countriesTest,
                   "typeFilter": "ESTABLISHMENT",
                   'newSessionToken': false,
-                  'origin': origin.toMap(),
+                  'origin': origin.toJson(),
                   'locationBias': null,
                   'locationRestriction': null,
                 }),
@@ -142,7 +142,7 @@ void main() {
             _getInitializeMatcher(),
             isMethodCall('fetchPlace', arguments: <String, dynamic>{
               'placeId': placeId,
-              'fields': fields.map((e) => e.value).toList(growable: false),
+              'fields': fields.map((e) => e..name).toList(growable: false),
               'newSessionToken': null,
             }),
           ],

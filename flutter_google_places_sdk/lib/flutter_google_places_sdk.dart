@@ -8,11 +8,7 @@ export 'package:flutter_google_places_sdk_platform_interface/flutter_google_plac
         AddressComponent,
         AutocompletePrediction,
         BusinessStatus,
-        BusinessStatusDescriptor,
-        BusinessStatusEnumParser,
         DayOfWeek,
-        DayOfWeekDescriptor,
-        DayOfWeekEnumParser,
         FetchPlaceResponse,
         FetchPlacePhotoResponse,
         FindAutocompletePredictionsResponse,
@@ -23,7 +19,6 @@ export 'package:flutter_google_places_sdk_platform_interface/flutter_google_plac
         PhotoMetadata,
         Place,
         PlaceField,
-        PlaceFieldDescriptor,
         PlaceLocalTime,
         PlaceType,
         PlaceTypeDescriptor,
@@ -120,7 +115,7 @@ class FlutterGooglePlacesSdk {
   Future<FindAutocompletePredictionsResponse> findAutocompletePredictions(
     String query, {
     List<String>? countries,
-    PlaceTypeFilter placeTypeFilter = PlaceTypeFilter.ALL,
+    List<PlaceTypeFilter> placeTypesFilter = const [],
     bool? newSessionToken,
     LatLng? origin,
     LatLngBounds? locationBias,
@@ -129,7 +124,7 @@ class FlutterGooglePlacesSdk {
     return _addMethodCall(() => platform.findAutocompletePredictions(
           query,
           countries: countries,
-          placeTypeFilter: placeTypeFilter,
+          placeTypesFilter: placeTypesFilter,
           newSessionToken: newSessionToken,
           origin: origin,
           locationBias: locationBias,

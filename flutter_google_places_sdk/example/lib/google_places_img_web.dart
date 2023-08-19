@@ -19,7 +19,11 @@ class GooglePlacesImg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = placePhotoResponse.imageUrl!;
+    final imageUrl =
+        placePhotoResponse.whenOrNull(imageUrl: (imageUrl) => imageUrl);
+    if (imageUrl == null) {
+      return Text('Invalid image url!');
+    }
 
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(photoMetadata.photoReference,

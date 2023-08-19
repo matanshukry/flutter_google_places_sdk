@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   //
   String? _predictLastText;
 
-  PlaceTypeFilter _placeTypeFilter = PlaceTypeFilter.ESTABLISHMENT;
+  List<PlaceTypeFilter> _placeTypesFilter = [PlaceTypeFilter.ESTABLISHMENT];
 
   bool _locationBiasEnabled = true;
   LatLngBounds _locationBias = LatLngBounds(
@@ -137,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onPlaceTypeFilterChanged(PlaceTypeFilter? value) {
     if (value != null) {
       setState(() {
-        _placeTypeFilter = value;
+        _placeTypesFilter = [value];
       });
     }
   }
@@ -226,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
       final result = await _places.findAutocompletePredictions(
         _predictLastText!,
         countries: _countriesEnabled ? _countries : null,
-        placeTypeFilter: _placeTypeFilter,
+        placeTypesFilter: _placeTypesFilter,
         newSessionToken: false,
         origin: LatLng(lat: 43.12, lng: 95.20),
         locationBias: _locationBiasEnabled ? _locationBias : null,
@@ -379,7 +379,7 @@ class _MyHomePageState extends State<MyHomePage> {
             .map((item) => DropdownMenuItem<PlaceTypeFilter>(
                 child: Text(item.value), value: item))
             .toList(growable: false),
-        value: _placeTypeFilter,
+        value: _placeTypesFilter.isEmpty ? null : _placeTypesFilter[0],
         onChanged: _onPlaceTypeFilterChanged,
       ),
       // -- Location Bias

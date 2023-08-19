@@ -4,17 +4,15 @@ description: Demonstrates how to use the flutter_google_places_sdk plugin.
 publish_to: 'none'
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_google_places_sdk:
-    path: ../
+    path: ../../flutter_google_places_sdk
 
 dev_dependencies:
-  integration_test:
-    sdk: flutter
   flutter_test:
     sdk: flutter
 
