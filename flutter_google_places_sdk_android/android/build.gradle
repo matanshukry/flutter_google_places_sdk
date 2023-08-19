@@ -29,7 +29,12 @@ android {
     if (project.android.hasProperty("namespace")) {
         namespace 'com.msh.flutter_google_places_sdk'
     }
-    compileSdkVersion 28
+    compileSdkVersion 30
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'

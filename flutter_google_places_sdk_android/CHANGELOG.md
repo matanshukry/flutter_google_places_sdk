@@ -1,3 +1,7 @@
+## 0.1.6
+
+* Adding 'sourceCompatibility' and 'targetCompatibility' to build.gradle
+
 ## 0.1.5
 
 * Updating min android sdk version to 21
