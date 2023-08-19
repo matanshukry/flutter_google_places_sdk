@@ -1,3 +1,12 @@
+## 0.1.5
+
+* Updating min android sdk version to 21
+* Upgrading flutter_google_places_sdk_platform_interface to 0.2.5
+
+## 0.1.4
+
+* Upgrading java library com.google.android.libraries.places:places to 3.2.0
+
 ## 0.1.3
 
 * Added namespace attribute in android/build.gradle for AGP
