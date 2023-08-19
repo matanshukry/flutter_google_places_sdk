@@ -1,3 +1,11 @@
+## 0.3.3
+
+* Updated sdk minimum to 2.14.0
+* Updating android to 0.1.3
+* Updating windows to 0.1.1
+* Updating linux to 0.1.1
+* Updating macos to 0.1.1
+
 ## 0.3.2+9
 
 * Updating ios to 0.1.2+4
