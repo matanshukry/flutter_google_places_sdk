@@ -1,3 +1,7 @@
+## 0.1.2
+
+* Upgrading flutter_google_places_sdk_platform_interface to 0.2.5
+
 ## 0.1.1
 
 * Updating http to 1.1.0

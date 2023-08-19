@@ -50,14 +50,14 @@ class FlutterGooglePlacesSdkHttpPlugin
   Future<inter.FindAutocompletePredictionsResponse> findAutocompletePredictions(
     String query, {
     List<String>? countries,
-    inter.PlaceTypeFilter placeTypeFilter = inter.PlaceTypeFilter.ALL,
+    List<inter.PlaceTypeFilter> placeTypesFilter = const [],
     bool? newSessionToken,
     inter.LatLng? origin,
     inter.LatLngBounds? locationBias,
     inter.LatLngBounds? locationRestriction,
   }) async {
     final sessionToken = (newSessionToken ?? false) ? null : _lastSessionToken;
-    final url = _buildAutocompleteUrl(query, countries, placeTypeFilter,
+    final url = _buildAutocompleteUrl(query, countries, placeTypesFilter,
         sessionToken, origin, locationBias, locationRestriction);
 
     final PlacesAutocompleteResponse response =
@@ -95,7 +95,7 @@ class FlutterGooglePlacesSdkHttpPlugin
   String _buildAutocompleteUrl(
     String query,
     List<String>? countries,
-    inter.PlaceTypeFilter placeTypeFilter,
+    List<inter.PlaceTypeFilter> placeTypesFilter,
     String? sessionToken,
     inter.LatLng? origin,
     inter.LatLngBounds? locationBias,
@@ -117,9 +117,9 @@ class FlutterGooglePlacesSdkHttpPlugin
     }
 
     // -- Place Type
-    if (placeTypeFilter != inter.PlaceTypeFilter.ALL) {
-      url += '&types=${placeTypeFilter.value.toLowerCase()}';
-    }
+    placeTypesFilter.forEach((placeType) {
+      url += '&types=${placeType.value.toLowerCase()}';
+    });
 
     // -- Session Token
     if (sessionToken != null) {
