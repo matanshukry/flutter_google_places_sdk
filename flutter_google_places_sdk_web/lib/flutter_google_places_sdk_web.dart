@@ -104,14 +104,15 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   Future<FindAutocompletePredictionsResponse> findAutocompletePredictions(
     String query, {
     List<String>? countries,
-    PlaceTypeFilter placeTypeFilter = PlaceTypeFilter.ALL,
+    List<PlaceTypeFilter> placeTypesFilter = const [],
     bool? newSessionToken,
     inter.LatLng? origin,
     inter.LatLngBounds? locationBias,
     inter.LatLngBounds? locationRestriction,
   }) async {
     await _completer;
-    final typeFilterStr = _placeTypeToStr(placeTypeFilter);
+    final typeFilterStr =
+        placeTypesFilter.map(_placeTypeToStr).toList(growable: false);
     if (locationRestriction != null) {
       // https://issuetracker.google.com/issues/36219203
       log("locationRestriction is not supported: https://issuetracker.google.com/issues/36219203");
@@ -119,7 +120,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     final prom = _svcAutoComplete!.getPlacePredictions(AutocompletionRequest()
       ..input = query
       ..origin = origin == null ? null : core.LatLng(origin.lat, origin.lng)
-      ..types = typeFilterStr == null ? null : [typeFilterStr]
+      ..types = typeFilterStr.isEmpty ? null : typeFilterStr
       ..componentRestrictions = (ComponentRestrictions()..country = countries)
       ..bounds = _boundsToWeb(locationBias)
       ..language = _language);
@@ -145,8 +146,6 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
         return "geocode";
       case PlaceTypeFilter.REGIONS:
         return "(regions)";
-      case PlaceTypeFilter.ALL:
-        return null;
     }
   }
 
@@ -243,7 +242,8 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
           ?.map(_parseAddressComponent)
           .cast<AddressComponent>()
           .toList(growable: false),
-      businessStatus: _parseBusinessStatus(getProperty(place, 'business_status')),
+      businessStatus:
+          _parseBusinessStatus(getProperty(place, 'business_status')),
       attributions: place.htmlAttributions?.cast<String>(),
       latLng: _parseLatLang(place.geometry?.location),
       name: place.name,
@@ -357,7 +357,9 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       return null;
     }
 
-    return businessStatus.toString().toBusinessStatus();
+    businessStatus = businessStatus.toUpperCase();
+    return inter.BusinessStatus.values.firstWhereOrNull(
+        (element) => element.name.toUpperCase() == businessStatus);
   }
 
   OpeningHours? _parseOpeningHours(PlaceOpeningHours? openingHours) {
@@ -382,7 +384,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
 
   Period _parsePeriod(PlaceOpeningHoursPeriod period) {
     return Period(
-        open: _parseTimeOfWeek(period.open),
+        open: _parseTimeOfWeek(period.open)!,
         close: _parseTimeOfWeek(period.close));
   }
 
@@ -427,7 +429,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     int? maxWidth,
     int? maxHeight,
   }) async {
-    final value = _photosCache[photoMetadata.photoReference];
+    PlacePhoto? value = _photosCache[photoMetadata.photoReference];
     if (value == null) {
       throw PlatformException(
         code: 'API_ERROR_PHOTO',
@@ -441,7 +443,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       ..maxHeight = maxHeight;
     final url = value.getUrl(options);
 
-    return FetchPlacePhotoResponse.imageUrl(url);
+    return FetchPlacePhotoResponse.imageUrl(url!);
   }
 }
 

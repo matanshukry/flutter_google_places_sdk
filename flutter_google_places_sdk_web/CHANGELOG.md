@@ -1,6 +1,10 @@
+## 0.1.4
+
+* Upgrading flutter_google_places_sdk_platform_interface to 0.2.5
+
 ## 0.1.3+4
 
-* Use formatted adrress instead of adr_address
+* Use formatted address instead of adr_address
 
 ## 0.1.3+3
 
