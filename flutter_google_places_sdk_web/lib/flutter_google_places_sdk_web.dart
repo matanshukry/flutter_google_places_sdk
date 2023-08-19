@@ -100,6 +100,14 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     return _completer?.isCompleted == true;
   }
 
+  AutocompleteSessionToken _getSessionToken({required bool force}) {
+    final localToken = _lastSessionToken;
+    if (force || localToken == null) {
+      return AutocompleteSessionToken();
+    }
+    return localToken;
+  }
+
   @override
   Future<FindAutocompletePredictionsResponse> findAutocompletePredictions(
     String query, {
@@ -116,13 +124,26 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       // https://issuetracker.google.com/issues/36219203
       log("locationRestriction is not supported: https://issuetracker.google.com/issues/36219203");
     }
-    final prom = _svcAutoComplete!.getPlacePredictions(AutocompletionRequest()
-      ..input = query
-      ..origin = origin == null ? null : core.LatLng(origin.lat, origin.lng)
-      ..types = typeFilterStr == null ? null : [typeFilterStr]
-      ..componentRestrictions = (ComponentRestrictions()..country = countries)
-      ..bounds = _boundsToWeb(locationBias)
-      ..language = _language);
+    final sessionToken = _getSessionToken(force: newSessionToken == true);
+    final prom = _svcAutoComplete!.getPlacePredictions(
+      AutocompletionRequest()
+        ..input = query
+        ..origin = origin == null ? null : core.LatLng(origin.lat, origin.lng)
+        ..types = typeFilterStr == null ? null : [typeFilterStr]
+        ..componentRestrictions = (ComponentRestrictions()..country = countries)
+        ..bounds = _boundsToWeb(locationBias)
+        ..language = _language
+        ..sessionToken = sessionToken,
+      (results, status) {
+        if (status == PlacesServiceStatus.OK ||
+            status == PlacesServiceStatus.ZERO_RESULTS ||
+            status == PlacesServiceStatus.NOT_FOUND) {
+          _lastSessionToken = sessionToken;
+        } else {
+          log('API_ERROR: $status');
+        }
+      },
+    );
     final resp = await prom;
 
     final predictions = resp.predictions
@@ -169,10 +190,11 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     List<PlaceField>? fields,
     bool? newSessionToken,
   }) async {
+    final sessionToken = _getSessionToken(force: newSessionToken == true);
     final prom = _getDetails(PlaceDetailsRequest()
       ..placeId = placeId
       ..fields = fields?.map(this._mapField).toList(growable: false)
-      ..sessionToken = _lastSessionToken
+      ..sessionToken = sessionToken
       ..language = _language);
 
     final resp = await prom;
@@ -243,7 +265,8 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
           ?.map(_parseAddressComponent)
           .cast<AddressComponent>()
           .toList(growable: false),
-      businessStatus: _parseBusinessStatus(getProperty(place, 'business_status')),
+      businessStatus:
+          _parseBusinessStatus(getProperty(place, 'business_status')),
       attributions: place.htmlAttributions?.cast<String>(),
       latLng: _parseLatLang(place.geometry?.location),
       name: place.name,

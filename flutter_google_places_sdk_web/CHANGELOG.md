@@ -1,3 +1,7 @@
+## 0.1.3+5
+
+* Fix: session token is never used during the place autocomplete
+
 ## 0.1.3+4
 
 * Use formatted adrress instead of adr_address
