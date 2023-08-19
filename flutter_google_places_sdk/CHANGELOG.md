@@ -1,3 +1,7 @@
+## 0.3.5
+
+* Updating android to 0.1.6
+
 ## 0.3.4
 
 * Updated sdk minimum to 2.15.0
