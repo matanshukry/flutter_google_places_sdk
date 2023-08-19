@@ -1,3 +1,8 @@
+## 0.1.3
+
+* Added namespace attribute in android/build.gradle for AGP
+* Updated sdk minimum to 2.14.0
+
 ## 0.1.2+6
 
 * Updating kotlin version to 1.7.21
