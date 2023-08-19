@@ -29,9 +29,6 @@ enum PlaceTypeFilter {
   /// ADMINISTRATIVE_AREA_LEVEL_1
   /// ADMINISTRATIVE_AREA_LEVEL_2
   REGIONS,
-
-  /// All types are returned
-  ALL,
 }
 
 extension PlaceTypeFilterDescriptor on PlaceTypeFilter {

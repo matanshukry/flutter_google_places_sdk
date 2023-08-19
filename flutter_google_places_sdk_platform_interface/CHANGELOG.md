@@ -1,3 +1,9 @@
+## 0.2.5
+
+* findAutocompletePredictions: now uses List<String> for typeFilter rather than just a single String.
+* PlaceTypeFilter: Removed ALL enum. Since it's used as a list, passing an empty list is equivalent to all.
+* Updated sdk minimum to 2.14.0
+
 ## 0.2.4+4
 
 * Added types property to the Autocomplete predictions

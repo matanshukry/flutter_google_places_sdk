@@ -7,7 +7,7 @@ part 'lat_lng_bounds.g.dart';
 /// An immutable class representing a latitude/longitude aligned rectangle.
 ///
 /// Ref: https://developers.google.com/android/reference/com/google/android/gms/maps/model/LatLngBounds.html
-@freezed
+@Freezed()
 class LatLngBounds with _$LatLngBounds {
   /// constructs a [LatLngBounds] object.
   const factory LatLngBounds({

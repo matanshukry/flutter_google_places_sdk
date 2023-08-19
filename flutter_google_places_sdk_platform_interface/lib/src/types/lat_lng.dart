@@ -6,7 +6,7 @@ part 'lat_lng.g.dart';
 /// An immutable class representing a pair of latitude and longitude coordinates, stored as degrees.
 ///
 /// Ref: https://developers.google.com/android/reference/com/google/android/gms/maps/model/LatLng
-@freezed
+@Freezed()
 class LatLng with _$LatLng {
   /// constructs a [LatLng] object.
   const factory LatLng({
