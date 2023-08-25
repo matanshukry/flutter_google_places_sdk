@@ -1,3 +1,7 @@
+## 0.1.7
+
+* Upgrading flutter_google_places_sdk_platform_interface to 0.2.6
+
 ## 0.1.6
 
 * Adding 'sourceCompatibility' and 'targetCompatibility' to build.gradle
