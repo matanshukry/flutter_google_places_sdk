@@ -143,7 +143,18 @@ enum PlaceType {
   TRAVEL_AGENCY,
   UNIVERSITY,
   VETERINARY_CARE,
-  ZOO,
+  ZOO
+  ;
+
+  factory PlaceType.fromJson(String name) {
+    name = name.toLowerCase();
+    for (final value in values) {
+      if (value.name.toLowerCase() == name) {
+        return value;
+      }
+    }
+    throw ArgumentError.value(name, 'name', 'No enum value with that name');
+  }
 }
 
 final placeTypeValuesMap = {

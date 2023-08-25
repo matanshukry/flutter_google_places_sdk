@@ -28,7 +28,18 @@ enum PlaceTypeFilter {
   /// COUNTRY
   /// ADMINISTRATIVE_AREA_LEVEL_1
   /// ADMINISTRATIVE_AREA_LEVEL_2
-  REGIONS,
+  REGIONS
+  ;
+
+  factory PlaceTypeFilter.fromJson(String name) {
+    name = name.toLowerCase();
+    for (final value in values) {
+      if (value.name.toLowerCase() == name) {
+        return value;
+      }
+    }
+    throw ArgumentError.value(name, 'name', 'No enum value with that name');
+  }
 }
 
 extension PlaceTypeFilterDescriptor on PlaceTypeFilter {

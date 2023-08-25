@@ -7,5 +7,16 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 enum BusinessStatus {
   Operational,
   ClosedTemporarily,
-  ClosedPermanently,
+  ClosedPermanently
+  ;
+
+  factory BusinessStatus.fromJson(String name) {
+    name = name.toLowerCase();
+    for (final value in values) {
+      if (value.name.toLowerCase() == name) {
+        return value;
+      }
+    }
+    throw ArgumentError.value(name, 'name', 'No enum value with that name');
+  }
 }

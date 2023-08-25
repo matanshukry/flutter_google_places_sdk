@@ -1,3 +1,9 @@
+## 0.2.6
+
+* Added any_map to all enums to freezed -> json_serializable
+* Defined custom fromJson and toJson for all enums for case insensitive serialization & deserialization.
+* Upgraded sdk minimum to 2.17.0 for enhanced enum support
+
 ## 0.2.5
 
 * findAutocompletePredictions: now uses List<String> for typeFilter rather than just a single String.
