@@ -2,31 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
-
-export 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart'
-    show
-        AddressComponent,
-        AutocompletePrediction,
-        BusinessStatus,
-        DayOfWeek,
-        FetchPlaceResponse,
-        FetchPlacePhotoResponse,
-        FindAutocompletePredictionsResponse,
-        LatLng,
-        LatLngBounds,
-        OpeningHours,
-        Period,
-        PhotoMetadata,
-        Place,
-        PlaceField,
-        PlaceLocalTime,
-        PlaceType,
-        PlaceTypeDescriptor,
-        PlaceTypeEnumParser,
-        PlaceTypeFilter,
-        PlaceTypeFilterDescriptor,
-        PlusCode,
-        TimeOfWeek;
+export 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
 
 /// Client used to call methods on the native google places sdk
 class FlutterGooglePlacesSdk {

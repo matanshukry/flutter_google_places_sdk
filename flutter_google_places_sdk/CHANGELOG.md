@@ -1,3 +1,14 @@
+## 0.3.6
+
+* Exporting all types rather than just by name, allowing clients to also see the freezed classes
+* Upgrading flutter_google_places_sdk_platform_interface to 0.2.6
+* Upgrading flutter_google_places_sdk_web to 0.1.5
+* Upgrading flutter_google_places_sdk_android to 0.1.7
+* Upgrading flutter_google_places_sdk_windows to 0.1.3
+* Upgrading flutter_google_places_sdk_linux to 0.1.3
+* Upgrading flutter_google_places_sdk_macos to 0.1.3
+* Upgrading sdk minimum to 2.17.0
+
 ## 0.3.5
 
 * Updating android to 0.1.6
