@@ -1,3 +1,8 @@
+## 0.1.3
+
+* Upgrading flutter_google_places_sdk_platform_interface to 0.2.6
+* Upgrading sdk minimum to 2.17.0
+
 ## 0.1.2
 
 * Upgrading flutter_google_places_sdk_platform_interface to 0.2.5
