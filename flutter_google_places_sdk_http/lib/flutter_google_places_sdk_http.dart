@@ -50,7 +50,7 @@ class FlutterGooglePlacesSdkHttpPlugin
   Future<inter.FindAutocompletePredictionsResponse> findAutocompletePredictions(
     String query, {
     List<String>? countries,
-    List<inter.PlaceTypeFilter> placeTypesFilter = const [],
+    List<String> placeTypesFilter = const [],
     bool? newSessionToken,
     inter.LatLng? origin,
     inter.LatLngBounds? locationBias,
@@ -95,7 +95,7 @@ class FlutterGooglePlacesSdkHttpPlugin
   String _buildAutocompleteUrl(
     String query,
     List<String>? countries,
-    List<inter.PlaceTypeFilter> placeTypesFilter,
+    List<String> placeTypesFilter,
     String? sessionToken,
     inter.LatLng? origin,
     inter.LatLngBounds? locationBias,
@@ -118,7 +118,7 @@ class FlutterGooglePlacesSdkHttpPlugin
 
     // -- Place Type
     placeTypesFilter.forEach((placeType) {
-      url += '&types=${placeType.value.toLowerCase()}';
+      url += '&types=${placeType}';
     });
 
     // -- Session Token

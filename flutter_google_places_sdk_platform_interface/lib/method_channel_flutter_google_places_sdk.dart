@@ -51,7 +51,7 @@ class FlutterGooglePlacesSdkMethodChannel
   Future<FindAutocompletePredictionsResponse> findAutocompletePredictions(
     String query, {
     List<String>? countries,
-    List<PlaceTypeFilter> placeTypesFilter = const [],
+    List<String> placeTypesFilter = const [],
     bool? newSessionToken,
     LatLng? origin,
     LatLngBounds? locationBias,
@@ -65,7 +65,7 @@ class FlutterGooglePlacesSdkMethodChannel
       {
         'query': query,
         'countries': countries ?? [],
-        'typesFilter': placeTypesFilter.map((e) => e.value).toList(),
+        'typesFilter': placeTypesFilter,
         'newSessionToken': newSessionToken,
         'origin': origin?.toJson(),
         'locationBias': locationBias?.toJson(),

@@ -104,15 +104,13 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   Future<FindAutocompletePredictionsResponse> findAutocompletePredictions(
     String query, {
     List<String>? countries,
-    List<PlaceTypeFilter> placeTypesFilter = const [],
+    List<String> placeTypesFilter = const [],
     bool? newSessionToken,
     inter.LatLng? origin,
     inter.LatLngBounds? locationBias,
     inter.LatLngBounds? locationRestriction,
   }) async {
     await _completer;
-    final typeFilterStr =
-        placeTypesFilter.map(_placeTypeToStr).toList(growable: false);
     if (locationRestriction != null) {
       // https://issuetracker.google.com/issues/36219203
       log("locationRestriction is not supported: https://issuetracker.google.com/issues/36219203");
@@ -120,7 +118,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     final prom = _svcAutoComplete!.getPlacePredictions(AutocompletionRequest()
       ..input = query
       ..origin = origin == null ? null : core.LatLng(origin.lat, origin.lng)
-      ..types = typeFilterStr.isEmpty ? null : typeFilterStr
+      ..types = placeTypesFilter.isEmpty ? null : placeTypesFilter
       ..componentRestrictions = (ComponentRestrictions()..country = countries)
       ..bounds = _boundsToWeb(locationBias)
       ..language = _language);
@@ -132,21 +130,6 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
             .toList(growable: false) ??
         [];
     return FindAutocompletePredictionsResponse(predictions);
-  }
-
-  String? _placeTypeToStr(PlaceTypeFilter placeTypeFilter) {
-    switch (placeTypeFilter) {
-      case PlaceTypeFilter.ADDRESS:
-        return "address";
-      case PlaceTypeFilter.CITIES:
-        return "(cities)";
-      case PlaceTypeFilter.ESTABLISHMENT:
-        return "establishment";
-      case PlaceTypeFilter.GEOCODE:
-        return "geocode";
-      case PlaceTypeFilter.REGIONS:
-        return "(regions)";
-    }
   }
 
   inter.AutocompletePrediction _translatePrediction(

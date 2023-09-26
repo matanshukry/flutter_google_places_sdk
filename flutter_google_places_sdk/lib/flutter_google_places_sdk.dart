@@ -100,7 +100,8 @@ class FlutterGooglePlacesSdk {
     return _addMethodCall(() => platform.findAutocompletePredictions(
           query,
           countries: countries,
-          placeTypesFilter: placeTypesFilter,
+          placeTypesFilter:
+              placeTypesFilter.map((type) => type.apiExpectedValue).toList(),
           newSessionToken: newSessionToken,
           origin: origin,
           locationBias: locationBias,

@@ -40,7 +40,7 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
             let args = call.arguments as! Dictionary<String,Any>
             let query = args["query"] as! String
             let countries = args["countries"] as? [String]? ?? [String]()
-            let placeTypeFilter = args["typeFilter"] as? String
+            let placeTypeFilters = args["typesFilter"] as? [String]
             let origin = latLngFromMap(argument: args["origin"] as? Dictionary<String, Any?>)
             let newSessionToken = args["newSessionToken"] as? Bool
             let locationBias = rectangularBoundsFromMap(argument: args["locationBias"] as? Dictionary<String, Any?>)
@@ -49,7 +49,7 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
             
             // Create a type filter.
             let filter = GMSAutocompleteFilter()
-            filter.type = makeTypeFilter(typeFilter: placeTypeFilter);
+            filter.types = placeTypeFilters;
             filter.countries = countries
             filter.origin = origin
             filter.locationBias = locationBias
@@ -125,28 +125,6 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
             }
         default:
             result(FlutterMethodNotImplemented)
-        }
-    }
-    
-    private func makeTypeFilter(typeFilter: String?) -> GMSPlacesAutocompleteTypeFilter {
-        guard let typeFilter = typeFilter else {
-            return GMSPlacesAutocompleteTypeFilter.noFilter
-        }
-        switch (typeFilter.uppercased()) {
-        case "ADDRESS":
-            return GMSPlacesAutocompleteTypeFilter.address
-        case "CITIES":
-            return GMSPlacesAutocompleteTypeFilter.city
-        case "ESTABLISHMENT":
-            return GMSPlacesAutocompleteTypeFilter.establishment
-        case "GEOCODE":
-            return GMSPlacesAutocompleteTypeFilter.geocode
-        case "REGIONS":
-            return GMSPlacesAutocompleteTypeFilter.region
-        case "ALL":
-            fallthrough
-        default:
-            return GMSPlacesAutocompleteTypeFilter.noFilter
         }
     }
     

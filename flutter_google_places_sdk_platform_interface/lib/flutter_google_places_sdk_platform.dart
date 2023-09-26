@@ -79,7 +79,7 @@ abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
   Future<FindAutocompletePredictionsResponse> findAutocompletePredictions(
     String query, {
     List<String>? countries,
-    List<PlaceTypeFilter> placeTypesFilter = const [],
+    List<String> placeTypesFilter = const [],
     bool? newSessionToken,
     LatLng? origin,
     LatLngBounds? locationBias,

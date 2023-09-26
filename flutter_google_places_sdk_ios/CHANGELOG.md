@@ -1,3 +1,7 @@
+## 0.1.3
+
+* Now receiving an already converted string list for typesFilter in `findAutocompletePredictions` instead of only one typeFilter enum object
+
 ## 0.1.2+4
 
 * Implements latLngBoundsToMap

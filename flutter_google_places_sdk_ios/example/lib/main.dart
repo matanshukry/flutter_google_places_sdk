@@ -216,7 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
       final result = await _places.findAutocompletePredictions(
         _predictLastText!,
         countries: _countries,
-        placeTypeFilter: _placeTypeFilter,
+        placeTypesFilter: [_placeTypeFilter.apiExpectedValue],
         newSessionToken: false,
         origin: LatLng(lat: 43.12, lng: 95.20),
         locationBias: _locationBias,
@@ -253,7 +253,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final theme = Theme.of(context);
     final errorText = err == null ? '' : err.toString();
     return Text(errorText,
-        style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error));
+        style: theme.textTheme.bodySmall
+            ?.copyWith(color: theme.colorScheme.error));
   }
 
   List<Widget> _buildFetchPlaceWidgets() {

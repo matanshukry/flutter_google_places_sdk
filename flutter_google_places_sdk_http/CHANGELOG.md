@@ -1,3 +1,7 @@
+## 0.1.4
+
+* Now receiving an already converted string list for typesFilter in `findAutocompletePredictions`
+
 ## 0.1.3
 
 * Upgrading flutter_google_places_sdk_platform_interface to 0.2.6

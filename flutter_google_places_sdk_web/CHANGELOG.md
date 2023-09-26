@@ -1,3 +1,8 @@
+## 0.1.6
+
+* Now receiving an already converted string list for typesFilter in `findAutocompletePredictions`, code we formerly used to convert was moved up to the shared interface (flutter_google_places_sdk_platform_interface)
+* Upgrading flutter_google_places_sdk_platform_interface to 0.2.7
+
 ## 0.1.5
 
 * Upgrading flutter_google_places_sdk_platform_interface to 0.2.6

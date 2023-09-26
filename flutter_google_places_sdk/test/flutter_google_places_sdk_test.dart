@@ -28,7 +28,24 @@ void main() {
     fullText: 'ftext6cad',
   );
 
-  const kPlace = const Place(latLng: LatLng(lat: 542.13, lng: -32.43), address: '', addressComponents: [], businessStatus: null, attributions: [], name: '', openingHours: null, phoneNumber: '', photoMetadatas: [], plusCode: null, priceLevel: null, rating: null, types: [], userRatingsTotal: null, utcOffsetMinutes: null, viewport: null, websiteUri: null);
+  const kPlace = const Place(
+      latLng: LatLng(lat: 542.13, lng: -32.43),
+      address: '',
+      addressComponents: [],
+      businessStatus: null,
+      attributions: [],
+      name: '',
+      openingHours: null,
+      phoneNumber: '',
+      photoMetadatas: [],
+      plusCode: null,
+      priceLevel: null,
+      rating: null,
+      types: [],
+      userRatingsTotal: null,
+      utcOffsetMinutes: null,
+      viewport: null,
+      websiteUri: null);
 
   final kDefaultResponses = <dynamic, dynamic>{
     'findAutocompletePredictions': <dynamic>[
@@ -114,7 +131,40 @@ void main() {
                 arguments: <String, dynamic>{
                   'query': queryTest,
                   'countries': countriesTest,
-                  "typeFilter": "ESTABLISHMENT",
+                  "typesFilter": ["establishment"],
+                  'newSessionToken': false,
+                  'origin': origin.toJson(),
+                  'locationBias': null,
+                  'locationRestriction': null,
+                }),
+          ],
+        );
+
+        final expected =
+            FindAutocompletePredictionsResponse([kPrediction1, kPrediction2]);
+        expect(result, equals(expected));
+      });
+      test('search with types filter cities', () async {
+        const queryTest = 'my-query-text';
+        const countriesTest = ['c5', 'c32'];
+        const placeTypeFilterTest = [PlaceTypeFilter.CITIES];
+        final origin = LatLng(lat: 32.51, lng: 95.31);
+        final result = await flutterGooglePlacesSdk.findAutocompletePredictions(
+            queryTest,
+            countries: countriesTest,
+            placeTypesFilter: placeTypeFilterTest,
+            newSessionToken: false,
+            origin: origin);
+
+        expect(
+          log,
+          <Matcher>[
+            _getInitializeMatcher(),
+            isMethodCall('findAutocompletePredictions',
+                arguments: <String, dynamic>{
+                  'query': queryTest,
+                  'countries': countriesTest,
+                  "typesFilter": ["(cities)"],
                   'newSessionToken': false,
                   'origin': origin.toJson(),
                   'locationBias': null,

@@ -67,6 +67,7 @@ void main() {
     test('findAutocompletePredictions', () async {
       const testQuery = 'my-test-query';
       const testCountries = ['c1', 'c2'];
+      const typesFilter = ['(cities)', 'country'];
       const newSessionToken = true;
       const origin = LatLng(lat: 325.21, lng: -952.52);
       const locationBias = LatLngBounds(
@@ -77,7 +78,7 @@ void main() {
           northeast: LatLng(lat: 38.64, lng: 23.32));
       await places.findAutocompletePredictions(testQuery,
           countries: testCountries,
-          placeTypesFilter: [PlaceTypeFilter.CITIES],
+          placeTypesFilter: typesFilter,
           newSessionToken: newSessionToken,
           origin: origin,
           locationBias: locationBias,
@@ -89,7 +90,7 @@ void main() {
               arguments: <String, Object>{
                 'query': testQuery,
                 'countries': testCountries,
-                'typesFilter': 'CITIES',
+                'typesFilter': typesFilter,
                 'newSessionToken': newSessionToken,
                 'origin': origin.toJson(),
                 'locationBias': locationBias.toJson(),

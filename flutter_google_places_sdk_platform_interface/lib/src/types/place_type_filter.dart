@@ -28,8 +28,7 @@ enum PlaceTypeFilter {
   /// COUNTRY
   /// ADMINISTRATIVE_AREA_LEVEL_1
   /// ADMINISTRATIVE_AREA_LEVEL_2
-  REGIONS
-  ;
+  REGIONS;
 
   factory PlaceTypeFilter.fromJson(String name) {
     name = name.toLowerCase();
@@ -39,6 +38,21 @@ enum PlaceTypeFilter {
       }
     }
     throw ArgumentError.value(name, 'name', 'No enum value with that name');
+  }
+
+  String get apiExpectedValue {
+    switch (this) {
+      case PlaceTypeFilter.ADDRESS:
+        return 'address';
+      case PlaceTypeFilter.CITIES:
+        return '(cities)';
+      case PlaceTypeFilter.ESTABLISHMENT:
+        return 'establishment';
+      case PlaceTypeFilter.GEOCODE:
+        return 'geocode';
+      case PlaceTypeFilter.REGIONS:
+        return '(regions)';
+    }
   }
 }
 
