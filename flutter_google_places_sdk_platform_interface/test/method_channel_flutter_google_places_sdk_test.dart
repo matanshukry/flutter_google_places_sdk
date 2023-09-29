@@ -77,7 +77,7 @@ void main() {
           northeast: LatLng(lat: 38.64, lng: 23.32));
       await places.findAutocompletePredictions(testQuery,
           countries: testCountries,
-          placeTypesFilter: [PlaceTypeFilter.CITIES],
+          placeTypesFilter: ['(cities)'],
           newSessionToken: newSessionToken,
           origin: origin,
           locationBias: locationBias,
@@ -89,7 +89,7 @@ void main() {
               arguments: <String, Object>{
                 'query': testQuery,
                 'countries': testCountries,
-                'typesFilter': 'CITIES',
+                'typesFilter': '(cities)',
                 'newSessionToken': newSessionToken,
                 'origin': origin.toJson(),
                 'locationBias': locationBias.toJson(),

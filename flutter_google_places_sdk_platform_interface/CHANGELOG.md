@@ -1,3 +1,10 @@
+## 0.2.7
+
+* Now receiving an already converted string list for typesFilter in `findAutocompletePredictions`
+* Added an `apiExpectedValue` computed property to convert `PlaceTypeFilter` enum value to the expected string for the Google API
+* Added `id` property to `Place` object.
+* Upgraded `plugin_platform_interface` to `^2.1.6`
+
 ## 0.2.6
 
 * Added any_map to all enums to freezed -> json_serializable

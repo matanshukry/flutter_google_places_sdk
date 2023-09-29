@@ -21,6 +21,7 @@ part 'place.g.dart';
 @freezed
 class Place with _$Place {
   const factory Place({
+    required String? id,
     required String? address,
     required List<AddressComponent>? addressComponents,
     required BusinessStatus? businessStatus,

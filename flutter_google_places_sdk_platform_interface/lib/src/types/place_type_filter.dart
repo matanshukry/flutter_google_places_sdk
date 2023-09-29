@@ -40,6 +40,21 @@ enum PlaceTypeFilter {
     }
     throw ArgumentError.value(name, 'name', 'No enum value with that name');
   }
+
+  String get apiExpectedValue {
+    switch (this) {
+      case PlaceTypeFilter.ADDRESS:
+        return 'address';
+      case PlaceTypeFilter.CITIES:
+        return '(cities)';
+      case PlaceTypeFilter.ESTABLISHMENT:
+        return 'establishment';
+      case PlaceTypeFilter.GEOCODE:
+        return 'geocode';
+      case PlaceTypeFilter.REGIONS:
+        return '(regions)';
+    }
+  }
 }
 
 extension PlaceTypeFilterDescriptor on PlaceTypeFilter {
