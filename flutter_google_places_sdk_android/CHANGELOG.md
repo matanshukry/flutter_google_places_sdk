@@ -1,3 +1,8 @@
+## 0.1.8
+
+* Upgrading `flutter_google_places_sdk_platform_interface` to `0.2.7`
+* Implemented `id` property in `place`
+
 ## 0.1.7
 
 * Upgrading flutter_google_places_sdk_platform_interface to 0.2.6

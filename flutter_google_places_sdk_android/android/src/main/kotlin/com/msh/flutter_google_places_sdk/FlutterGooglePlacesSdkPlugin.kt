@@ -65,7 +65,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
             METHOD_FIND_AUTOCOMPLETE_PREDICTIONS -> {
                 val query = call.argument<String>("query")
                 val countries = call.argument<List<String>>("countries") ?: emptyList()
-                val placeTypesFilter = call.argument<List<String>>("typesFilter")?.map { it.lowercase() } ?: emptyList()
+                val placeTypesFilter = call.argument<List<String>>("typesFilter") ?: emptyList()
                 val newSessionToken = call.argument<Boolean>("newSessionToken")
 
                 val origin = latLngFromMap(call.argument<Map<String, Any?>>("origin"))
@@ -245,6 +245,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
         }
 
         return mapOf(
+            "id" to place.id,
             "address" to place.address,
             "addressComponents" to place.addressComponents?.asList()
                 ?.map { addressComponentToMap(it) },
