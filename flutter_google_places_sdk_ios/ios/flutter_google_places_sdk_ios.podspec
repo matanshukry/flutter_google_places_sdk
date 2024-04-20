@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_google_places_sdk_ios'
-  s.version          = '0.0.2'
+  s.version          = '0.0.3'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -15,7 +15,7 @@ A new flutter plugin project.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '15.0'
+  s.platform = :ios, '14.0'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64',
@@ -23,6 +23,6 @@ A new flutter plugin project.
   s.swift_version = '5.0'
 
   # Dependencies
-  s.dependency 'GooglePlaces', '~> 8.3.0'
+  s.dependency 'GooglePlaces', '~> 8.5.0'
   s.static_framework = true
 end
