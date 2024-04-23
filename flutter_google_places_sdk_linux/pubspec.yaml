@@ -1,6 +1,6 @@
 name: flutter_google_places_sdk_linux
 description: The linux implementation of Flutter plugin for google places sdk
-version: 0.1.4
+version: 1.0.0
 homepage: https://github.com/matanshukry/flutter_google_places_sdk/tree/master/flutter_google_places_sdk_linux
 
 environment:
