@@ -226,7 +226,10 @@ class _MyHomePageState extends State<MyHomePage> {
       final result = await _places.findAutocompletePredictions(
         _predictLastText!,
         countries: _countriesEnabled ? _countries : null,
-        placeTypesFilter: _placeTypesFilter,
+        placeTypesFilter: [
+          PlaceTypeFilter.ROUTE,
+          PlaceTypeFilter.ADMINISTRATIVE_AREA_LEVEL_3,
+        ],
         newSessionToken: false,
         origin: LatLng(lat: 43.12, lng: 95.20),
         locationBias: _locationBiasEnabled ? _locationBias : null,
