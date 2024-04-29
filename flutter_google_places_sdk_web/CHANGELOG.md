@@ -1,3 +1,7 @@
+## 0.1.7
+
+* Upgrading `google_maps` to ^7.1.0
+
 ## 0.1.6
 
 * Upgrading `flutter_google_places_sdk_platform_interface` to `0.2.7`
