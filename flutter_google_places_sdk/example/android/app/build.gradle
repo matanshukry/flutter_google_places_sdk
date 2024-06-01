@@ -29,7 +29,7 @@ android {
     namespace 'com.msh.flutter_google_places_sdk_example'
 
     compileSdkVersion 34
-    ndkVersion "25.1.8937393"
+    ndkVersion "26.1.10909125"
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
