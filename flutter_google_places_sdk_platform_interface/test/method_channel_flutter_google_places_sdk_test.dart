@@ -15,15 +15,18 @@ void main() {
 
     const channel = MethodChannel('plugins.msh.com/flutter_google_places_sdk');
     final List<MethodCall> log = <MethodCall>[];
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      log.add(methodCall);
-      for (final callback in handlers) {
-        final result = callback(methodCall);
-        if (result != null) {
-          return result;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+      channel,
+      (MethodCall methodCall) async {
+        log.add(methodCall);
+        for (final callback in handlers) {
+          final result = callback(methodCall);
+          if (result != null) {
+            return result;
+          }
         }
-      }
-    });
+      },
+    );
 
     final places = FlutterGooglePlacesSdkMethodChannel();
 
@@ -39,6 +42,7 @@ void main() {
         <Matcher>[
           isMethodCall('initialize', arguments: <String, Object>{
             'apiKey': testKey,
+            'useNewApi': false,
             'locale': {
               'country': null,
               'language': 'en',
@@ -69,12 +73,10 @@ void main() {
       const testCountries = ['c1', 'c2'];
       const newSessionToken = true;
       const origin = LatLng(lat: 325.21, lng: -952.52);
-      const locationBias = LatLngBounds(
-          southwest: LatLng(lat: 125.43, lng: 38.32),
-          northeast: LatLng(lat: -38.271, lng: 312.53));
-      const locationRestriction = LatLngBounds(
-          southwest: LatLng(lat: 49.28, lng: 3921.38),
-          northeast: LatLng(lat: 38.64, lng: 23.32));
+      const locationBias =
+          LatLngBounds(southwest: LatLng(lat: 125.43, lng: 38.32), northeast: LatLng(lat: -38.271, lng: 312.53));
+      const locationRestriction =
+          LatLngBounds(southwest: LatLng(lat: 49.28, lng: 3921.38), northeast: LatLng(lat: 38.64, lng: 23.32));
       await places.findAutocompletePredictions(testQuery,
           countries: testCountries,
           placeTypesFilter: ['(cities)'],
@@ -85,16 +87,15 @@ void main() {
       expect(
         log,
         <Matcher>[
-          isMethodCall('findAutocompletePredictions',
-              arguments: <String, Object>{
-                'query': testQuery,
-                'countries': testCountries,
-                'typesFilter': '(cities)',
-                'newSessionToken': newSessionToken,
-                'origin': origin.toJson(),
-                'locationBias': locationBias.toJson(),
-                'locationRestriction': locationRestriction.toJson(),
-              })
+          isMethodCall('findAutocompletePredictions', arguments: <String, Object>{
+            'query': testQuery,
+            'countries': testCountries,
+            'typesFilter': ['(cities)'],
+            'newSessionToken': newSessionToken,
+            'origin': origin.toJson(),
+            'locationBias': locationBias.toJson(),
+            'locationRestriction': locationRestriction.toJson(),
+          })
         ],
       );
     });
@@ -135,11 +136,7 @@ void main() {
 
     test('fetchPlacePhoto', () async {
       const photoRef = 'http://google.com/photo/ref/1';
-      const photoMetadata = PhotoMetadata(
-          photoReference: photoRef,
-          width: 100,
-          height: 100,
-          attributions: 'attr');
+      const photoMetadata = PhotoMetadata(photoReference: photoRef, width: 100, height: 100, attributions: 'attr');
       const maxWidth = 50;
 
       // Mock
@@ -154,8 +151,7 @@ void main() {
       handlers.add(handler);
       try {
         // call
-        await places.fetchPlacePhoto(photoMetadata,
-            maxWidth: maxWidth, maxHeight: null);
+        await places.fetchPlacePhoto(photoMetadata, maxWidth: maxWidth, maxHeight: null);
 
         expect(
           log,
@@ -175,6 +171,88 @@ void main() {
         handlers.remove(handler);
       }
     });
+
+    test('searchByText', () async {
+      const testQuery = 'my-test-query';
+      const locationBias =
+          LatLngBounds(southwest: LatLng(lat: 125.43, lng: 38.32), northeast: LatLng(lat: -38.271, lng: 312.53));
+      const locationRestriction =
+          LatLngBounds(southwest: LatLng(lat: 49.28, lng: 3921.38), northeast: LatLng(lat: 38.64, lng: 23.32));
+      await places.searchByText(
+        testQuery,
+        fields: [PlaceField.Id, PlaceField.Name],
+        openNow: true,
+        regionCode: 'eu',
+        rankPreference: TextSearchRankPreference.Distance,
+        minRating: 1.0,
+        maxResultCount: 9,
+        locationBias: locationBias,
+        locationRestriction: locationRestriction,
+        priceLevels: [1, 2, 3],
+        strictTypeFiltering: false,
+        includedType: 'test',
+      );
+      expect(
+        log,
+        <Matcher>[
+          isMethodCall(
+            'searchByText',
+            arguments: <String, Object>{
+              'textQuery': testQuery,
+              'fields': ['ID', 'NAME'],
+              'includedType': 'test',
+              'maxResultCount': 9,
+              'locationBias': locationBias.toJson(),
+              'locationRestriction': locationRestriction.toJson(),
+              'minRating': 1.0,
+              'openNow': true,
+              'priceLevels': [1, 2, 3],
+              'rankPreference': 'DISTANCE',
+              'regionCode': 'eu',
+              'strictTypeFiltering': false,
+            },
+          )
+        ],
+      );
+    });
+
+    test('searchNearby', () async {
+      const types = ['test1', 'test2'];
+      const locationRestriction = CircularBounds(
+        center: LatLng(lat: 125.43, lng: 38.32),
+        radius: 1000,
+      );
+      await places.searchNearby(
+          fields: [PlaceField.Id, PlaceField.Name],
+          locationRestriction: locationRestriction,
+          includedTypes: types,
+          includedPrimaryTypes: types,
+          excludedTypes: types,
+          excludedPrimaryTypes: types,
+          rankPreference: NearbySearchRankPreference.Popularity,
+          maxResultCount: 3,
+          regionCode: 'us');
+
+      expect(
+        log,
+        <Matcher>[
+          isMethodCall(
+            'searchNearby',
+            arguments: <String, Object>{
+              'fields': ['ID', 'NAME'],
+              'locationRestriction': locationRestriction.toJson(),
+              'includedTypes': types,
+              'includedPrimaryTypes': types,
+              'excludedTypes': types,
+              'excludedPrimaryTypes': types,
+              'rankPreference': 'POPULARITY',
+              'regionCode': 'us',
+              'maxResultCount': 3,
+            },
+          )
+        ],
+      );
+    });
   });
 }
 
@@ -182,8 +260,6 @@ class FlutterGooglePlacesSdkPlatformMock extends Mock
     with MockPlatformInterfaceMixin
     implements FlutterGooglePlacesSdkPlatform {}
 
-class ImplementsFlutterGooglePlacesSdkPlatform extends Mock
-    implements FlutterGooglePlacesSdkPlatform {}
+class ImplementsFlutterGooglePlacesSdkPlatform extends Mock implements FlutterGooglePlacesSdkPlatform {}
 
-class ExtendsFlutterGooglePlacesSdkPlatform
-    extends FlutterGooglePlacesSdkPlatform {}
+class ExtendsFlutterGooglePlacesSdkPlatform extends FlutterGooglePlacesSdkPlatform {}
