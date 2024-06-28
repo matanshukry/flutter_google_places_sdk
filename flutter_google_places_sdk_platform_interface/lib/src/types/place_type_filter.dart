@@ -28,8 +28,7 @@ enum PlaceTypeFilter {
   /// COUNTRY
   /// ADMINISTRATIVE_AREA_LEVEL_1
   /// ADMINISTRATIVE_AREA_LEVEL_2
-  REGIONS
-  ;
+  REGIONS;
 
   factory PlaceTypeFilter.fromJson(String name) {
     name = name.toLowerCase();
@@ -58,5 +57,6 @@ enum PlaceTypeFilter {
 }
 
 extension PlaceTypeFilterDescriptor on PlaceTypeFilter {
+  @Deprecated('Use `name` instead')
   String get value => describeEnum(this);
 }

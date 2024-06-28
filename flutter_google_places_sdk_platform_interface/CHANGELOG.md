@@ -1,3 +1,11 @@
+## 0.3.0
+
+* BREAKING: Rename `RankPreference` to `TextSearchRankPreference` and introduce `NearbySearchRankPreference`
+* FEAT: Added support for Google Places (new) which can be enabled through `initialize` function.
+* FEAT: Added `searchByText` function for Places (new).
+* FEAT: Added `searchNearby` function for Places (new).
+* FEAT: Added `nameLanguageCode` and `reviews` to Place object.
+
 ## 0.2.7
 
 * Now receiving an already converted string list for typesFilter in `findAutocompletePredictions`
