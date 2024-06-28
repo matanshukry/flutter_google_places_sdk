@@ -68,7 +68,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     } else {
       final body = html.window.document.querySelector('body')!;
       var src =
-          'https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap';
+          'https://maps.googleapis.com/maps/api/js?key=${apiKey}&loading=async&libraries=places&callback=initMap';
       if (locale?.languageCode != null) {
         _language = locale?.languageCode;
       }
