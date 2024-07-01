@@ -21,10 +21,10 @@ dependencies:
       path: flutter_google_places_sdk_ios
 #    path: ../flutter_google_places_sdk_ios
   flutter_google_places_sdk_web:
-#    git:
-#      url: git@github.com:crispybaconsrl/flutter_google_places.git
-#      path: flutter_google_places_sdk_web
-      path: ../flutter_google_places_sdk_web
+    git:
+      url: git@github.com:crispybaconsrl/flutter_google_places.git
+      path: flutter_google_places_sdk_web
+#      path: ../flutter_google_places_sdk_web
   flutter_google_places_sdk_android:
     git:
       url: git@github.com:crispybaconsrl/flutter_google_places.git
