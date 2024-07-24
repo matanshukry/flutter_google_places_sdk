@@ -51,7 +51,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   }
 
   @override
-  Future<void> initialize(String apiKey, {Locale? locale}) async {
+  Future<void> initialize(String apiKey, {Locale? locale, bool? useNewApi}) async {
     if (_svcAutoComplete != null) {
       return;
     }
@@ -83,7 +83,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   }
 
   @override
-  Future<void> updateSettings(String apiKey, {Locale? locale}) async {
+  Future<void> updateSettings(String apiKey, {Locale? locale, bool? useNewApi}) async {
     if (locale != null) {
       _language = locale.languageCode;
     }
@@ -249,6 +249,8 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       utcOffsetMinutes: place.utcOffsetMinutes?.toInt(),
       viewport: _parseLatLngBounds(place.geometry?.viewport),
       websiteUri: place.website == null ? null : Uri.parse(place.website!),
+      nameLanguageCode: null,
+      reviews: null,
     );
   }
 

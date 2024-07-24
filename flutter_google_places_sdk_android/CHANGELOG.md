@@ -1,3 +1,11 @@
+## 0.2.0
+
+* Update Google Places SDK to 3.4.0
+* Update gradle to 7.5
+* Add support for Places (new) API
+* Add [Text Search](https://developers.google.com/maps/documentation/places/web-service/text-search) feature
+* Add `reviews` and `nameLanguageCode` when fetching place
+
 ## 0.1.8
 
 * Upgrading `flutter_google_places_sdk_platform_interface` to `0.2.7`

@@ -5,11 +5,22 @@
 ![Tests](https://github.com/matanshukry/flutter_google_places_sdk/actions/workflows/tests.yml/badge.svg)
 
 A Flutter plugin for google places sdk that uses the native libraries on each platform.
-Check out [Rational](##RATIONAL) below to understand why you should use this plugin.
+Check out [Rationale](##RATIONALE) below to understand why you should use this plugin.
 
 ## Usage
 
 To use this plugin, add `flutter_google_places_sdk` as a [dependency in your pubspec.yaml file](https://flutter.dev/platform-plugins/).
+
+## Support
+
+|                    | Android | iOS | Web | MacOS | Windows | Linux |
+|--------------------|---------|-----|-----|-------|---------|-------|
+| Supports (new) API |    ✅    |  ❌  |  ❌  |       |         |       |
+| Text Search        |         |     |     |       |         |       |
+| Current Place      |         |     |     |       |         |       |
+| Place Details      |         |     |     |       |         |       |
+| Place Photos       |         |     |     |       |         |       |
+| Place Autocomplete |         |     |     |       |         |       |
 
 ## Web Usage
 
@@ -20,7 +31,7 @@ https://developers.google.com/maps/documentation/javascript/get-api-key
 Limits:
 * Location restriction is not supported. See google issue tracker for more info: https://issuetracker.google.com/issues/36219203
 
-## Rational
+## Rationale
 
 By now you probably found some other plugins, and wondering why this one was even created.
 Well, there's a good reason for that.

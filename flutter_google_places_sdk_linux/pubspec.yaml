@@ -10,8 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_google_places_sdk_platform_interface: ^0.2.7
-  flutter_google_places_sdk_http: ^0.1.4
+  flutter_google_places_sdk_platform_interface: 
+    path: ../flutter_google_places_sdk_platform_interface
+  flutter_google_places_sdk_http:
+    path: ../flutter_google_places_sdk_http
 
 dev_dependencies:
   flutter_lints: ^2.0.1

@@ -12,7 +12,8 @@ dependencies:
     sdk: flutter
   http: ^1.1.0
   latlong2: ^0.9.0
-  flutter_google_places_sdk_platform_interface: ^0.2.7
+  flutter_google_places_sdk_platform_interface:
+    path: ../flutter_google_places_sdk_platform_interface
   freezed_annotation: ^2.3.2
   json_annotation: ^4.8.1
 

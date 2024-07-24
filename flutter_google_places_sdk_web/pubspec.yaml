@@ -12,7 +12,8 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  flutter_google_places_sdk_platform_interface: ^0.2.7
+  flutter_google_places_sdk_platform_interface: 
+    path: ../flutter_google_places_sdk_platform_interface
   js: ^0.6.7 # Can't upgrade to 0.7.x due to google_maps
   google_maps: ^7.1.0
   collection: ^1.17.2 # Can't upgrade to 1.18 due to flutter sdk version
