@@ -9,7 +9,8 @@ const String _CHANNEL_NAME = 'plugins.msh.com/flutter_google_places_sdk';
 const MethodChannel _channel = MethodChannel(_CHANNEL_NAME);
 
 /// An implementation of [FlutterGooglePlacesSdkPlatform] that uses method channels.
-class FlutterGooglePlacesSdkMethodChannel extends FlutterGooglePlacesSdkPlatform {
+class FlutterGooglePlacesSdkMethodChannel
+    extends FlutterGooglePlacesSdkPlatform {
   static const CHANNEL_NAME = _CHANNEL_NAME;
 
   @override
@@ -107,7 +108,8 @@ class FlutterGooglePlacesSdkMethodChannel extends FlutterGooglePlacesSdkPlatform
   }
 
   FetchPlaceResponse _responseFromPlaceDetails(dynamic value) {
-    final place = value == null ? null : Place.fromJson(value.cast<String, dynamic>());
+    final Place? place =
+        value == null ? null : Place.fromJson(value.cast<String, dynamic>());
     return FetchPlaceResponse(place);
   }
 

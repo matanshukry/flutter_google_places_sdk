@@ -57,6 +57,5 @@ enum PlaceTypeFilter {
 }
 
 extension PlaceTypeFilterDescriptor on PlaceTypeFilter {
-  @Deprecated('Use `name` instead')
-  String get value => describeEnum(this);
+  String get value => name;
 }

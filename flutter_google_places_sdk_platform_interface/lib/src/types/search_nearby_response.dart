@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'search_nearby_response.freezed.dart';
 
 /// The response for a [FlutterGooglePlacesSdkPlatform.searchNearby] request
-@freezed
+@Freezed()
 class SearchNearbyResponse with _$SearchNearbyResponse {
   /// constructs a [SearchNearbyResponse] object.
   const factory SearchNearbyResponse(

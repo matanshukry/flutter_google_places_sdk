@@ -38,6 +38,6 @@ enum NearbySearchRankPreference {
   }
 }
 
-extension NearbySearcRankPreferenceValue on NearbySearchRankPreference {
+extension NearbySearchRankPreferenceValue on NearbySearchRankPreference {
   String get value => _$NearbySearchRankPreferenceEnumMap[this]!;
 }

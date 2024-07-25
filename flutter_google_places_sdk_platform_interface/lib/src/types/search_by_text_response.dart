@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'search_by_text_response.freezed.dart';
 
 /// The response for a [FlutterGooglePlacesSdkPlatform.searchByText] request
-@freezed
+@Freezed()
 class SearchByTextResponse with _$SearchByTextResponse {
   /// constructs a [SearchByTextResponse] object.
   const factory SearchByTextResponse(

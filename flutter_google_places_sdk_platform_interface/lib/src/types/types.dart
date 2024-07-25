@@ -2,6 +2,7 @@ export 'address_component.dart';
 export 'author_attribution.dart';
 export 'autocomplete_predictions.dart';
 export 'business_status.dart';
+export 'circular_bounds.dart';
 export 'day_of_week.dart';
 export 'fetch_photo_response.dart';
 export 'fetch_place_response.dart';

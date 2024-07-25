@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'review.freezed.dart';
 part 'review.g.dart';
 
-@freezed
+@Freezed()
 class Review with _$Review {
   /// Constructs a [Review] object.
   const factory Review({
@@ -14,12 +14,6 @@ class Review with _$Review {
     /// This review's AuthorAttribution.
     required AuthorAttribution authorAttribution,
 
-    /// The text of the review in its original language.
-    String? originalText,
-
-    /// The language code of the original text of the review.
-    String? originalTextLanguageCode,
-
     /// A whole number between 1.0 and 5.0 (inclusive), meaning the number of stars.
     required double rating,
 
@@ -28,6 +22,12 @@ class Review with _$Review {
 
     /// A human-readable description of the relative publish time of a review, such as "a month ago", or "in the last week", based on the time elapsed.
     required String relativePublishTimeDescription,
+
+    /// The text of the review in its original language.
+    String? originalText,
+
+    /// The language code of the original text of the review.
+    String? originalTextLanguageCode,
 
     /// The text of the review.
     String? text,

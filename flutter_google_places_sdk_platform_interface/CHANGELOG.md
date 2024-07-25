@@ -1,10 +1,8 @@
 ## 0.3.0
 
-* BREAKING: Rename `RankPreference` to `TextSearchRankPreference` and introduce `NearbySearchRankPreference`
-* FEAT: Added support for Google Places (new) which can be enabled through `initialize` function.
-* FEAT: Added `searchByText` function for Places (new).
-* FEAT: Added `searchNearby` function for Places (new).
-* FEAT: Added `nameLanguageCode` and `reviews` to Place object.
+* feat: Added support for Google Places (new) which can be enabled through `initialize` function.
+* feat: Added `searchByText` and `searchNearby` function for Places (new).
+* feat: Added `nameLanguageCode` and `reviews` to Place object.
 
 ## 0.2.7
 

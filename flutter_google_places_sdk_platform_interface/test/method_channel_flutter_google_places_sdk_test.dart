@@ -260,6 +260,8 @@ class FlutterGooglePlacesSdkPlatformMock extends Mock
     with MockPlatformInterfaceMixin
     implements FlutterGooglePlacesSdkPlatform {}
 
-class ImplementsFlutterGooglePlacesSdkPlatform extends Mock implements FlutterGooglePlacesSdkPlatform {}
+class ImplementsFlutterGooglePlacesSdkPlatform extends Mock
+    implements FlutterGooglePlacesSdkPlatform {}
 
-class ExtendsFlutterGooglePlacesSdkPlatform extends FlutterGooglePlacesSdkPlatform {}
+class ExtendsFlutterGooglePlacesSdkPlatform
+    extends FlutterGooglePlacesSdkPlatform {}

@@ -9,19 +9,18 @@ abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
 
   /// "Powered by google" image that should be used when background is white
   static const AssetImage ASSET_POWERED_BY_GOOGLE_ON_WHITE = AssetImage(
-    'assets/google/powered_by_google_on_white.png',
-    package: 'flutter_google_places_sdk_platform_interface',
-  );
+      'assets/google/powered_by_google_on_white.png',
+      package: 'flutter_google_places_sdk_platform_interface');
 
   /// "Powered by google" image that should be used when background is not white
   static const AssetImage ASSET_POWERED_BY_GOOGLE_ON_NON_WHITE = AssetImage(
-    'assets/google/powered_by_google_on_non_white.png',
-    package: 'flutter_google_places_sdk_platform_interface',
-  );
+      'assets/google/powered_by_google_on_non_white.png',
+      package: 'flutter_google_places_sdk_platform_interface');
 
   static final Object _token = Object();
 
-  static FlutterGooglePlacesSdkPlatform _instance = FlutterGooglePlacesSdkMethodChannel();
+  static FlutterGooglePlacesSdkPlatform _instance =
+      FlutterGooglePlacesSdkMethodChannel();
 
   /// Singleton instance to the platform
   static FlutterGooglePlacesSdkPlatform get instance => _instance;
@@ -86,7 +85,8 @@ abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
     LatLngBounds? locationBias,
     LatLngBounds? locationRestriction,
   }) {
-    throw UnimplementedError('findAutocompletePredictions() has not been implemented.');
+    throw UnimplementedError(
+        'findAutocompletePredictions() has not been implemented.');
   }
 
   /// Fetches the details of a place.
