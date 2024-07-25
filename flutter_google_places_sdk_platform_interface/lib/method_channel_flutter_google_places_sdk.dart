@@ -19,8 +19,8 @@ class FlutterGooglePlacesSdkMethodChannel
   }
 
   @override
-  Future<void> initialize(String apiKey, {Locale? locale}) {
-    return _invokeForSettings('initialize', apiKey, locale);
+  Future<void> initialize(String apiKey, {Locale? locale, bool? useNewApi}) {
+    return _invokeForSettings('initialize', apiKey, locale, useNewApi);
   }
 
   @override
@@ -29,19 +29,25 @@ class FlutterGooglePlacesSdkMethodChannel
   }
 
   @override
-  Future<void> updateSettings(String apiKey, {Locale? locale}) {
-    return _invokeForSettings('updateSettings', apiKey, locale);
+  Future<void> updateSettings(String apiKey, {Locale? locale, bool? useNewApi}) {
+    return _invokeForSettings('updateSettings', apiKey, locale, useNewApi);
   }
 
-  Future<void> _invokeForSettings(String methodName, String apiKey, Locale? locale) {
+  Future<void> _invokeForSettings(
+    String methodName,
+    String apiKey,
+    Locale? locale,
+    bool? useNewApi,
+  ) {
     return _channel.invokeMethod<void>(methodName, {
       'apiKey': apiKey,
+      'useNewApi': useNewApi ?? false,
       'locale': locale == null
           ? null
           : {
-        'country': locale.countryCode,
-        'language': locale.languageCode,
-      },
+              'country': locale.countryCode,
+              'language': locale.languageCode,
+            },
     });
   }
 
@@ -142,5 +148,84 @@ class FlutterGooglePlacesSdkMethodChannel
       message: 'Invalid platform response from fetchPlacePhoto',
       details: 'Response: $value',
     );
+  }
+
+  @override
+  Future<SearchByTextResponse> searchByText(
+    String textQuery, {
+    required List<PlaceField> fields,
+    String? includedType,
+    int? maxResultCount,
+    LatLngBounds? locationBias,
+    LatLngBounds? locationRestriction,
+    double? minRating,
+    bool? openNow,
+    List<int>? priceLevels,
+    TextSearchRankPreference? rankPreference,
+    String? regionCode,
+    bool? strictTypeFiltering,
+  }) {
+    if (textQuery.isEmpty) {
+      throw ArgumentError('Argument query can not be empty');
+    }
+    return _channel.invokeListMethod<Map<dynamic, dynamic>>(
+      'searchByText',
+      {
+        'textQuery': textQuery,
+        'fields': fields.map((e) => e.value).toList(),
+        'includedType': includedType,
+        'maxResultCount': maxResultCount,
+        'locationBias': locationBias?.toJson(),
+        'locationRestriction': locationRestriction?.toJson(),
+        'minRating': minRating,
+        'openNow': openNow,
+        'priceLevels': priceLevels,
+        'rankPreference': rankPreference?.value,
+        'regionCode': regionCode,
+        'strictTypeFiltering': strictTypeFiltering,
+      },
+    ).then(_responseFromTextSearch);
+  }
+
+  SearchByTextResponse _responseFromTextSearch(List<Map<dynamic, dynamic>>? value) {
+    final items =
+        value?.map((item) => item.cast<String, dynamic>()).map((map) => Place.fromJson(map)).toList(growable: false) ??
+            [];
+    return SearchByTextResponse(items);
+  }
+
+  @override
+  Future<SearchNearbyResponse> searchNearby({
+    required List<PlaceField> fields,
+    required CircularBounds locationRestriction,
+    List<String>? includedTypes,
+    List<String>? includedPrimaryTypes,
+    List<String>? excludedTypes,
+    List<String>? excludedPrimaryTypes,
+    NearbySearchRankPreference? rankPreference,
+    String? regionCode,
+    int? maxResultCount,
+  }) {
+    return _channel.invokeListMethod<Map<dynamic, dynamic>>(
+      'searchNearby',
+      {
+        'fields': fields.map((e) => e.value).toList(),
+        'locationRestriction': locationRestriction.toJson(),
+        'includedTypes': includedTypes,
+        'includedPrimaryTypes': includedPrimaryTypes,
+        'excludedTypes': excludedTypes,
+        'excludedPrimaryTypes': excludedPrimaryTypes,
+        'rankPreference': rankPreference?.value,
+        'regionCode': regionCode,
+        'maxResultCount': maxResultCount,
+      },
+    ).then(_responseFromNearbySearch);
+  }
+
+  SearchNearbyResponse _responseFromNearbySearch(List<Map<dynamic, dynamic>>? value) {
+    final items =
+        value?.map((item) => item.cast<String, dynamic>()).map((map) => Place.fromJson(map)).toList(growable: false) ??
+            [];
+    return SearchNearbyResponse(items);
   }
 }

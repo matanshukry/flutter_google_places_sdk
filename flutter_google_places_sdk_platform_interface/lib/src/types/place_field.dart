@@ -23,8 +23,28 @@ enum PlaceField {
   UserRatingsTotal,
   @JsonValue('UTC_OFFSET') UTCOffset,
   Viewport,
-  WebsiteUri
-  ;
+  WebsiteUri,
+
+  /// Places (new) API
+  CurbsidePickup,
+  CurrentOpeningHours,
+  Delivery,
+  DineIn,
+  EditorialSummary,
+  IconBackgroundColor,
+  IconUrl,
+  Reservable,
+  Reviews,
+  SecondaryOpeningHours,
+  ServesBeer,
+  ServesBreakfast,
+  ServesBrunch,
+  ServesDinner,
+  ServesLunch,
+  ServesVegetarianFood,
+  ServesWine,
+  Takeout,
+  WheelchairAccessibleEntrance;
 
   factory PlaceField.fromJson(String name) {
     name = name.toLowerCase();

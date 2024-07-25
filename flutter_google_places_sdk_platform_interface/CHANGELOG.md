@@ -1,3 +1,9 @@
+## 0.3.0
+
+* feat: Added support for Google Places (new) which can be enabled through `initialize` function.
+* feat: Added `searchByText` and `searchNearby` function for Places (new).
+* feat: Added `nameLanguageCode` and `reviews` to Place object.
+
 ## 0.2.7
 
 * Now receiving an already converted string list for typesFilter in `findAutocompletePredictions`
