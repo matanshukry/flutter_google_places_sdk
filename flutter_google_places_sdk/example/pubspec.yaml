@@ -12,6 +12,10 @@ dependencies:
   flutter_google_places_sdk:
     path: ../../flutter_google_places_sdk
 
+dependency_overrides:
+  flutter_google_places_sdk_web:
+    path: ../../flutter_google_places_sdk_web
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,3 +1,9 @@
+## 0.1.8
+
+* Upgrading `google_maps` to ^8.1.0
+* Upgrading `js` to ^0.7.1
+* Upgrading `collection` to 1.18.0
+
 ## 0.1.7
 
 * Upgrading `google_maps` to ^7.1.0
