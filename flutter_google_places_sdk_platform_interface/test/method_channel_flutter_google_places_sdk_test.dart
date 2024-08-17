@@ -15,7 +15,8 @@ void main() {
 
     const channel = MethodChannel('plugins.msh.com/flutter_google_places_sdk');
     final List<MethodCall> log = <MethodCall>[];
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
       log.add(methodCall);
       for (final callback in handlers) {
         final result = callback(methodCall);
@@ -23,6 +24,7 @@ void main() {
           return result;
         }
       }
+      return null;
     });
 
     final places = FlutterGooglePlacesSdkMethodChannel();
