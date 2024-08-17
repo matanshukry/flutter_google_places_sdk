@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+
 
 /// Available types for a [Place]
 ///
@@ -159,7 +159,7 @@ enum PlaceType {
 
 final placeTypeValuesMap = {
   for (final placeType in PlaceType.values)
-    describeEnum(placeType): placeType
+    placeType.name: placeType
 };
 
 extension PlaceTypeDescriptor on PlaceType {

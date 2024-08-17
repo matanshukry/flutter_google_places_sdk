@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+
 
 /// Filter to restrict the result set of autocomplete predictions to certain types.
 ///
@@ -58,5 +58,5 @@ enum PlaceTypeFilter {
 }
 
 extension PlaceTypeFilterDescriptor on PlaceTypeFilter {
-  String get value => describeEnum(this);
+  String get value => name;
 }
