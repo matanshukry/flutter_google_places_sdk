@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+
 
 /// Filter to restrict the result set of autocomplete predictions to certain types.
 ///

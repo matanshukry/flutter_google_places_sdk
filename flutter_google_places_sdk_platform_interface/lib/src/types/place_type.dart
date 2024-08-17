@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+
 
 /// Available types for a [Place]
 ///

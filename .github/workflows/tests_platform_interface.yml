@@ -10,7 +10,7 @@ on:
     paths: [ 'flutter_google_places_sdk_platform_interface/**' ]
 
 env:
-  flutter_version: "2.5.1"
+  flutter_version: "3.24.0"
   java_version: "16.x"
   dir: "flutter_google_places_sdk_platform_interface"
 
@@ -49,6 +49,9 @@ jobs:
         run: flutter --version
       - name: Install dependencies
         run: flutter pub get
+        working-directory: ${{ env.dir }}
+      - name: Build Runner
+        run: flutter pub run build_runner build
         working-directory: ${{ env.dir }}
       - name: Flutter Analyze
         run: flutter analyze
