@@ -1,3 +1,7 @@
+## 0.1.9
+
+* Upgrading gradle kotlin and java versions to be compatible with Java 17
+
 ## 0.1.8
 
 * Upgrading `flutter_google_places_sdk_platform_interface` to `0.2.7`
