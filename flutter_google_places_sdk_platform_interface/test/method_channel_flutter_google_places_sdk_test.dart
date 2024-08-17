@@ -91,7 +91,7 @@ void main() {
               arguments: <String, Object>{
                 'query': testQuery,
                 'countries': testCountries,
-                'typesFilter': '(cities)',
+                'typesFilter': ['(cities)'],
                 'newSessionToken': newSessionToken,
                 'origin': origin.toJson(),
                 'locationBias': locationBias.toJson(),
