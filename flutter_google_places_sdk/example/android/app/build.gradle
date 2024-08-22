@@ -26,7 +26,9 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    namespace 'com.msh.flutter_google_places_sdk_example'
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.msh.flutter_google_places_sdk_example'
+    }
 
     compileSdkVersion 34
     ndkVersion "26.1.10909125"
