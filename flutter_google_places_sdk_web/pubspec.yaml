@@ -1,6 +1,6 @@
 name: flutter_google_places_sdk_web
 description: The web implementation of Flutter plugin for google places sdk
-version: 0.1.7
+version: 0.1.8
 homepage: https://github.com/matanshukry/flutter_google_places_sdk/tree/master/flutter_google_places_sdk_web
 
 environment:
@@ -13,8 +13,8 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   flutter_google_places_sdk_platform_interface: ^0.2.7
-  js: ^0.6.7 # Can't upgrade to 0.7.x due to google_maps
-  google_maps: ^7.1.0
+  js: ^0.7.1
+  google_maps: ^8.0.0
   collection: ^1.17.2 # Can't upgrade to 1.18 due to flutter sdk version
 
 dev_dependencies:
