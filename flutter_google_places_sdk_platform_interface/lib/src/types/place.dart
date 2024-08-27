@@ -6,6 +6,7 @@ import 'package:flutter_google_places_sdk_platform_interface/src/types/opening_h
 import 'package:flutter_google_places_sdk_platform_interface/src/types/photo_metadata.dart';
 import 'package:flutter_google_places_sdk_platform_interface/src/types/place_type.dart';
 import 'package:flutter_google_places_sdk_platform_interface/src/types/plus_code.dart';
+import 'package:flutter_google_places_sdk_platform_interface/src/types/review.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'place.freezed.dart';
@@ -28,6 +29,7 @@ class Place with _$Place {
     required List<String>? attributions,
     required LatLng? latLng,
     required String? name,
+    required String? nameLanguageCode,
     required OpeningHours? openingHours,
     required String? phoneNumber,
     required List<PhotoMetadata>? photoMetadatas,
@@ -39,6 +41,7 @@ class Place with _$Place {
     required int? utcOffsetMinutes,
     required LatLngBounds? viewport,
     required Uri? websiteUri,
+    required List<Review>? reviews,
   }) = _Place;
 
   /// Parse an [Place] from json.
