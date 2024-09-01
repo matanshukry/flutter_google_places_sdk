@@ -10,7 +10,7 @@ on:
     paths: ['flutter_google_places_sdk_android/**']
 
 env:
-  flutter_version: "3.3.0"
+  flutter_version: "3.13.0"
   java_version: "16.x"
   dir: "flutter_google_places_sdk_android"
 
