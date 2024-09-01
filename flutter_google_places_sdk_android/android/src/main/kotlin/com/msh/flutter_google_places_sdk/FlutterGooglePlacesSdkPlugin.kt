@@ -16,7 +16,6 @@ import java.io.ByteArrayOutputStream
 import java.lang.reflect.Field
 import java.util.*
 
-
 /** FlutterGooglePlacesSdkPlugin */
 class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
 
