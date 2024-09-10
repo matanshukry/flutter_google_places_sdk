@@ -26,8 +26,12 @@ mixin _$TimeOfWeek {
   /// The time in 24 hour format, for example "1730", or "0000"
   PlaceLocalTime get time => throw _privateConstructorUsedError;
 
+  /// Serializes this TimeOfWeek to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TimeOfWeek
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TimeOfWeekCopyWith<TimeOfWeek> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -53,6 +57,8 @@ class _$TimeOfWeekCopyWithImpl<$Res, $Val extends TimeOfWeek>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TimeOfWeek
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -71,6 +77,8 @@ class _$TimeOfWeekCopyWithImpl<$Res, $Val extends TimeOfWeek>
     ) as $Val);
   }
 
+  /// Create a copy of TimeOfWeek
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PlaceLocalTimeCopyWith<$Res> get time {
@@ -102,6 +110,8 @@ class __$$TimeOfWeekImplCopyWithImpl<$Res>
       _$TimeOfWeekImpl _value, $Res Function(_$TimeOfWeekImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TimeOfWeek
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -151,11 +161,13 @@ class _$TimeOfWeekImpl implements _TimeOfWeek {
             (identical(other.time, time) || other.time == time));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, day, time);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TimeOfWeek
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TimeOfWeekImplCopyWith<_$TimeOfWeekImpl> get copyWith =>
@@ -177,16 +189,18 @@ abstract class _TimeOfWeek implements TimeOfWeek {
   factory _TimeOfWeek.fromJson(Map<String, dynamic> json) =
       _$TimeOfWeekImpl.fromJson;
 
-  @override
-
   /// The day of the week.
-  DayOfWeek get day;
   @override
+  DayOfWeek get day;
 
   /// The time in 24 hour format, for example "1730", or "0000"
-  PlaceLocalTime get time;
   @override
-  @JsonKey(ignore: true)
+  PlaceLocalTime get time;
+
+  /// Create a copy of TimeOfWeek
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TimeOfWeekImplCopyWith<_$TimeOfWeekImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

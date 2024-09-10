@@ -34,8 +34,12 @@ mixin _$PlacesAutocompleteResponse {
   /// When the service returns additional information about the request specification, there may be an additional info_messages field within the response object. This field is only returned for successful requests. It may not always be returned, and its content is subject to change.
   List<String>? get info_messages => throw _privateConstructorUsedError;
 
+  /// Serializes this PlacesAutocompleteResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PlacesAutocompleteResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PlacesAutocompleteResponseCopyWith<PlacesAutocompleteResponse>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -65,6 +69,8 @@ class _$PlacesAutocompleteResponseCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PlacesAutocompleteResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -120,6 +126,8 @@ class __$$PlacesAutocompleteResponseImplCopyWithImpl<$Res>
       $Res Function(_$PlacesAutocompleteResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PlacesAutocompleteResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -215,7 +223,7 @@ class _$PlacesAutocompleteResponseImpl implements _PlacesAutocompleteResponse {
                 .equals(other._info_messages, _info_messages));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -224,7 +232,9 @@ class _$PlacesAutocompleteResponseImpl implements _PlacesAutocompleteResponse {
       error_message,
       const DeepCollectionEquality().hash(_info_messages));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PlacesAutocompleteResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PlacesAutocompleteResponseImplCopyWith<_$PlacesAutocompleteResponseImpl>
@@ -251,24 +261,26 @@ abstract class _PlacesAutocompleteResponse
   factory _PlacesAutocompleteResponse.fromJson(Map<String, dynamic> json) =
       _$PlacesAutocompleteResponseImpl.fromJson;
 
-  @override
-
   /// Contains an array of predictions.
-  List<PlaceAutocompletePrediction> get predictions;
   @override
+  List<PlaceAutocompletePrediction> get predictions;
 
   /// Contains the status of the request, and may contain debugging information to help you track down why the request failed.
-  PlacesAutocompleteStatus get status;
   @override
+  PlacesAutocompleteStatus get status;
 
   /// When the service returns a status code other than OK<, there may be an additional error_message field within the response object. This field contains more detailed information about thereasons behind the given status code. This field is not always returned, and its content is subject to change.
-  String? get error_message;
   @override
+  String? get error_message;
 
   /// When the service returns additional information about the request specification, there may be an additional info_messages field within the response object. This field is only returned for successful requests. It may not always be returned, and its content is subject to change.
-  List<String>? get info_messages;
   @override
-  @JsonKey(ignore: true)
+  List<String>? get info_messages;
+
+  /// Create a copy of PlacesAutocompleteResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PlacesAutocompleteResponseImplCopyWith<_$PlacesAutocompleteResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

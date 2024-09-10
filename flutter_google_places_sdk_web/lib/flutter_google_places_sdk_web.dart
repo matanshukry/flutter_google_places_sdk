@@ -4,7 +4,7 @@ library places;
 import 'dart:async';
 import 'dart:developer';
 import 'dart:html' as html;
-import 'dart:js_util';
+import 'dart:js_interop';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +13,10 @@ import 'package:flutter_google_places_sdk_platform_interface/flutter_google_plac
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart'
     as inter;
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:google_maps/google_maps.dart';
 import 'package:google_maps/google_maps.dart' as core;
+import 'package:google_maps/google_maps_geocoding.dart';
 import 'package:google_maps/google_maps_places.dart' as places;
-import 'package:google_maps/google_maps_places.dart';
-import 'package:js/js.dart';
+import 'package:js/js_util.dart';
 
 @JS('initMap')
 external set _initMap(void Function() f);
@@ -34,15 +33,15 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
 
   Completer? _completer;
 
-  AutocompleteService? _svcAutoComplete;
-  PlacesService? _svcPlaces;
-  AutocompleteSessionToken? _lastSessionToken;
+  places.AutocompleteService? _svcAutoComplete;
+  places.PlacesService? _svcPlaces;
+  places.AutocompleteSessionToken? _lastSessionToken;
 
   // Language
   String? _language;
 
   // Cache for photos
-  final _photosCache = <String, PlacePhoto>{};
+  final _photosCache = <String, places.PlacePhoto>{};
   var _runningUid = 1;
 
   @override
@@ -90,8 +89,9 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   }
 
   void _doInit() {
-    _svcAutoComplete = AutocompleteService();
-    _svcPlaces = PlacesService(html.window.document.createElement('div'));
+    _svcAutoComplete = places.AutocompleteService();
+    _svcPlaces =
+        places.PlacesService(html.window.document.createElement('div').toJSBox);
     _completer!.complete();
   }
 
@@ -115,32 +115,33 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       // https://issuetracker.google.com/issues/36219203
       log("locationRestriction is not supported: https://issuetracker.google.com/issues/36219203");
     }
-    final prom = _svcAutoComplete!.getPlacePredictions(AutocompletionRequest()
+    final prom =
+        _svcAutoComplete!.getPlacePredictions(places.AutocompletionRequest()
       ..input = query
       ..origin = origin == null ? null : core.LatLng(origin.lat, origin.lng)
       ..types = placeTypesFilter.isEmpty ? null : placeTypesFilter
-      ..componentRestrictions = (ComponentRestrictions()..country = countries)
+          ..componentRestrictions =
+              (places.ComponentRestrictions()..country = countries?.toJSBox)
       ..bounds = _boundsToWeb(locationBias)
       ..language = _language);
     final resp = await prom;
 
     final predictions = resp.predictions
-            ?.whereNotNull()
+        .whereNotNull()
             .map(_translatePrediction)
-            .toList(growable: false) ??
-        [];
+        .toList(growable: false);
     return FindAutocompletePredictionsResponse(predictions);
   }
 
   inter.AutocompletePrediction _translatePrediction(
       places.AutocompletePrediction prediction) {
-    var main_text = prediction.structuredFormatting?.mainText;
-    var secondary_text = prediction.structuredFormatting?.secondaryText;
+    var main_text = prediction.structuredFormatting.mainText;
+    var secondary_text = prediction.structuredFormatting.secondaryText;
     return inter.AutocompletePrediction(
       distanceMeters: prediction.distanceMeters?.toInt() ?? 0,
-      placeId: prediction.placeId ?? '',
-      primaryText: main_text ?? '',
-      secondaryText: secondary_text ?? '',
+      placeId: prediction.placeId,
+      primaryText: main_text,
+      secondaryText: secondary_text,
       fullText: '$main_text, $secondary_text',
     );
   }
@@ -151,7 +152,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     List<PlaceField>? fields,
     bool? newSessionToken,
   }) async {
-    final prom = _getDetails(PlaceDetailsRequest()
+    final prom = _getDetails(places.PlaceDetailsRequest()
       ..placeId = placeId
       ..fields = fields?.map(this._mapField).toList(growable: false)
       ..sessionToken = _lastSessionToken
@@ -202,19 +203,19 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     }
   }
 
-  Future<_GetDetailsResponse> _getDetails(PlaceDetailsRequest request) {
+  Future<_GetDetailsResponse> _getDetails(places.PlaceDetailsRequest request) {
     final completer = Completer<_GetDetailsResponse>();
 
-    final func = (PlaceResult? place, PlacesServiceStatus? status) {
+    final func =
+        (places.PlaceResult? place, places.PlacesServiceStatus? status) {
       completer.complete(_GetDetailsResponse(_parsePlace(place), status));
     };
 
-    _svcPlaces!.getDetails(request, func);
-
+    _svcPlaces!.getDetails(request, allowInteropCaptureThis(func).toJS);
     return completer.future;
   }
 
-  inter.Place? _parsePlace(PlaceResult? place) {
+  inter.Place? _parsePlace(places.PlaceResult? place) {
     if (place == null) {
       return null;
     }
@@ -270,14 +271,13 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     }
 
     return AddressComponent(
-      name: addressComponent.longName ?? '',
-      shortName: addressComponent.shortName ?? '',
+      name: addressComponent.longName,
+      shortName: addressComponent.shortName,
       types: addressComponent.types
-              ?.whereNotNull()
+          .whereNotNull()
               .map((e) => e.toString())
               .cast<String>()
-              .toList(growable: false) ??
-          [],
+          .toList(growable: false),
     );
   }
 
@@ -292,17 +292,17 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     );
   }
 
-  PhotoMetadata? _parsePhotoMetadata(PlacePhoto? photo) {
+  PhotoMetadata? _parsePhotoMetadata(places.PlacePhoto? photo) {
     if (photo == null) {
       return null;
     }
 
     final htmlAttrs =
-        photo.htmlAttributions?.whereNotNull().toList(growable: false) ?? [];
+        photo.htmlAttributions.whereNotNull().toList(growable: false);
     final photoMetadata = PhotoMetadata(
         photoReference: _getPhotoMetadataReference(photo),
-        width: photo.width?.toInt() ?? 0,
-        height: photo.height?.toInt() ?? 0,
+        width: photo.width.toInt(),
+        height: photo.height.toInt(),
         attributions: htmlAttrs.length == 1 ? htmlAttrs[0] : '');
 
     _photosCache[photoMetadata.photoReference] = photo;
@@ -310,7 +310,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     return photoMetadata;
   }
 
-  String _getPhotoMetadataReference(PlacePhoto photo) {
+  String _getPhotoMetadataReference(places.PlacePhoto photo) {
     final num = _runningUid++;
     return "id_${num.toString()}";
   }
@@ -325,14 +325,14 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
         northeast: _parseLatLang(viewport.northEast)!);
   }
 
-  PlusCode? _parsePlusCode(PlacePlusCode? plusCode) {
+  PlusCode? _parsePlusCode(places.PlacePlusCode? plusCode) {
     if (plusCode == null) {
       return null;
     }
 
     return PlusCode(
       compoundCode: plusCode.compoundCode ?? '',
-      globalCode: plusCode.globalCode ?? '',
+      globalCode: plusCode.globalCode,
     );
   }
 
@@ -346,7 +346,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
         (element) => element.name.toUpperCase() == businessStatus);
   }
 
-  OpeningHours? _parseOpeningHours(PlaceOpeningHours? openingHours) {
+  OpeningHours? _parseOpeningHours(places.PlaceOpeningHours? openingHours) {
     if (openingHours == null) {
       return null;
     }
@@ -366,27 +366,24 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     );
   }
 
-  Period _parsePeriod(PlaceOpeningHoursPeriod period) {
+  Period _parsePeriod(places.PlaceOpeningHoursPeriod period) {
     return Period(
         open: _parseTimeOfWeek(period.open)!,
         close: _parseTimeOfWeek(period.close));
   }
 
-  TimeOfWeek? _parseTimeOfWeek(PlaceOpeningHoursTime? timeOfWeek) {
-    if (timeOfWeek == null || timeOfWeek.day == null) {
+  TimeOfWeek? _parseTimeOfWeek(places.PlaceOpeningHoursTime? timeOfWeek) {
+    if (timeOfWeek == null) {
       return null;
     }
 
-    final day = timeOfWeek.day?.toInt();
-    if (day == null) {
-      return null;
-    }
+    final day = timeOfWeek.day.toInt();
 
     return TimeOfWeek(
       day: _parseDayOfWeek(day),
       time: PlaceLocalTime(
-        hours: timeOfWeek.hours?.toInt() ?? 0,
-        minutes: timeOfWeek.minutes?.toInt() ?? 0,
+        hours: timeOfWeek.hours.toInt(),
+        minutes: timeOfWeek.minutes.toInt(),
       ),
     );
   }
@@ -413,7 +410,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     int? maxWidth,
     int? maxHeight,
   }) async {
-    PlacePhoto? value = _photosCache[photoMetadata.photoReference];
+    places.PlacePhoto? value = _photosCache[photoMetadata.photoReference];
     if (value == null) {
       throw PlatformException(
         code: 'API_ERROR_PHOTO',
@@ -422,12 +419,9 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       );
     }
 
-    final options = PhotoOptions()
-      ..maxWidth = maxWidth
-      ..maxHeight = maxHeight;
-    final url = value.getUrl(options);
+    final url = value.url;
 
-    return FetchPlacePhotoResponse.imageUrl(url!);
+    return FetchPlacePhotoResponse.imageUrl(url);
   }
 }
 
@@ -440,5 +434,5 @@ class _GetDetailsResponse {
   final inter.Place? place;
 
   /// The status of the response.
-  final PlacesServiceStatus? status;
+  final places.PlacesServiceStatus? status;
 }

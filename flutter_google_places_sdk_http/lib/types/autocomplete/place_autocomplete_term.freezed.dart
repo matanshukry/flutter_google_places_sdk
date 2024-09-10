@@ -27,8 +27,12 @@ mixin _$PlaceAutocompleteTerm {
   /// The text of the term.
   String get value => throw _privateConstructorUsedError;
 
+  /// Serializes this PlaceAutocompleteTerm to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PlaceAutocompleteTerm
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PlaceAutocompleteTermCopyWith<PlaceAutocompleteTerm> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -53,6 +57,8 @@ class _$PlaceAutocompleteTermCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PlaceAutocompleteTerm
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -93,6 +99,8 @@ class __$$PlaceAutocompleteTermImplCopyWithImpl<$Res>
       $Res Function(_$PlaceAutocompleteTermImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PlaceAutocompleteTerm
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -143,11 +151,13 @@ class _$PlaceAutocompleteTermImpl implements _PlaceAutocompleteTerm {
             (identical(other.value, value) || other.value == value));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, offset, value);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PlaceAutocompleteTerm
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PlaceAutocompleteTermImplCopyWith<_$PlaceAutocompleteTermImpl>
@@ -170,16 +180,18 @@ abstract class _PlaceAutocompleteTerm implements PlaceAutocompleteTerm {
   factory _PlaceAutocompleteTerm.fromJson(Map<String, dynamic> json) =
       _$PlaceAutocompleteTermImpl.fromJson;
 
-  @override
-
   /// Defines the start position of this term in the description, measured in Unicode characters.
-  int get offset;
   @override
+  int get offset;
 
   /// The text of the term.
-  String get value;
   @override
-  @JsonKey(ignore: true)
+  String get value;
+
+  /// Create a copy of PlaceAutocompleteTerm
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PlaceAutocompleteTermImplCopyWith<_$PlaceAutocompleteTermImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

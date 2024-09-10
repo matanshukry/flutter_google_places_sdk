@@ -32,8 +32,12 @@ mixin _$PhotoMetadata {
   /// The attributions that must be shown to the user if this photo is displayed.
   String get attributions => throw _privateConstructorUsedError;
 
+  /// Serializes this PhotoMetadata to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PhotoMetadata
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PhotoMetadataCopyWith<PhotoMetadata> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -58,6 +62,8 @@ class _$PhotoMetadataCopyWithImpl<$Res, $Val extends PhotoMetadata>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PhotoMetadata
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -107,6 +113,8 @@ class __$$PhotoMetadataImplCopyWithImpl<$Res>
       _$PhotoMetadataImpl _value, $Res Function(_$PhotoMetadataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PhotoMetadata
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -182,12 +190,14 @@ class _$PhotoMetadataImpl implements _PhotoMetadata {
                 other.attributions == attributions));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, photoReference, width, height, attributions);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PhotoMetadata
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PhotoMetadataImplCopyWith<_$PhotoMetadataImpl> get copyWith =>
@@ -211,24 +221,26 @@ abstract class _PhotoMetadata implements PhotoMetadata {
   factory _PhotoMetadata.fromJson(Map<String, dynamic> json) =
       _$PhotoMetadataImpl.fromJson;
 
-  @override
-
   /// Non-empty String used to identify the underlying photo.
-  String get photoReference;
   @override
+  String get photoReference;
 
   /// The maximum width in which this photo is available.
-  int get width;
   @override
+  int get width;
 
   /// The maximum height in which this photo is available.
-  int get height;
   @override
+  int get height;
 
   /// The attributions that must be shown to the user if this photo is displayed.
-  String get attributions;
   @override
-  @JsonKey(ignore: true)
+  String get attributions;
+
+  /// Create a copy of PhotoMetadata
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PhotoMetadataImplCopyWith<_$PhotoMetadataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -26,8 +26,12 @@ mixin _$LatLngBounds {
   /// The northeast coordinate of the bounds.
   LatLng get northeast => throw _privateConstructorUsedError;
 
+  /// Serializes this LatLngBounds to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LatLngBounds
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LatLngBoundsCopyWith<LatLngBounds> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -54,6 +58,8 @@ class _$LatLngBoundsCopyWithImpl<$Res, $Val extends LatLngBounds>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LatLngBounds
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -72,6 +78,8 @@ class _$LatLngBoundsCopyWithImpl<$Res, $Val extends LatLngBounds>
     ) as $Val);
   }
 
+  /// Create a copy of LatLngBounds
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $LatLngCopyWith<$Res> get southwest {
@@ -80,6 +88,8 @@ class _$LatLngBoundsCopyWithImpl<$Res, $Val extends LatLngBounds>
     });
   }
 
+  /// Create a copy of LatLngBounds
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $LatLngCopyWith<$Res> get northeast {
@@ -113,6 +123,8 @@ class __$$LatLngBoundsImplCopyWithImpl<$Res>
       _$LatLngBoundsImpl _value, $Res Function(_$LatLngBoundsImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LatLngBounds
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -164,11 +176,13 @@ class _$LatLngBoundsImpl implements _LatLngBounds {
                 other.northeast == northeast));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, southwest, northeast);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LatLngBounds
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LatLngBoundsImplCopyWith<_$LatLngBoundsImpl> get copyWith =>
@@ -190,16 +204,18 @@ abstract class _LatLngBounds implements LatLngBounds {
   factory _LatLngBounds.fromJson(Map<String, dynamic> json) =
       _$LatLngBoundsImpl.fromJson;
 
-  @override
-
   /// The southwest coordinate of the bounds.
-  LatLng get southwest;
   @override
+  LatLng get southwest;
 
   /// The northeast coordinate of the bounds.
-  LatLng get northeast;
   @override
-  @JsonKey(ignore: true)
+  LatLng get northeast;
+
+  /// Create a copy of LatLngBounds
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LatLngBoundsImplCopyWith<_$LatLngBoundsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

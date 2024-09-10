@@ -23,8 +23,12 @@ mixin _$Period {
   TimeOfWeek get open => throw _privateConstructorUsedError;
   TimeOfWeek? get close => throw _privateConstructorUsedError;
 
+  /// Serializes this Period to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Period
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PeriodCopyWith<Period> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -49,6 +53,8 @@ class _$PeriodCopyWithImpl<$Res, $Val extends Period>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Period
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -67,6 +73,8 @@ class _$PeriodCopyWithImpl<$Res, $Val extends Period>
     ) as $Val);
   }
 
+  /// Create a copy of Period
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TimeOfWeekCopyWith<$Res> get open {
@@ -75,6 +83,8 @@ class _$PeriodCopyWithImpl<$Res, $Val extends Period>
     });
   }
 
+  /// Create a copy of Period
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TimeOfWeekCopyWith<$Res>? get close {
@@ -111,6 +121,8 @@ class __$$PeriodImplCopyWithImpl<$Res>
       _$PeriodImpl _value, $Res Function(_$PeriodImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Period
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -157,11 +169,13 @@ class _$PeriodImpl implements _Period {
             (identical(other.close, close) || other.close == close));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, open, close);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Period
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PeriodImplCopyWith<_$PeriodImpl> get copyWith =>
@@ -186,8 +200,11 @@ abstract class _Period implements Period {
   TimeOfWeek get open;
   @override
   TimeOfWeek? get close;
+
+  /// Create a copy of Period
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PeriodImplCopyWith<_$PeriodImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

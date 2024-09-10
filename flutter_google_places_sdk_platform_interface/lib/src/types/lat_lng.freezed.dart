@@ -26,8 +26,12 @@ mixin _$LatLng {
   /// the longitude part of the coordinate.
   double get lng => throw _privateConstructorUsedError;
 
+  /// Serializes this LatLng to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LatLng
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LatLngCopyWith<LatLng> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -49,6 +53,8 @@ class _$LatLngCopyWithImpl<$Res, $Val extends LatLng>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LatLng
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$LatLngImplCopyWithImpl<$Res>
       _$LatLngImpl _value, $Res Function(_$LatLngImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LatLng
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -135,11 +143,13 @@ class _$LatLngImpl implements _LatLng {
             (identical(other.lng, lng) || other.lng == lng));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, lat, lng);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LatLng
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LatLngImplCopyWith<_$LatLngImpl> get copyWith =>
@@ -159,16 +169,18 @@ abstract class _LatLng implements LatLng {
 
   factory _LatLng.fromJson(Map<String, dynamic> json) = _$LatLngImpl.fromJson;
 
-  @override
-
   /// The latitude part of the coordinate,
-  double get lat;
   @override
+  double get lat;
 
   /// the longitude part of the coordinate.
-  double get lng;
   @override
-  @JsonKey(ignore: true)
+  double get lng;
+
+  /// Create a copy of LatLng
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LatLngImplCopyWith<_$LatLngImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

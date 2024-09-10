@@ -39,8 +39,12 @@ mixin _$AutocompletePrediction {
   /// The full text of a place.
   String get fullText => throw _privateConstructorUsedError;
 
+  /// Serializes this AutocompletePrediction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AutocompletePrediction
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AutocompletePredictionCopyWith<AutocompletePrediction> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -71,6 +75,8 @@ class _$AutocompletePredictionCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AutocompletePrediction
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -138,6 +144,8 @@ class __$$AutocompletePredictionImplCopyWithImpl<$Res>
       $Res Function(_$AutocompletePredictionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AutocompletePrediction
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -248,7 +256,7 @@ class _$AutocompletePredictionImpl implements _AutocompletePrediction {
                 other.fullText == fullText));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -259,7 +267,9 @@ class _$AutocompletePredictionImpl implements _AutocompletePrediction {
       secondaryText,
       fullText);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AutocompletePrediction
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AutocompletePredictionImplCopyWith<_$AutocompletePredictionImpl>
@@ -286,32 +296,34 @@ abstract class _AutocompletePrediction implements AutocompletePrediction {
   factory _AutocompletePrediction.fromJson(Map<String, dynamic> json) =
       _$AutocompletePredictionImpl.fromJson;
 
-  @override
-
   /// the straight-line distance between the place being referred to by getPlaceId() and the origin specified in the request.
-  int? get distanceMeters;
   @override
+  int? get distanceMeters;
 
   /// the place ID of the place being referred to by this prediction.
-  String get placeId;
   @override
+  String get placeId;
 
   /// the list of place types associated with the place referred to by getPlaceId()
-  List<PlaceType>? get placeTypes;
   @override
+  List<PlaceType>? get placeTypes;
 
   /// the primary text of a place.
-  String get primaryText;
   @override
+  String get primaryText;
 
   /// the secondary text of a place.
-  String get secondaryText;
   @override
+  String get secondaryText;
 
   /// The full text of a place.
-  String get fullText;
   @override
-  @JsonKey(ignore: true)
+  String get fullText;
+
+  /// Create a copy of AutocompletePrediction
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AutocompletePredictionImplCopyWith<_$AutocompletePredictionImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

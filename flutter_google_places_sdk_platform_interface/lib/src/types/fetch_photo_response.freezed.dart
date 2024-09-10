@@ -73,6 +73,9 @@ class _$FetchPlacePhotoResponseCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of FetchPlacePhotoResponse
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -95,6 +98,8 @@ class __$$FetchPlacePhotoResponseImageImplCopyWithImpl<$Res>
       $Res Function(_$FetchPlacePhotoResponseImageImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FetchPlacePhotoResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -134,7 +139,9 @@ class _$FetchPlacePhotoResponseImageImpl
   @override
   int get hashCode => Object.hash(runtimeType, image);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FetchPlacePhotoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FetchPlacePhotoResponseImageImplCopyWith<
@@ -210,7 +217,10 @@ abstract class FetchPlacePhotoResponseImage implements FetchPlacePhotoResponse {
       _$FetchPlacePhotoResponseImageImpl;
 
   Image get image;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FetchPlacePhotoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FetchPlacePhotoResponseImageImplCopyWith<
           _$FetchPlacePhotoResponseImageImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -236,6 +246,8 @@ class __$$FetchPlacePhotoResponseImageUrlImplCopyWithImpl<$Res>
       $Res Function(_$FetchPlacePhotoResponseImageUrlImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FetchPlacePhotoResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -276,7 +288,9 @@ class _$FetchPlacePhotoResponseImageUrlImpl
   @override
   int get hashCode => Object.hash(runtimeType, imageUrl);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FetchPlacePhotoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FetchPlacePhotoResponseImageUrlImplCopyWith<
@@ -353,7 +367,10 @@ abstract class FetchPlacePhotoResponseImageUrl
       _$FetchPlacePhotoResponseImageUrlImpl;
 
   String get imageUrl;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FetchPlacePhotoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FetchPlacePhotoResponseImageUrlImplCopyWith<
           _$FetchPlacePhotoResponseImageUrlImpl>
       get copyWith => throw _privateConstructorUsedError;

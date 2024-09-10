@@ -19,7 +19,9 @@ mixin _$FetchPlaceResponse {
   /// the Place returned by the response.
   Place? get place => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FetchPlaceResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FetchPlaceResponseCopyWith<FetchPlaceResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -45,6 +47,8 @@ class _$FetchPlaceResponseCopyWithImpl<$Res, $Val extends FetchPlaceResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FetchPlaceResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -58,6 +62,8 @@ class _$FetchPlaceResponseCopyWithImpl<$Res, $Val extends FetchPlaceResponse>
     ) as $Val);
   }
 
+  /// Create a copy of FetchPlaceResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PlaceCopyWith<$Res>? get place {
@@ -96,6 +102,8 @@ class __$$FetchPlacePhotoResponseImageImplCopyWithImpl<$Res>
       $Res Function(_$FetchPlacePhotoResponseImageImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FetchPlaceResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -136,7 +144,9 @@ class _$FetchPlacePhotoResponseImageImpl
   @override
   int get hashCode => Object.hash(runtimeType, place);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FetchPlaceResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FetchPlacePhotoResponseImageImplCopyWith<
@@ -149,12 +159,14 @@ abstract class _FetchPlacePhotoResponseImage implements FetchPlaceResponse {
   const factory _FetchPlacePhotoResponseImage(final Place? place) =
       _$FetchPlacePhotoResponseImageImpl;
 
-  @override
-
   /// the Place returned by the response.
-  Place? get place;
   @override
-  @JsonKey(ignore: true)
+  Place? get place;
+
+  /// Create a copy of FetchPlaceResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FetchPlacePhotoResponseImageImplCopyWith<
           _$FetchPlacePhotoResponseImageImpl>
       get copyWith => throw _privateConstructorUsedError;

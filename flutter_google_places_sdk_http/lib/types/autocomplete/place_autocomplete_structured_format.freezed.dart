@@ -40,8 +40,12 @@ mixin _$PlaceAutocompleteStructuredFormat {
       get secondary_text_matched_substrings =>
           throw _privateConstructorUsedError;
 
+  /// Serializes this PlaceAutocompleteStructuredFormat to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PlaceAutocompleteStructuredFormat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PlaceAutocompleteStructuredFormatCopyWith<PlaceAutocompleteStructuredFormat>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -73,6 +77,8 @@ class _$PlaceAutocompleteStructuredFormatCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PlaceAutocompleteStructuredFormat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -130,6 +136,8 @@ class __$$PlaceAutocompleteStructuredFormatImplCopyWithImpl<$Res>
       $Res Function(_$PlaceAutocompleteStructuredFormatImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PlaceAutocompleteStructuredFormat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -244,7 +252,7 @@ class _$PlaceAutocompleteStructuredFormatImpl
                 _secondary_text_matched_substrings));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -253,7 +261,9 @@ class _$PlaceAutocompleteStructuredFormatImpl
       secondary_text,
       const DeepCollectionEquality().hash(_secondary_text_matched_substrings));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PlaceAutocompleteStructuredFormat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PlaceAutocompleteStructuredFormatImplCopyWith<
@@ -284,29 +294,31 @@ abstract class _PlaceAutocompleteStructuredFormat
           Map<String, dynamic> json) =
       _$PlaceAutocompleteStructuredFormatImpl.fromJson;
 
-  @override
-
   /// Contains the main text of a prediction, usually the name of the place.
-  String get main_text;
   @override
+  String get main_text;
 
   /// Contains an array with offset value and length.
   /// These describe the location of the entered term in the prediction result text,
   /// so that the term can be highlighted if desired.
-  List<PlaceAutocompleteMatchedSubstring> get main_text_matched_substrings;
   @override
+  List<PlaceAutocompleteMatchedSubstring> get main_text_matched_substrings;
 
   /// Contains the secondary text of a prediction, usually the location of the place.
-  String get secondary_text;
   @override
+  String get secondary_text;
 
   /// Contains an array with offset value and length.
   /// These describe the location of the entered term in the prediction result text,
   /// so that the term can be highlighted if desired.
+  @override
   List<PlaceAutocompleteMatchedSubstring>?
       get secondary_text_matched_substrings;
+
+  /// Create a copy of PlaceAutocompleteStructuredFormat
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PlaceAutocompleteStructuredFormatImplCopyWith<
           _$PlaceAutocompleteStructuredFormatImpl>
       get copyWith => throw _privateConstructorUsedError;

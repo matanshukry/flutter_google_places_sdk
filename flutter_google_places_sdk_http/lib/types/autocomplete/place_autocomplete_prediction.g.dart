@@ -19,7 +19,7 @@ _$PlacesAutocompletePredictionImpl _$$PlacesAutocompletePredictionImplFromJson(
       terms: (json['terms'] as List<dynamic>)
           .map((e) => PlaceAutocompleteTerm.fromJson(e as Map<String, dynamic>))
           .toList(),
-      distance_meters: json['distance_meters'] as int?,
+      distance_meters: (json['distance_meters'] as num?)?.toInt(),
       place_id: json['place_id'] as String?,
       types:
           (json['types'] as List<dynamic>?)?.map((e) => e as String).toList(),
