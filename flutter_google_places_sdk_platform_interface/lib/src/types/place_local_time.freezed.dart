@@ -26,8 +26,12 @@ mixin _$PlaceLocalTime {
   /// The minutes (0 <= return value < 60).
   int get minutes => throw _privateConstructorUsedError;
 
+  /// Serializes this PlaceLocalTime to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PlaceLocalTime
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PlaceLocalTimeCopyWith<PlaceLocalTime> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -51,6 +55,8 @@ class _$PlaceLocalTimeCopyWithImpl<$Res, $Val extends PlaceLocalTime>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PlaceLocalTime
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -89,6 +95,8 @@ class __$$PlaceLocalTimeImplCopyWithImpl<$Res>
       _$PlaceLocalTimeImpl _value, $Res Function(_$PlaceLocalTimeImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PlaceLocalTime
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -138,11 +146,13 @@ class _$PlaceLocalTimeImpl implements _PlaceLocalTime {
             (identical(other.minutes, minutes) || other.minutes == minutes));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, hours, minutes);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PlaceLocalTime
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PlaceLocalTimeImplCopyWith<_$PlaceLocalTimeImpl> get copyWith =>
@@ -165,16 +175,18 @@ abstract class _PlaceLocalTime implements PlaceLocalTime {
   factory _PlaceLocalTime.fromJson(Map<String, dynamic> json) =
       _$PlaceLocalTimeImpl.fromJson;
 
-  @override
-
   /// The hours in 24 hour format (0 <= return value < 24).
-  int get hours;
   @override
+  int get hours;
 
   /// The minutes (0 <= return value < 60).
-  int get minutes;
   @override
-  @JsonKey(ignore: true)
+  int get minutes;
+
+  /// Create a copy of PlaceLocalTime
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PlaceLocalTimeImplCopyWith<_$PlaceLocalTimeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

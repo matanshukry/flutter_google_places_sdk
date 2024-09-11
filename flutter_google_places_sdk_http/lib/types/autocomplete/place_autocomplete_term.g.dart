@@ -9,7 +9,7 @@ part of 'place_autocomplete_term.dart';
 _$PlaceAutocompleteTermImpl _$$PlaceAutocompleteTermImplFromJson(
         Map<String, dynamic> json) =>
     _$PlaceAutocompleteTermImpl(
-      offset: json['offset'] as int,
+      offset: (json['offset'] as num).toInt(),
       value: json['value'] as String,
     );
 

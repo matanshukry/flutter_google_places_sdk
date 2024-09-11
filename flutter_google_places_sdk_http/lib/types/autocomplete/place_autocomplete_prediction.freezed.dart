@@ -59,8 +59,12 @@ mixin _$PlaceAutocompletePrediction {
   /// The array can contain multiple values.
   List<String>? get types => throw _privateConstructorUsedError;
 
+  /// Serializes this PlaceAutocompletePrediction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PlaceAutocompletePrediction
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PlaceAutocompletePredictionCopyWith<PlaceAutocompletePrediction>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -96,6 +100,8 @@ class _$PlaceAutocompletePredictionCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PlaceAutocompletePrediction
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -139,6 +145,8 @@ class _$PlaceAutocompletePredictionCopyWithImpl<$Res,
     ) as $Val);
   }
 
+  /// Create a copy of PlaceAutocompletePrediction
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PlaceAutocompleteStructuredFormatCopyWith<$Res> get structured_formatting {
@@ -181,6 +189,8 @@ class __$$PlacesAutocompletePredictionImplCopyWithImpl<$Res>
       $Res Function(_$PlacesAutocompletePredictionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PlaceAutocompletePrediction
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -343,7 +353,7 @@ class _$PlacesAutocompletePredictionImpl extends _PlacesAutocompletePrediction {
             const DeepCollectionEquality().equals(other._types, _types));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -355,7 +365,9 @@ class _$PlacesAutocompletePredictionImpl extends _PlacesAutocompletePrediction {
       place_id,
       const DeepCollectionEquality().hash(_types));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PlaceAutocompletePrediction
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PlacesAutocompletePredictionImplCopyWith<
@@ -386,51 +398,53 @@ abstract class _PlacesAutocompletePrediction
   factory _PlacesAutocompletePrediction.fromJson(Map<String, dynamic> json) =
       _$PlacesAutocompletePredictionImpl.fromJson;
 
-  @override
-
   /// Contains the human-readable name for the returned result.
   /// For establishment results, this is usually the business name.
   /// This content is meant to be read as-is. Do not programmatically
   /// parse the formatted address.
-  String get description;
   @override
+  String get description;
 
   /// A list of substrings that describe the location of the entered term
   /// in the prediction result text, so that the term can be highlighted if desired.
-  List<PlaceAutocompleteMatchedSubstring> get matched_substrings;
   @override
+  List<PlaceAutocompleteMatchedSubstring> get matched_substrings;
 
   /// Provides pre-formatted text that can be shown in your autocomplete results.
   /// This content is meant to be read as-is. Do not programmatically parse the formatted address.
-  PlaceAutocompleteStructuredFormat get structured_formatting;
   @override
+  PlaceAutocompleteStructuredFormat get structured_formatting;
 
   /// Contains an array of terms identifying each section of the returned
   /// description (a section of the description is generally terminated with a comma).
   /// Each entry in the array has a value field, containing the text of the term,
   /// and an offset field, defining the start position of this term in the description,
   /// measured in Unicode characters.
-  List<PlaceAutocompleteTerm> get terms;
   @override
+  List<PlaceAutocompleteTerm> get terms;
 
   /// The straight-line distance in meters from the origin.
   /// This field is only returned for requests made with an origin.
-  int? get distance_meters;
   @override
+  int? get distance_meters;
 
   /// A textual identifier that uniquely identifies a place.
   /// To retrieve information about the place, pass this identifier in the
   /// placeId field of a Places API request. For more information about
   /// place IDs, see the Place IDs overview.
-  String? get place_id;
   @override
+  String? get place_id;
 
   /// Contains an array of types that apply to this place.
   /// For example: [ "political", "locality" ] or [ "establishment", "geocode", "beauty_salon" ].
   /// The array can contain multiple values.
-  List<String>? get types;
   @override
-  @JsonKey(ignore: true)
+  List<String>? get types;
+
+  /// Create a copy of PlaceAutocompletePrediction
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PlacesAutocompletePredictionImplCopyWith<
           _$PlacesAutocompletePredictionImpl>
       get copyWith => throw _privateConstructorUsedError;

@@ -48,6 +48,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                 initialize(apiKey, locale)
                 result.success(null)
             }
+
             METHOD_UPDATE_SETTINGS -> {
                 val apiKey = call.argument<String>("apiKey")
                 val localeMap = call.argument<Map<String, Any>>("locale")
@@ -55,13 +56,16 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                 updateSettings(apiKey, locale)
                 result.success(null)
             }
+
             METHOD_DEINITIALIZE -> {
                 Places.deinitialize()
                 result.success(null)
             }
+
             METHOD_IS_INITIALIZE -> {
                 result.success(Places.isInitialized())
             }
+
             METHOD_FIND_AUTOCOMPLETE_PREDICTIONS -> {
                 val query = call.argument<String>("query")
                 val countries = call.argument<List<String>>("countries") ?: emptyList()
@@ -70,19 +74,19 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
 
                 val origin = latLngFromMap(call.argument<Map<String, Any?>>("origin"))
                 val locationBias =
-                    rectangularBoundsFromMap(call.argument<Map<String, Any?>>("locationBias"))
+                        rectangularBoundsFromMap(call.argument<Map<String, Any?>>("locationBias"))
                 val locationRestriction =
-                    rectangularBoundsFromMap(call.argument<Map<String, Any?>>("locationRestriction"))
+                        rectangularBoundsFromMap(call.argument<Map<String, Any?>>("locationRestriction"))
                 val sessionToken = getSessionToken(newSessionToken == true)
                 val request = FindAutocompletePredictionsRequest.builder()
-                    .setQuery(query)
-                    .setLocationBias(locationBias)
-                    .setLocationRestriction(locationRestriction)
-                    .setCountries(countries)
-                    .setTypesFilter(placeTypesFilter)
-                    .setSessionToken(sessionToken)
-                    .setOrigin(origin)
-                    .build()
+                        .setQuery(query)
+                        .setLocationBias(locationBias)
+                        .setLocationRestriction(locationRestriction)
+                        .setCountries(countries)
+                        .setTypesFilter(placeTypesFilter)
+                        .setSessionToken(sessionToken)
+                        .setOrigin(origin)
+                        .build()
                 client.findAutocompletePredictions(request).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         lastSessionToken = request.sessionToken
@@ -93,20 +97,37 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                         val exception = task.exception
                         print("findAutoCompletePredictions Exception: $exception")
                         result.error(
-                            "API_ERROR_AUTOCOMPLETE", exception?.message ?: "Unknown exception",
-                            mapOf("type" to (exception?.javaClass?.toString() ?: "null"))
+                                "API_ERROR_AUTOCOMPLETE", exception?.message ?: "Unknown exception",
+                                mapOf("type" to (exception?.javaClass?.toString() ?: "null"))
                         )
                     }
                 }
             }
+
             METHOD_FETCH_PLACE -> {
                 val placeId = call.argument<String>("placeId")!!
-                val fields = call.argument<List<String>>("fields")?.map { placeFieldFromStr(it) }
-                    ?: emptyList()
+                var fields = listOf<Place.Field>(
+                        Place.Field.ADDRESS,
+                Place.Field.ADDRESS_COMPONENTS,
+                Place.Field.BUSINESS_STATUS,
+                Place.Field.ID,
+                Place.Field.LAT_LNG,
+                Place.Field.NAME,
+                Place.Field.OPENING_HOURS,
+                Place.Field.PHONE_NUMBER,
+                Place.Field.PHOTO_METADATAS,
+                Place.Field.PLUS_CODE,
+                Place.Field.PRICE_LEVEL, Place.Field.RATING, Place.Field.TYPES, Place.Field.USER_RATINGS_TOTAL, Place.Field.UTC_OFFSET, Place.Field.VIEWPORT, Place.Field.WEBSITE_URI
+                )
+                val fieldsArgs = call.argument<List<String>>("fields")
+                if (fieldsArgs != null && fieldsArgs.size > 0){
+                   fields = fieldsArgs?.map{ placeFieldFromStr(it) } ?: fields
+                }
+
                 val newSessionToken = call.argument<Boolean>("newSessionToken")
                 val request = FetchPlaceRequest.builder(placeId, fields)
-                    .setSessionToken(getSessionToken(newSessionToken == true))
-                    .build()
+                        .setSessionToken(getSessionToken(newSessionToken == true))
+                        .build()
                 client.fetchPlace(request).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val place = placeToMap(task.result?.place)
@@ -116,22 +137,23 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                         val exception = task.exception
                         print("FetchPlace Exception: $exception")
                         result.error(
-                            "API_ERROR_PLACE", exception?.message ?: "Unknown exception",
-                            mapOf("type" to (exception?.javaClass?.toString() ?: "null"))
+                                "API_ERROR_PLACE", exception?.message ?: "Unknown exception",
+                                mapOf("type" to (exception?.javaClass?.toString() ?: "null"))
                         )
                     }
                 }
             }
+
             METHOD_FETCH_PLACE_PHOTO -> {
                 val photoMetadata =
-                    photoMetadataFromMap(call.argument<Map<String, Any?>>("photoMetadata")!!)
+                        photoMetadataFromMap(call.argument<Map<String, Any?>>("photoMetadata")!!)
                 val maxWidth = call.argument<Int?>("maxWidth")
                 val maxHeight = call.argument<Int?>("maxHeight")
 
                 val request = FetchPhotoRequest.builder(photoMetadata)
-                    .setMaxWidth(maxWidth)
-                    .setMaxHeight(maxHeight)
-                    .build()
+                        .setMaxWidth(maxWidth)
+                        .setMaxHeight(maxHeight)
+                        .build()
                 client.fetchPhoto(request).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val photo = task.result?.bitmap
@@ -141,8 +163,8 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                         val exception = task.exception
                         print("fetchPlacePhoto Exception: $exception")
                         result.error(
-                            "API_ERROR_PHOTO", exception?.message ?: "Unknown exception",
-                            mapOf("type" to (exception?.javaClass?.toString() ?: "null"))
+                                "API_ERROR_PHOTO", exception?.message ?: "Unknown exception",
+                                mapOf("type" to (exception?.javaClass?.toString() ?: "null"))
                         )
                     }
                 }
@@ -245,25 +267,25 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
         }
 
         return mapOf(
-            "id" to place.id,
-            "address" to place.address,
-            "addressComponents" to place.addressComponents?.asList()
-                ?.map { addressComponentToMap(it) },
-            "businessStatus" to place.businessStatus?.name,
-            "attributions" to place.attributions,
-            "latLng" to latLngToMap(place.latLng),
-            "name" to place.name,
-            "openingHours" to openingHoursToMap(place.openingHours),
-            "phoneNumber" to place.phoneNumber,
-            "photoMetadatas" to place.photoMetadatas?.map { photoMetadataToMap(it) },
-            "plusCode" to plusCodeToMap(place.plusCode),
-            "priceLevel" to place.priceLevel,
-            "rating" to place.rating,
-            "types" to place.types?.map { it.name },
-            "userRatingsTotal" to place.userRatingsTotal,
-            "utcOffsetMinutes" to place.utcOffsetMinutes,
-            "viewport" to latLngBoundsToMap(place.viewport),
-            "websiteUri" to place.websiteUri?.toString()
+                "id" to place.id,
+                "address" to place.address,
+                "addressComponents" to place.addressComponents?.asList()
+                        ?.map { addressComponentToMap(it) },
+                "businessStatus" to place.businessStatus?.name,
+                "attributions" to place.attributions,
+                "latLng" to latLngToMap(place.latLng),
+                "name" to place.name,
+                "openingHours" to openingHoursToMap(place.openingHours),
+                "phoneNumber" to place.phoneNumber,
+                "photoMetadatas" to place.photoMetadatas?.map { photoMetadataToMap(it) },
+                "plusCode" to plusCodeToMap(place.plusCode),
+                "priceLevel" to place.priceLevel,
+                "rating" to place.rating,
+                "types" to place.types?.map { it.name },
+                "userRatingsTotal" to place.userRatingsTotal,
+                "utcOffsetMinutes" to place.utcOffsetMinutes,
+                "viewport" to latLngBoundsToMap(place.viewport),
+                "websiteUri" to place.websiteUri?.toString()
         )
     }
 
@@ -273,15 +295,15 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
         }
 
         return mapOf(
-            "periods" to openingHours.periods.map { periodToMap(it) },
-            "weekdayText" to openingHours.weekdayText
+                "periods" to openingHours.periods.map { periodToMap(it) },
+                "weekdayText" to openingHours.weekdayText
         )
     }
 
     private fun periodToMap(period: Period): Map<String, Any?> {
         return mapOf(
-            "open" to timeOfWeekToMap(period.open),
-            "close" to timeOfWeekToMap(period.close)
+                "open" to timeOfWeekToMap(period.open),
+                "close" to timeOfWeekToMap(period.close)
         )
     }
 
@@ -291,25 +313,25 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
         }
 
         return mapOf(
-            "day" to timeOfWeek.day.name,
-            "time" to placeLocalTimeToMap(timeOfWeek.time)
+                "day" to timeOfWeek.day.name,
+                "time" to placeLocalTimeToMap(timeOfWeek.time)
         )
     }
 
     private fun placeLocalTimeToMap(time: LocalTime): Map<String, Any?> {
         return mapOf(
-            "hours" to time.hours,
-            "minutes" to time.minutes
+                "hours" to time.hours,
+                "minutes" to time.minutes
         )
     }
 
     private fun photoMetadataToMap(photoMetadata: PhotoMetadata): Map<String, Any?> {
         val photoReference = getPhotoReference(photoMetadata)
         return mapOf(
-            "width" to photoMetadata.width,
-            "height" to photoMetadata.height,
-            "attributions" to photoMetadata.attributions,
-            "photoReference" to photoReference
+                "width" to photoMetadata.width,
+                "height" to photoMetadata.height,
+                "attributions" to photoMetadata.attributions,
+                "photoReference" to photoReference
         )
     }
 
@@ -318,9 +340,9 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
         // We need that field to construct photoMetadata in the future, for use with
         // fetchPlacePhoto
         return getFieldsInHierarchy(photoMetadata.javaClass)
-            .filter { "zzd" == it.name }
-            .map { it.isAccessible = true; it.get(photoMetadata) as String? }
-            .firstOrNull()
+                .filter { "zzd" == it.name }
+                .map { it.isAccessible = true; it.get(photoMetadata) as String? }
+                .firstOrNull()
     }
 
     private fun getFieldsInHierarchy(javaClass: Class<in PhotoMetadata>?) = sequence<Field> {
@@ -339,9 +361,9 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
         val height = data["height"] as Int
 
         return PhotoMetadata.builder(photoReference)
-            .setWidth(width)
-            .setHeight(height)
-            .build()
+                .setWidth(width)
+                .setHeight(height)
+                .build()
     }
 
     private fun plusCodeToMap(plusCode: PlusCode?): Map<String, Any?>? {
@@ -350,8 +372,8 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
         }
 
         return mapOf(
-            "compoundCode" to plusCode.compoundCode,
-            "globalCode" to plusCode.globalCode
+                "compoundCode" to plusCode.compoundCode,
+                "globalCode" to plusCode.globalCode
         )
     }
 
@@ -361,16 +383,16 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
         }
 
         return mapOf(
-            "southwest" to latLngToMap(viewport.southwest),
-            "northeast" to latLngToMap(viewport.northeast)
+                "southwest" to latLngToMap(viewport.southwest),
+                "northeast" to latLngToMap(viewport.northeast)
         )
     }
 
     private fun addressComponentToMap(addressComponent: AddressComponent): Map<String, Any?> {
         return mapOf(
-            "name" to addressComponent.name,
-            "shortName" to addressComponent.shortName,
-            "types" to addressComponent.types
+                "name" to addressComponent.name,
+                "shortName" to addressComponent.shortName,
+                "types" to addressComponent.types
         )
     }
 
@@ -380,18 +402,18 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
         }
 
         return mapOf(
-            "lat" to latLng.latitude,
-            "lng" to latLng.longitude
+                "lat" to latLng.latitude,
+                "lng" to latLng.longitude
         )
     }
 
     private fun predictionToMap(result: AutocompletePrediction): Map<String, Any?> {
         return mapOf(
-            "placeId" to result.placeId,
-            "distanceMeters" to result.distanceMeters,
-            "primaryText" to result.getPrimaryText(null).toString(),
-            "secondaryText" to result.getSecondaryText(null).toString(),
-            "fullText" to result.getFullText(null).toString()
+                "placeId" to result.placeId,
+                "distanceMeters" to result.distanceMeters,
+                "primaryText" to result.getPrimaryText(null).toString(),
+                "secondaryText" to result.getSecondaryText(null).toString(),
+                "fullText" to result.getFullText(null).toString()
         )
     }
 

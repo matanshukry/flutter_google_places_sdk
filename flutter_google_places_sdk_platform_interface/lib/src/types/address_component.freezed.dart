@@ -31,8 +31,12 @@ mixin _$AddressComponent {
   /// For a list of supported types, see [Address Component Types](https://developers.google.com/maps/documentation/geocoding/overview#Types)
   List<String> get types => throw _privateConstructorUsedError;
 
+  /// Serializes this AddressComponent to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AddressComponent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddressComponentCopyWith<AddressComponent> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,6 +60,8 @@ class _$AddressComponentCopyWithImpl<$Res, $Val extends AddressComponent>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddressComponent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -99,6 +105,8 @@ class __$$AddressComponentImplCopyWithImpl<$Res>
       $Res Function(_$AddressComponentImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddressComponent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -186,12 +194,14 @@ class _$AddressComponentImpl
             const DeepCollectionEquality().equals(other._types, _types));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, name, shortName,
       const DeepCollectionEquality().hash(_types));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddressComponent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddressComponentImplCopyWith<_$AddressComponentImpl> get copyWith =>
@@ -215,22 +225,24 @@ abstract class _AddressComponent implements AddressComponent {
   factory _AddressComponent.fromJson(Map<String, dynamic> json) =
       _$AddressComponentImpl.fromJson;
 
-  @override
-
   /// Name of the address component, e.g. "Sydney".
-  String get name;
   @override
+  String get name;
 
   /// Short name of the address component, e.g. "AU".
-  String get shortName;
   @override
+  String get shortName;
 
   /// Types of the AddressComponent
   ///
   /// For a list of supported types, see [Address Component Types](https://developers.google.com/maps/documentation/geocoding/overview#Types)
-  List<String> get types;
   @override
-  @JsonKey(ignore: true)
+  List<String> get types;
+
+  /// Create a copy of AddressComponent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddressComponentImplCopyWith<_$AddressComponentImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

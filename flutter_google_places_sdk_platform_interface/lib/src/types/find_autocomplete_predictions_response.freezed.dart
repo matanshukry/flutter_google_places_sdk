@@ -20,7 +20,9 @@ mixin _$FindAutocompletePredictionsResponse {
   List<AutocompletePrediction> get predictions =>
       throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FindAutocompletePredictionsResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FindAutocompletePredictionsResponseCopyWith<
           FindAutocompletePredictionsResponse>
       get copyWith => throw _privateConstructorUsedError;
@@ -48,6 +50,8 @@ class _$FindAutocompletePredictionsResponseCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FindAutocompletePredictionsResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -84,6 +88,8 @@ class __$$FindAutocompletePredictionsResponseImplCopyWithImpl<$Res>
       $Res Function(_$FindAutocompletePredictionsResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FindAutocompletePredictionsResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -135,7 +141,9 @@ class _$FindAutocompletePredictionsResponseImpl
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_predictions));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FindAutocompletePredictionsResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FindAutocompletePredictionsResponseImplCopyWith<
@@ -150,12 +158,14 @@ abstract class _FindAutocompletePredictionsResponse
           final List<AutocompletePrediction> predictions) =
       _$FindAutocompletePredictionsResponseImpl;
 
-  @override
-
   /// the AutocompletePrediction list returned by the response.
-  List<AutocompletePrediction> get predictions;
   @override
-  @JsonKey(ignore: true)
+  List<AutocompletePrediction> get predictions;
+
+  /// Create a copy of FindAutocompletePredictionsResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FindAutocompletePredictionsResponseImplCopyWith<
           _$FindAutocompletePredictionsResponseImpl>
       get copyWith => throw _privateConstructorUsedError;

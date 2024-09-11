@@ -36,13 +36,13 @@ _$PlaceImpl _$$PlaceImplFromJson(Map json) => _$PlaceImpl(
           ? null
           : PlusCode.fromJson(
               Map<String, Object?>.from(json['plusCode'] as Map)),
-      priceLevel: json['priceLevel'] as int?,
+      priceLevel: (json['priceLevel'] as num?)?.toInt(),
       rating: (json['rating'] as num?)?.toDouble(),
       types: (json['types'] as List<dynamic>?)
           ?.map((e) => PlaceType.fromJson(e as String))
           .toList(),
-      userRatingsTotal: json['userRatingsTotal'] as int?,
-      utcOffsetMinutes: json['utcOffsetMinutes'] as int?,
+      userRatingsTotal: (json['userRatingsTotal'] as num?)?.toInt(),
+      utcOffsetMinutes: (json['utcOffsetMinutes'] as num?)?.toInt(),
       viewport: json['viewport'] == null
           ? null
           : LatLngBounds.fromJson(

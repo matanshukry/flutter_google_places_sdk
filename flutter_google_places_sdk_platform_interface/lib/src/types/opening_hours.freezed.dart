@@ -26,8 +26,12 @@ mixin _$OpeningHours {
   /// Returns a list of strings that represent opening and closing hours in human readable form.
   List<String> get weekdayText => throw _privateConstructorUsedError;
 
+  /// Serializes this OpeningHours to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of OpeningHours
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $OpeningHoursCopyWith<OpeningHours> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -51,6 +55,8 @@ class _$OpeningHoursCopyWithImpl<$Res, $Val extends OpeningHours>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of OpeningHours
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -89,6 +95,8 @@ class __$$OpeningHoursImplCopyWithImpl<$Res>
       _$OpeningHoursImpl _value, $Res Function(_$OpeningHoursImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of OpeningHours
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -157,14 +165,16 @@ class _$OpeningHoursImpl implements _OpeningHours {
                 .equals(other._weekdayText, _weekdayText));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_periods),
       const DeepCollectionEquality().hash(_weekdayText));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of OpeningHours
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$OpeningHoursImplCopyWith<_$OpeningHoursImpl> get copyWith =>
@@ -186,16 +196,18 @@ abstract class _OpeningHours implements OpeningHours {
   factory _OpeningHours.fromJson(Map<String, dynamic> json) =
       _$OpeningHoursImpl.fromJson;
 
-  @override
-
   /// A list of Period objects that provide more detailed information that is equivalent to the data provided by getWeekdayText().
-  List<Period> get periods;
   @override
+  List<Period> get periods;
 
   /// Returns a list of strings that represent opening and closing hours in human readable form.
-  List<String> get weekdayText;
   @override
-  @JsonKey(ignore: true)
+  List<String> get weekdayText;
+
+  /// Create a copy of OpeningHours
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$OpeningHoursImplCopyWith<_$OpeningHoursImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -8,8 +8,8 @@ part of 'place_local_time.dart';
 
 _$PlaceLocalTimeImpl _$$PlaceLocalTimeImplFromJson(Map json) =>
     _$PlaceLocalTimeImpl(
-      hours: json['hours'] as int,
-      minutes: json['minutes'] as int,
+      hours: (json['hours'] as num).toInt(),
+      minutes: (json['minutes'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$PlaceLocalTimeImplToJson(

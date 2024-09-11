@@ -27,8 +27,12 @@ mixin _$PlaceAutocompleteMatchedSubstring {
   /// Start location of the matched substring in the prediction result text.
   int get offset => throw _privateConstructorUsedError;
 
+  /// Serializes this PlaceAutocompleteMatchedSubstring to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PlaceAutocompleteMatchedSubstring
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PlaceAutocompleteMatchedSubstringCopyWith<PlaceAutocompleteMatchedSubstring>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -55,6 +59,8 @@ class _$PlaceAutocompleteMatchedSubstringCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PlaceAutocompleteMatchedSubstring
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -96,6 +102,8 @@ class __$$PlaceAutocompleteMatchedSubstringImplCopyWithImpl<$Res>
       $Res Function(_$PlaceAutocompleteMatchedSubstringImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PlaceAutocompleteMatchedSubstring
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -148,11 +156,13 @@ class _$PlaceAutocompleteMatchedSubstringImpl
             (identical(other.offset, offset) || other.offset == offset));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, length, offset);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PlaceAutocompleteMatchedSubstring
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PlaceAutocompleteMatchedSubstringImplCopyWith<
@@ -178,16 +188,18 @@ abstract class _PlaceAutocompleteMatchedSubstring
           Map<String, dynamic> json) =
       _$PlaceAutocompleteMatchedSubstringImpl.fromJson;
 
-  @override
-
   /// Length of the matched substring in the prediction result text.
-  int get length;
   @override
+  int get length;
 
   /// Start location of the matched substring in the prediction result text.
-  int get offset;
   @override
-  @JsonKey(ignore: true)
+  int get offset;
+
+  /// Create a copy of PlaceAutocompleteMatchedSubstring
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PlaceAutocompleteMatchedSubstringImplCopyWith<
           _$PlaceAutocompleteMatchedSubstringImpl>
       get copyWith => throw _privateConstructorUsedError;

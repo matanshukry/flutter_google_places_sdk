@@ -8,7 +8,7 @@ part of 'autocomplete_predictions.dart';
 
 _$AutocompletePredictionImpl _$$AutocompletePredictionImplFromJson(Map json) =>
     _$AutocompletePredictionImpl(
-      distanceMeters: json['distanceMeters'] as int?,
+      distanceMeters: (json['distanceMeters'] as num?)?.toInt(),
       placeId: json['placeId'] as String,
       placeTypes: (json['placeTypes'] as List<dynamic>?)
           ?.map((e) => PlaceType.fromJson(e as String))

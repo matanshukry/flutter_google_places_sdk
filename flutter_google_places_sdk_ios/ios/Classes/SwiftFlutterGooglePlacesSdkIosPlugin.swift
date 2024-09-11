@@ -74,16 +74,28 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
         case METHOD_FETCH_PLACE:
             let args = call.arguments as! Dictionary<String,Any>
             let placeId = args["placeId"] as! String
-            let fields = ((args["fields"] as? [String])?.map {
-                (item) in return placeFieldFromStr(it: item)
-            })?.reduce(GMSPlaceField(), { partialResult, field in
-                return GMSPlaceField(rawValue: partialResult.rawValue | field.rawValue)
-            })
+            let fieldsArgs = args["fields"] as? [String]
+            var fields: GMSPlaceField = GMSPlaceField.all
+
+            if (fieldsArgs != nil && fieldsArgs!.count != 0) {
+               fields = fieldsArgs!.map {
+                   (item) in return placeFieldFromStr(it: item)
+               }.reduce(GMSPlaceField(), { partialResult, field in
+                   return GMSPlaceField(rawValue: partialResult.rawValue | field.rawValue)
+               })                 
+            }
+
+            // let fields = ((args["fields"] as? [String])?.map {
+            //     (item) in return placeFieldFromStr(it: item)
+            // })?.reduce(GMSPlaceField(), { partialResult, field in
+            //     return GMSPlaceField(rawValue: partialResult.rawValue | field.rawValue)
+            // })
+            // print("fields: \(fields)")
             let newSessionToken = args["newSessionToken"] as? Bool ?? false
             let sessionToken = getSessionToken(force: newSessionToken == true)
             
             placesClient.fetchPlace(fromPlaceID: placeId,
-                                    placeFields: fields ?? GMSPlaceField.all,
+                                    placeFields: fields,
                                     sessionToken: sessionToken) { (place, error) in
                 if let error = error {
                     print("fetchPlace error: \(error)")

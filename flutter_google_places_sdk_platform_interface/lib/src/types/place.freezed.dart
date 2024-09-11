@@ -40,8 +40,12 @@ mixin _$Place {
   LatLngBounds? get viewport => throw _privateConstructorUsedError;
   Uri? get websiteUri => throw _privateConstructorUsedError;
 
+  /// Serializes this Place to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Place
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PlaceCopyWith<Place> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -86,6 +90,8 @@ class _$PlaceCopyWithImpl<$Res, $Val extends Place>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Place
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -184,6 +190,8 @@ class _$PlaceCopyWithImpl<$Res, $Val extends Place>
     ) as $Val);
   }
 
+  /// Create a copy of Place
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $LatLngCopyWith<$Res>? get latLng {
@@ -196,6 +204,8 @@ class _$PlaceCopyWithImpl<$Res, $Val extends Place>
     });
   }
 
+  /// Create a copy of Place
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $OpeningHoursCopyWith<$Res>? get openingHours {
@@ -208,6 +218,8 @@ class _$PlaceCopyWithImpl<$Res, $Val extends Place>
     });
   }
 
+  /// Create a copy of Place
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PlusCodeCopyWith<$Res>? get plusCode {
@@ -220,6 +232,8 @@ class _$PlaceCopyWithImpl<$Res, $Val extends Place>
     });
   }
 
+  /// Create a copy of Place
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $LatLngBoundsCopyWith<$Res>? get viewport {
@@ -278,6 +292,8 @@ class __$$PlaceImplCopyWithImpl<$Res>
       _$PlaceImpl _value, $Res Function(_$PlaceImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Place
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -519,7 +535,7 @@ class _$PlaceImpl implements _Place {
                 other.websiteUri == websiteUri));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -542,7 +558,9 @@ class _$PlaceImpl implements _Place {
       viewport,
       websiteUri);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Place
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PlaceImplCopyWith<_$PlaceImpl> get copyWith =>
@@ -615,8 +633,11 @@ abstract class _Place implements Place {
   LatLngBounds? get viewport;
   @override
   Uri? get websiteUri;
+
+  /// Create a copy of Place
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PlaceImplCopyWith<_$PlaceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
