@@ -9,6 +9,11 @@ of [`flutter_google_places_web`](https://pub.dartlang.org/packages/flutter_googl
 
 ## Restrictions
 
+## fetchPlacePhoto
+
+* Since `0.1.8`: `fetchPlacePhoto` no longer use the maxWidth/maxHeight parameter since
+  they're not available in the getUrl method
+
 ### updateSettings
 
-The `updateSettings` method will only update the language. Api Key can not be changed at runtime.
+* The `updateSettings` method will only update the language. Api Key can not be changed at runtime.

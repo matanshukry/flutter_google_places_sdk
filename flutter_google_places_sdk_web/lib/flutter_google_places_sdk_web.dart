@@ -418,9 +418,6 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       );
     }
 
-    final options = PhotoOptions()
-      ..maxWidth = maxWidth
-      ..maxHeight = maxHeight;
     final url = value.url;
 
     return FetchPlacePhotoResponse.imageUrl(url);
