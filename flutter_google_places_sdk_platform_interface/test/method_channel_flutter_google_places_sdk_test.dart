@@ -109,6 +109,7 @@ void main() {
         placeId,
         fields: testFields,
         newSessionToken: newSessionToken,
+        regionCode: 'us',
       );
       expect(
         log,
@@ -117,6 +118,7 @@ void main() {
             'placeId': placeId,
             'fields': testFields.map((e) => e.value).toList(growable: false),
             'newSessionToken': newSessionToken,
+            'regionCode': 'us',
           })
         ],
       );
