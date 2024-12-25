@@ -1,3 +1,9 @@
+## 0.1.8
+
+* Upgrading `google_maps` to ^8.1.1
+* Upgrading `js` to ^0.7.1
+* fetchPlacePhoto will no longer use the maxWidth/maxHeight parameter since they're not available in the getUrl method
+
 ## 0.1.7
 
 * Upgrading `google_maps` to ^7.1.0
