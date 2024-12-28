@@ -4,7 +4,7 @@
 * Add support for Places (new) API
 * Add [Text Search](https://developers.google.com/maps/documentation/places/web-service/text-search) feature
 * Add [Nearby Search](https://developers.google.com/maps/documentation/places/web-service/nearby-search) feature
-* Add `reviews` and `nameLanguageCode` when fetching place
+* Add `reviews` and `nameLanguageCode` fields to response from `fetchPlace`
 
 ## 0.1.9
 

@@ -189,7 +189,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                         val exception = task.exception
                         print("searchByText Exception: $exception")
                         result.error(
-                            "API_ERROR_SEARCH", exception?.message ?: "Unknown exception",
+                            "API_ERROR_SEARCH_BY_TEXT", exception?.message ?: "Unknown exception",
                             mapOf("type" to (exception?.javaClass?.toString() ?: "null"))
                         )
                     }
@@ -232,7 +232,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                         val exception = task.exception
                         print("searchNearby Exception: $exception")
                         result.error(
-                            "API_ERROR_SEARCH", exception?.message ?: "Unknown exception",
+                            "API_ERROR_NEARBY_SEARCH", exception?.message ?: "Unknown exception",
                             mapOf("type" to (exception?.javaClass?.toString() ?: "null"))
                         )
                     }
