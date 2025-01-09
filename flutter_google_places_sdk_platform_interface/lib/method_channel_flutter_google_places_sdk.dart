@@ -96,6 +96,7 @@ class FlutterGooglePlacesSdkMethodChannel
     String placeId, {
     required List<PlaceField> fields,
     bool? newSessionToken,
+    String? regionCode,
   }) {
     return _channel.invokeMapMethod(
       'fetchPlace',
@@ -103,6 +104,7 @@ class FlutterGooglePlacesSdkMethodChannel
         'placeId': placeId,
         'fields': fields.map((e) => e.value).toList(),
         'newSessionToken': newSessionToken,
+        'regionCode': regionCode,
       },
     ).then(_responseFromPlaceDetails);
   }

@@ -1,3 +1,7 @@
+## 0.3.1
+
+* fix: Add missing argument `regionCode` to `fetchPlace` function
+
 ## 0.3.0
 
 * feat: Added support for Google Places (new) which can be enabled through `initialize` function.

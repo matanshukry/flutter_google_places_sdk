@@ -100,6 +100,7 @@ abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
     String placeId, {
     required List<PlaceField> fields,
     bool? newSessionToken,
+    String? regionCode,
   }) {
     throw UnimplementedError('fetchPlaceDetails() has not been implemented.');
   }
