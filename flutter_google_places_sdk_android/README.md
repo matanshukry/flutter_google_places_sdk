@@ -4,4 +4,4 @@
 
 ![Tests](https://github.com/matanshukry/flutter_google_places_sdk/actions/workflows/tests_android.yml/badge.svg)
 
-Androind implementation for flutter google places sdk
+Android implementation for flutter google places sdk
