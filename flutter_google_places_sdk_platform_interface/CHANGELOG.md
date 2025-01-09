@@ -1,3 +1,7 @@
+## 0.3.1+1
+
+* Add missing place types: `administrative_area_level_6`, `administrative_area_level_7`, `landmark`
+
 ## 0.3.1
 
 * fix: Add missing argument `regionCode` to `fetchPlace` function
