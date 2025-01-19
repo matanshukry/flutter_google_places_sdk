@@ -1,6 +1,7 @@
-## 0.2.0
+## 0.2.0-dev.1
 
-* Update Google Places SDK to 3.5.0
+* Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.1+1`
+* * Update Google Places SDK to 3.5.0
 * Add support for Places (new) API
 * Add [Text Search](https://developers.google.com/maps/documentation/places/web-service/text-search) feature
 * Add [Nearby Search](https://developers.google.com/maps/documentation/places/web-service/nearby-search) feature
