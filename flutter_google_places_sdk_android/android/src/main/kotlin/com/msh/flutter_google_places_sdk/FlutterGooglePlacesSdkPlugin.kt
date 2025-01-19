@@ -18,10 +18,12 @@ import java.util.*
 
 /** FlutterGooglePlacesSdkPlugin */
 class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
+    private val USE_NEW_API_DEFAULT = true
 
     private lateinit var client: PlacesClient
     private lateinit var channel: MethodChannel
     private lateinit var applicationContext: Context
+    private var useNewApi: Boolean = USE_NEW_API_DEFAULT
 
     private var lastSessionToken: AutocompleteSessionToken? = null
 
@@ -42,7 +44,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                 val apiKey = call.argument<String>("apiKey")
                 val localeMap = call.argument<Map<String, Any>>("locale")
                 val locale = readLocale(localeMap)
-                val useNewApi = call.argument<Boolean>("useNewApi")
+                useNewApi = call.argument<Boolean>("useNewApi") ?: USE_NEW_API_DEFAULT
                 initialize(apiKey, locale, useNewApi)
                 result.success(null)
             }
@@ -50,7 +52,6 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                 val apiKey = call.argument<String>("apiKey")
                 val localeMap = call.argument<Map<String, Any>>("locale")
                 val locale = readLocale(localeMap)
-                val useNewApi = call.argument<Boolean>("useNewApi")
                 updateSettings(apiKey, locale, useNewApi)
                 result.success(null)
             }
@@ -102,7 +103,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                 val placeId = call.argument<String>("placeId")!!
                 val fields = call.argument<List<String>>("fields")?.map { placeFieldFromStr(it) }
                     ?: emptyList()
-                val regionCode = call.argument<String?>("regionCode")
+                val regionCode = call.argument<String>("regionCode")
                 val newSessionToken = call.argument<Boolean>("newSessionToken")
                 val request = FetchPlaceRequest.builder(placeId, fields)
                     .setSessionToken(getSessionToken(newSessionToken == true))
@@ -126,8 +127,8 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
             METHOD_FETCH_PLACE_PHOTO -> {
                 val photoMetadata =
                     photoMetadataFromMap(call.argument<Map<String, Any?>>("photoMetadata")!!)
-                val maxWidth = call.argument<Int?>("maxWidth")
-                val maxHeight = call.argument<Int?>("maxHeight")
+                val maxWidth = call.argument<Int>("maxWidth")
+                val maxHeight = call.argument<Int>("maxHeight")
 
                 val request = FetchPhotoRequest.builder(photoMetadata)
                     .setMaxWidth(maxWidth)
@@ -157,10 +158,9 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                 val priceLevels = call.argument<List<Int>>("priceLevels")
                     ?: emptyList()
                 val regionCode = call.argument<String>("regionCode")
-                val rankPreference = SearchByTextRequest.RankPreference.valueOf(
-                    call.argument<String>("rankPreference")
-                        ?: SearchByTextRequest.RankPreference.RELEVANCE.name
-                )
+                val rankPreference = call.argument<String>("rankPreference")
+                    ?.let(SearchByTextRequest.RankPreference::valueOf)
+                    ?: SearchByTextRequest.RankPreference.RELEVANCE
                 val strictTypeFiltering = call.argument<Boolean>("strictTypeFiltering") ?: false
                 val locationBias =
                     rectangularBoundsFromMap(call.argument<Map<String, Any?>>("locationBias"))
