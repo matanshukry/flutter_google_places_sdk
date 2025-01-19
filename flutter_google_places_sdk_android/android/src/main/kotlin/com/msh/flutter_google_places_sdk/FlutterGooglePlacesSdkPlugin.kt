@@ -2,7 +2,6 @@ package com.msh.flutter_google_places_sdk
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.annotation.NonNull
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.libraries.places.api.Places
@@ -13,18 +12,18 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
 import java.io.ByteArrayOutputStream
 import java.lang.reflect.Field
 import java.util.*
 
-
 /** FlutterGooglePlacesSdkPlugin */
 class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
+    private val USE_NEW_API_DEFAULT = true
 
     private lateinit var client: PlacesClient
     private lateinit var channel: MethodChannel
     private lateinit var applicationContext: Context
+    private var useNewApi: Boolean = USE_NEW_API_DEFAULT
 
     private var lastSessionToken: AutocompleteSessionToken? = null
 
@@ -39,20 +38,21 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
         channel.setMethodCallHandler(this)
     }
 
-    override fun onMethodCall(call: MethodCall, result: Result) {
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             METHOD_INITIALIZE -> {
                 val apiKey = call.argument<String>("apiKey")
                 val localeMap = call.argument<Map<String, Any>>("locale")
                 val locale = readLocale(localeMap)
-                initialize(apiKey, locale)
+                useNewApi = call.argument<Boolean>("useNewApi") ?: USE_NEW_API_DEFAULT
+                initialize(apiKey, locale, useNewApi)
                 result.success(null)
             }
             METHOD_UPDATE_SETTINGS -> {
                 val apiKey = call.argument<String>("apiKey")
                 val localeMap = call.argument<Map<String, Any>>("locale")
                 val locale = readLocale(localeMap)
-                updateSettings(apiKey, locale)
+                updateSettings(apiKey, locale, useNewApi)
                 result.success(null)
             }
             METHOD_DEINITIALIZE -> {
@@ -103,9 +103,11 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                 val placeId = call.argument<String>("placeId")!!
                 val fields = call.argument<List<String>>("fields")?.map { placeFieldFromStr(it) }
                     ?: emptyList()
+                val regionCode = call.argument<String>("regionCode")
                 val newSessionToken = call.argument<Boolean>("newSessionToken")
                 val request = FetchPlaceRequest.builder(placeId, fields)
                     .setSessionToken(getSessionToken(newSessionToken == true))
+                    .setRegionCode(regionCode)
                     .build()
                 client.fetchPlace(request).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -125,8 +127,8 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
             METHOD_FETCH_PLACE_PHOTO -> {
                 val photoMetadata =
                     photoMetadataFromMap(call.argument<Map<String, Any?>>("photoMetadata")!!)
-                val maxWidth = call.argument<Int?>("maxWidth")
-                val maxHeight = call.argument<Int?>("maxHeight")
+                val maxWidth = call.argument<Int>("maxWidth")
+                val maxHeight = call.argument<Int>("maxHeight")
 
                 val request = FetchPhotoRequest.builder(photoMetadata)
                     .setMaxWidth(maxWidth)
@@ -142,6 +144,95 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                         print("fetchPlacePhoto Exception: $exception")
                         result.error(
                             "API_ERROR_PHOTO", exception?.message ?: "Unknown exception",
+                            mapOf("type" to (exception?.javaClass?.toString() ?: "null"))
+                        )
+                    }
+                }
+            }
+            METHOD_SEARCH_BY_TEXT -> {
+                val textQuery = call.argument<String>("textQuery")
+                val includedType = call.argument<String>("includedType")
+                val maxResultCount = call.argument<Int>("maxResultCount")
+                val minRating = call.argument<Double>("minRating")
+                val openNow = call.argument<Boolean>("openNow") ?: false
+                val priceLevels = call.argument<List<Int>>("priceLevels")
+                    ?: emptyList()
+                val regionCode = call.argument<String>("regionCode")
+                val rankPreference = call.argument<String>("rankPreference")
+                    ?.let(SearchByTextRequest.RankPreference::valueOf)
+                    ?: SearchByTextRequest.RankPreference.RELEVANCE
+                val strictTypeFiltering = call.argument<Boolean>("strictTypeFiltering") ?: false
+                val locationBias =
+                    rectangularBoundsFromMap(call.argument<Map<String, Any?>>("locationBias"))
+                val locationRestriction =
+                    rectangularBoundsFromMap(call.argument<Map<String, Any?>>("locationRestriction"))
+                val fields = call.argument<List<String>>("fields")?.map { placeFieldFromStr(it) }
+                    ?: emptyList()
+                val request = SearchByTextRequest.builder(textQuery, fields)
+                    .setIncludedType(includedType)
+                    .setLocationBias(locationBias)
+                    .setLocationRestriction(locationRestriction)
+                    .setMaxResultCount(maxResultCount)
+                    .setMinRating(minRating)
+                    .setOpenNow(openNow)
+                    .setPriceLevels(priceLevels)
+                    .setRankPreference(rankPreference)
+                    .setRegionCode(regionCode)
+                    .setStrictTypeFiltering(strictTypeFiltering)
+                    .build()
+                client.searchByText(request).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val places = task.result?.places?.map { placeToMap(it) }
+                        print("searchByText Result: $places")
+                        result.success(places)
+                    } else {
+                        val exception = task.exception
+                        print("searchByText Exception: $exception")
+                        result.error(
+                            "API_ERROR_SEARCH_BY_TEXT", exception?.message ?: "Unknown exception",
+                            mapOf("type" to (exception?.javaClass?.toString() ?: "null"))
+                        )
+                    }
+                }
+            }
+            METHOD_NEARBY_SEARCH -> {
+                val fields = call.argument<List<String>>("fields")?.map { placeFieldFromStr(it) }
+                    ?: emptyList()
+                val locationRestriction =
+                    circularBoundsFromMap(call.argument<Map<String, Any?>>("locationRestriction"))
+                val excludedPrimaryTypes = call.argument<List<String>>("excludedPrimaryTypes")
+                    ?: emptyList()
+                val excludedTypes = call.argument<List<String>>("excludedTypes")
+                    ?: emptyList()
+                val includedPrimaryTypes = call.argument<List<String>>("includedPrimaryTypes")
+                    ?: emptyList()
+                val includedTypes = call.argument<List<String>>("includedTypes")
+                    ?: emptyList()
+                val rankPreference = SearchNearbyRequest.RankPreference.valueOf(
+                    call.argument<String>("rankPreference")
+                        ?: SearchNearbyRequest.RankPreference.POPULARITY.name
+                )
+                val regionCode = call.argument<String>("regionCode")
+                val maxResultCount = call.argument<Int>("maxResultCount")
+                val request = SearchNearbyRequest.builder(locationRestriction!!, fields)
+                    .setExcludedPrimaryTypes(excludedPrimaryTypes)
+                    .setExcludedTypes(excludedTypes)
+                    .setIncludedPrimaryTypes(includedPrimaryTypes)
+                    .setIncludedTypes(includedTypes)
+                    .setRankPreference(rankPreference)
+                    .setRegionCode(regionCode)
+                    .setMaxResultCount(maxResultCount)
+                    .build()
+                client.searchNearby(request).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val places = task.result?.places?.map { placeToMap(it) }
+                        print("searchNearby Result: $places")
+                        result.success(places)
+                    } else {
+                        val exception = task.exception
+                        print("searchNearby Exception: $exception")
+                        result.error(
+                            "API_ERROR_NEARBY_SEARCH", exception?.message ?: "Unknown exception",
                             mapOf("type" to (exception?.javaClass?.toString() ?: "null"))
                         )
                     }
@@ -170,6 +261,18 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
 
         val latLngBounds = latLngBoundsFromMap(argument) ?: return null
         return RectangularBounds.newInstance(latLngBounds)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun circularBoundsFromMap(argument: Map<String, Any?>?): CircularBounds? {
+        if (argument == null) {
+            return null
+        }
+
+        val center = latLngFromMap(argument["center"] as? Map<String, Any?>) ?: return null
+        val radius = argument["radius"] as? Double ?: 0.0
+
+        return CircularBounds.newInstance(center, radius)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -207,27 +310,10 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun placeFieldFromStr(it: String): Place.Field {
-        return when (it) {
-            "ADDRESS" -> Place.Field.ADDRESS
-            "ADDRESS_COMPONENTS" -> Place.Field.ADDRESS_COMPONENTS
-            "BUSINESS_STATUS" -> Place.Field.BUSINESS_STATUS
-            "ID" -> Place.Field.ID
-            "LAT_LNG" -> Place.Field.LAT_LNG
-            "NAME" -> Place.Field.NAME
-            "OPENING_HOURS" -> Place.Field.OPENING_HOURS
-            "PHONE_NUMBER" -> Place.Field.PHONE_NUMBER
-            "PHOTO_METADATAS" -> Place.Field.PHOTO_METADATAS
-            "PLUS_CODE" -> Place.Field.PLUS_CODE
-            "PRICE_LEVEL" -> Place.Field.PRICE_LEVEL
-            "RATING" -> Place.Field.RATING
-            "TYPES" -> Place.Field.TYPES
-            "USER_RATINGS_TOTAL" -> Place.Field.USER_RATINGS_TOTAL
-            "UTC_OFFSET" -> Place.Field.UTC_OFFSET
-            "VIEWPORT" -> Place.Field.VIEWPORT
-            "WEBSITE_URI" -> Place.Field.WEBSITE_URI
-            else -> {
-                throw IllegalArgumentException("Invalid placeField: $it")
-            }
+        try {
+            return Place.Field.valueOf(it)
+        } catch (e: IllegalArgumentException) {
+            throw IllegalArgumentException("Invalid placeField: $it")
         }
     }
 
@@ -253,17 +339,19 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
             "attributions" to place.attributions,
             "latLng" to latLngToMap(place.latLng),
             "name" to place.name,
+            "nameLanguageCode" to place.nameLanguageCode,
             "openingHours" to openingHoursToMap(place.openingHours),
             "phoneNumber" to place.phoneNumber,
             "photoMetadatas" to place.photoMetadatas?.map { photoMetadataToMap(it) },
             "plusCode" to plusCodeToMap(place.plusCode),
             "priceLevel" to place.priceLevel,
             "rating" to place.rating,
-            "types" to place.types?.map { it.name },
+            "types" to place.placeTypes,
             "userRatingsTotal" to place.userRatingsTotal,
             "utcOffsetMinutes" to place.utcOffsetMinutes,
             "viewport" to latLngBoundsToMap(place.viewport),
-            "websiteUri" to place.websiteUri?.toString()
+            "websiteUri" to place.websiteUri?.toString(),
+            "reviews" to place.reviews?.map { reviewToMap(it) }
         )
     }
 
@@ -309,7 +397,31 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
             "width" to photoMetadata.width,
             "height" to photoMetadata.height,
             "attributions" to photoMetadata.attributions,
+            "authorAttributions" to photoMetadata.authorAttributions
+                ?.asList()?.map { authorAttributionToMap(it) },
             "photoReference" to photoReference
+        )
+    }
+
+    private fun reviewToMap(review: Review): Map<String, Any?> {
+        return mapOf(
+            "attribution" to review.attribution,
+            "authorAttribution" to authorAttributionToMap(review.authorAttribution),
+            "originalText" to review.originalText,
+            "originalTextLanguageCode" to review.originalTextLanguageCode,
+            "rating" to review.rating,
+            "publishTime" to review.publishTime,
+            "relativePublishTimeDescription" to review.relativePublishTimeDescription,
+            "text" to review.text,
+            "textLanguageCode" to review.textLanguageCode
+        )
+    }
+
+    private fun authorAttributionToMap(authorAttribution: AuthorAttribution): Map<String, String?> {
+        return mapOf<String, String?>(
+            "name" to authorAttribution.name,
+            "photoUri" to authorAttribution.photoUri,
+            "uri" to authorAttribution.uri
         )
     }
 
@@ -408,13 +520,17 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
         return Locale(language, country)
     }
 
-    private fun initialize(apiKey: String?, locale: Locale?) {
-        updateSettings(apiKey, locale)
+    private fun initialize(apiKey: String?, locale: Locale?, useNewApi: Boolean?) {
+        updateSettings(apiKey, locale, useNewApi)
         client = Places.createClient(applicationContext)
     }
 
-    private fun updateSettings(apiKey: String?, locale: Locale?) {
-        Places.initialize(applicationContext, apiKey ?: "", locale)
+    private fun updateSettings(apiKey: String?, locale: Locale?, useNewApi: Boolean?) {
+        if (useNewApi == true) {
+            Places.initializeWithNewPlacesApiEnabled(applicationContext, apiKey ?: "", locale)
+        } else {
+            Places.initialize(applicationContext, apiKey ?: "", locale)
+        }
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -429,6 +545,8 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
         private const val METHOD_FIND_AUTOCOMPLETE_PREDICTIONS = "findAutocompletePredictions"
         private const val METHOD_FETCH_PLACE = "fetchPlace"
         private const val METHOD_FETCH_PLACE_PHOTO = "fetchPlacePhoto"
+        private const val METHOD_SEARCH_BY_TEXT = "searchByText"
+        private const val METHOD_NEARBY_SEARCH = "searchNearby"
 
         const val CHANNEL_NAME = "plugins.msh.com/flutter_google_places_sdk"
     }

@@ -1,3 +1,11 @@
+## 0.2.0
+
+* Update Google Places SDK to 3.5.0
+* Add support for Places (new) API
+* Add [Text Search](https://developers.google.com/maps/documentation/places/web-service/text-search) feature
+* Add [Nearby Search](https://developers.google.com/maps/documentation/places/web-service/nearby-search) feature
+* Add `reviews` and `nameLanguageCode` fields to response from `fetchPlace`
+
 ## 0.1.9
 
 * Upgrading gradle kotlin and java versions to be compatible with Java 17
