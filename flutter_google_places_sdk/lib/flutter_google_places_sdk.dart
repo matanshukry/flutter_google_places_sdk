@@ -100,7 +100,8 @@ class FlutterGooglePlacesSdk {
     return _addMethodCall(() => platform.findAutocompletePredictions(
           query,
           countries: countries,
-          placeTypesFilter: placeTypesFilter.map((type) => type.apiExpectedValue).toList(),
+          placeTypesFilter:
+              placeTypesFilter.map((type) => type.apiExpectedValue).toList(),
           newSessionToken: newSessionToken,
           origin: origin,
           locationBias: locationBias,
@@ -110,13 +111,18 @@ class FlutterGooglePlacesSdk {
 
   /// Fetches the details of a place.
   /// Only the requested [fields] will be returned. If none specified,
-  /// all fields will be returned.
+  /// basic fields (https://developers.google.com/maps/documentation/places/ios-sdk/usage-and-billing#basic-data) will be returned.
   ///
   /// Note that different fields can incur different billing.
   ///
   /// For more info about billing: https://developers.google.com/maps/documentation/places/web-service/usage-and-billing
-  Future<FetchPlaceResponse> fetchPlace(String placeId,
-      {required List<PlaceField> fields}) {
+  Future<FetchPlaceResponse> fetchPlace(
+    String placeId, {
+    required List<PlaceField> fields,
+  }) {
+    if(fields.length == 0) {
+      fields = placeDetailsBasicDataSKU;
+    }
     return _addMethodCall(() => platform.fetchPlace(placeId, fields: fields));
   }
 
