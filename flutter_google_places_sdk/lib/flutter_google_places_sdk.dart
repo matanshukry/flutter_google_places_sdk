@@ -118,7 +118,7 @@ class FlutterGooglePlacesSdk {
   /// For more info about billing: https://developers.google.com/maps/documentation/places/web-service/usage-and-billing
   Future<FetchPlaceResponse> fetchPlace(
     String placeId, {
-    required List<PlaceField> fields,
+    required PlaceDetailsDataSKU fields,
   }) {
     if(fields.length == 0) {
       fields = placeDetailsBasicDataSKU;

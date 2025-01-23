@@ -1,6 +1,8 @@
 
 import 'package:flutter_google_places_sdk_platform_interface/src/types/place_field.dart';
 
+typedef PlaceDetailsDataSKU = List<PlaceField>;
+
 // https://developers.google.com/maps/documentation/places/android-sdk/usage-and-billing#basic-data
 const placeDetailsBasicDataSKU = [
   PlaceField.Address,
