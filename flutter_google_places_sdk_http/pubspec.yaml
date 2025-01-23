@@ -1,6 +1,6 @@
 name: flutter_google_places_sdk_http
 description: An http implementation of Flutter plugin to be used by other platform implementation
-version: 1.0.4
+version: 1.0.5
 homepage: https://github.com/matanshukry/flutter_google_places_sdk/tree/master/flutter_google_places_sdk_http
 
 environment:
@@ -16,8 +16,8 @@ dependencies:
     git:
       url: git@github.com:crispybaconsrl/flutter_google_places.git
       path: flutter_google_places_sdk_platform_interface
-      ref: 1.0.4
-  #    path: ../flutter_google_places_sdk_platform_interface
+      ref: 1.0.5
+#      path: ../flutter_google_places_sdk_platform_interface
   freezed_annotation: ^2.3.2
   json_annotation: ^4.8.1
 
