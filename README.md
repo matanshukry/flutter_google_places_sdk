@@ -20,6 +20,12 @@ https://developers.google.com/maps/documentation/javascript/get-api-key
 Limits:
 * Location restriction is not supported. See google issue tracker for more info: https://issuetracker.google.com/issues/36219203
 
+add this script to your index.html . you can combine with another google maps library, more info: https://developers.google.com/maps/documentation/javascript/libraries#libraries-for-dynamic-library-import
+
+```dart
+<script src="https://maps.googleapis.com/maps/api/js?key={YOUR_API_KEY}&libraries=places&callback=initMap"></script>
+```
+
 ## Rational
 
 By now you probably found some other plugins, and wondering why this one was even created.
