@@ -1,7 +1,7 @@
 
 import 'package:flutter_google_places_sdk_platform_interface/src/types/place_field.dart';
 
-// https://developers.google.com/maps/documentation/places/android-sdk/usage-and-billing#basic-placedetails
+// https://developers.google.com/maps/documentation/places/android-sdk/usage-and-billing#basic-data
 const placeDetailsBasicDataSKU = [
   PlaceField.Address,
   PlaceField.AddressComponents,
@@ -19,6 +19,7 @@ const placeDetailsBasicDataSKU = [
 
 // https://developers.google.com/maps/documentation/places/android-sdk/usage-and-billing#contact-data
 const placeDetailsContactDataSKU = [
+  PlaceField.OpeningHours,
   PlaceField.PhoneNumber,
   PlaceField.WebsiteUri,
 ];
