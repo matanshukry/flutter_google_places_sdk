@@ -1,3 +1,7 @@
+## 0.1.6
+
+* Add 'placeTypes' property in 'GMSAutocompletePrediction'
+
 ## 0.1.5
 
 * Upgrade to Google Places 8.5.0 and Google Maps 7.1.0 

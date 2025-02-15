@@ -504,6 +504,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
             "primaryText" to result.getPrimaryText(null).toString(),
             "secondaryText" to result.getSecondaryText(null).toString(),
             "fullText" to result.getFullText(null).toString()
+            "placeTypes" to result.placeTypes?.map { it.name }
         )
     }
 

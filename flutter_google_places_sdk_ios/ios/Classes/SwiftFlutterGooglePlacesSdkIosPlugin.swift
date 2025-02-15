@@ -311,6 +311,7 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
             "primaryText": prediction.attributedPrimaryText.string,
             "secondaryText": prediction.attributedSecondaryText?.string ?? "",
             "fullText": prediction.attributedFullText.string
+            "placeTypes": prediction.types.map { (it) in return it.uppercased() }
         ];
     }
 
