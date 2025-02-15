@@ -1,6 +1,6 @@
 ## 0.1.6
 
-* Add 'placeTypes' property in 'GMSAutocompletePrediction'
+* Add 'types' property in 'GMSAutocompletePrediction'
 
 ## 0.1.5
 

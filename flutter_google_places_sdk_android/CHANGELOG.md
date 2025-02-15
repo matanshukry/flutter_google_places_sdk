@@ -1,6 +1,6 @@
 ## 0.2.0-dev.2
 
-* Add `placeTypes` property in `AutocompletePrediction`
+* Add `types` property in `AutocompletePrediction`
 
 ## 0.2.0-dev.1
 
