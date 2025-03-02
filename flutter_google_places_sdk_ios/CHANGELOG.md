@@ -1,4 +1,8 @@
-## 0.1.6
+## 0.1.6+1
+
+* Added missing , fixing 0.1.6
+
+## 0.1.6 (broken)
 
 * Add 'placeTypes' property in 'GMSAutocompletePrediction'
 
