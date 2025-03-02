@@ -310,7 +310,7 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
             "distanceMeters": prediction.distanceMeters,
             "primaryText": prediction.attributedPrimaryText.string,
             "secondaryText": prediction.attributedSecondaryText?.string ?? "",
-            "fullText": prediction.attributedFullText.string
+            "fullText": prediction.attributedFullText.string,
             "placeTypes": prediction.types.map { (it) in return it.uppercased() }
         ];
     }
