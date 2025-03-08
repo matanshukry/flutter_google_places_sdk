@@ -1,3 +1,7 @@
+## 0.1.9
+
+* Remove `js` dependency and use `web` over `html` enabling wasm compilation
+
 ## 0.1.8
 
 * Upgrading `google_maps` to ^8.1.1

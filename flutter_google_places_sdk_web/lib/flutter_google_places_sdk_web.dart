@@ -3,9 +3,9 @@ library places;
 
 import 'dart:async';
 import 'dart:developer';
-import 'dart:html' as html;
+import 'package:web/web.dart' as html;
 import 'dart:js_interop';
-import 'dart:js_util';
+import 'dart:js_interop_unsafe';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +73,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       if (locale?.languageCode != null) {
         _language = locale?.languageCode;
       }
-      body.append(html.ScriptElement()
+      body.append(html.HTMLScriptElement()
         ..id = _SCRIPT_ID
         ..src = src
         ..async = true
@@ -126,9 +126,9 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     final resp = await prom;
 
     final predictions = resp.predictions
-            .whereNotNull()
-            .map(_translatePrediction)
-            .toList(growable: false);
+        .whereNotNull()
+        .map(_translatePrediction)
+        .toList(growable: false);
     return FindAutocompletePredictionsResponse(predictions);
   }
 
@@ -226,8 +226,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
           ?.map(_parseAddressComponent)
           .cast<inter.AddressComponent>()
           .toList(growable: false),
-      businessStatus:
-          _parseBusinessStatus(getProperty(place, 'business_status')),
+      businessStatus: _parseBusinessStatus(place.getProperty('business_status'.toJS) as String?),
       attributions: place.htmlAttributions?.cast<String>(),
       latLng: _parseLatLang(place.geometry?.location),
       name: place.name,
