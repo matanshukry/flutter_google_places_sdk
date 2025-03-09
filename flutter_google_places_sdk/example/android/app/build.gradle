@@ -1,41 +1,17 @@
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
-        localProperties.load(reader)
-    }
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
 }
 
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-}
-
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
-
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+def localKeystoreProperties = new Properties()
+def localKeystorePropertiesFile = rootProject.file('C:\\dev\\upload_key\\local-key.properties')
+localKeystoreProperties.load(new FileInputStream(localKeystorePropertiesFile))
 
 android {
-    if (project.android.hasProperty("namespace")) {
-        namespace 'com.msh.flutter_google_places_sdk_example'
-    }
-
+    namespace 'com.msh.flutter_google_places_sdk_example'
     compileSdkVersion 34
     ndkVersion "26.1.10909125"
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -49,17 +25,15 @@ android {
     defaultConfig {
         applicationId "com.msh.flutter_google_places_sdk_example"
         minSdkVersion 21
-        targetSdkVersion 28
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
 
         multiDexEnabled true
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
         }
     }
@@ -71,10 +45,4 @@ android {
 
 flutter {
     source '../..'
-}
-
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
-    implementation 'com.android.support:multidex:1.0.3'
 }
