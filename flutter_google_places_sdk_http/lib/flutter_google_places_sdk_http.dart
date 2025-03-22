@@ -18,6 +18,9 @@ class FlutterGooglePlacesSdkHttpPlugin
 
   static const _kAPI_PLACES = '${_kAPI_HOST}/maps/api/place';
 
+  static const _kAPI_HOST_V2 = 'https://places.googleapis.com';
+  static const _kAPI_PLACES_V2 = '${_kAPI_HOST_V2}/v1/places:autocomplete';
+
   bool _useNewApi = false;
   String? _apiKey;
   Locale? _locale;
@@ -91,23 +94,23 @@ class FlutterGooglePlacesSdkHttpPlugin
     inter.LatLngBounds? locationBias,
     inter.LatLngBounds? locationRestriction,
   ) {
-    final url = '${_kAPI_PLACES}/v1/places:autocomplete';
     final headers = {
       'Content-Type': 'application/json',
       'X-Goog-Api-Key': _apiKey!
     };
     final body = _buildAutocompleteBody(query, countries, placeTypesFilter,
         sessionToken, origin, locationBias, locationRestriction);
+    final bodyJson = jsonEncode(body);
 
     return _doPost(
-      url,
-      body,
+      _kAPI_PLACES_V2,
+      bodyJson,
       (json) => PlacesAutocompleteResponse.fromJson(json),
       headers: headers,
     );
   }
 
-  Object _buildAutocompleteBody(
+  Map<String, dynamic> _buildAutocompleteBody(
     String query,
     List<String>? countries,
     List<String> placeTypesFilter,
@@ -116,24 +119,17 @@ class FlutterGooglePlacesSdkHttpPlugin
     inter.LatLngBounds? locationBias,
     inter.LatLngBounds? locationRestriction,
   ) {
-    final data = <String, dynamic>{};
+    final data = <String, dynamic>{'input': query};
 
     // -- Language (from _locale)
     final langCode = _locale?.languageCode;
     if (langCode != null) {
-      data['language'] = langCode;
-    }
-
-    // -- Countries (to Components)
-    if (countries != null) {
-      final strCountries =
-          countries.map((country) => 'country:$country').join('|');
-      data['components'] = strCountries;
+      data['languageCode'] = langCode;
     }
 
     // -- Place Type
     if (placeTypesFilter.isNotEmpty) {
-      data['types'] = placeTypesFilter;
+      data['includedPrimaryTypes'] = placeTypesFilter;
     }
 
     // -- Session Token
@@ -143,22 +139,16 @@ class FlutterGooglePlacesSdkHttpPlugin
 
     // -- Origin
     if (origin != null) {
-      data['origin'] = origin;
+      data['origin'] = {
+        'latitude': origin.lat,
+        'longitude': origin.lng,
+      };
     }
 
     // -- Location Bias/Restrictions
     if (locationBias != null && locationRestriction != null) {
       print(
           '${_kLogPrefix}Only locationBias OR locationRestriction are supported - not both. Using locationRestriction');
-    }
-
-    final loc = locationRestriction ?? locationBias;
-    if (loc != null) {
-      data['location'] = loc.center;
-      data['radius'] = loc.radius;
-      if (locationRestriction != null) {
-        data['strictbounds'] = true;
-      }
     }
 
     return data;
