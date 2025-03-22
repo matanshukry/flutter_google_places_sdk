@@ -1,3 +1,7 @@
+## 0.2.0-dev.3
+
+* Fix missing `,`
+
 ## 0.2.0-dev.2
 
 * Add `placeTypes` property in `AutocompletePrediction`
