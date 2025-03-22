@@ -1,3 +1,7 @@
+## 0.2.0
+
+* No changes, released to a non-dev version
+
 ## 0.2.0-dev.3
 
 * Fix missing `,`
