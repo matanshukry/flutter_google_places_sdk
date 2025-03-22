@@ -1,3 +1,9 @@
+## 0.2.0-dev.1
+
+* Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.1+1`
+* Upgrading `web` to `1.1.1`
+* Removed `js` dependency
+
 ## 0.1.8
 
 * Upgrading `google_maps` to ^8.1.1
