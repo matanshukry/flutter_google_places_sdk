@@ -18,6 +18,7 @@ class FlutterGooglePlacesSdkHttpPlugin
 
   static const _kAPI_PLACES = '${_kAPI_HOST}/maps/api/place';
 
+  bool _useNewApi = false;
   String? _apiKey;
   Locale? _locale;
 
@@ -30,19 +31,25 @@ class FlutterGooglePlacesSdkHttpPlugin
   }
 
   @override
-  Future<void> initialize(String apiKey, {Locale? locale}) async {
+  Future<void> initialize(String apiKey,
+      {Locale? locale, bool? useNewApi}) async {
     _apiKey = apiKey;
     _locale = locale;
+    _useNewApi = useNewApi ?? false;
   }
 
   @override
   Future<bool?> isInitialized() async => _apiKey != null;
 
   @override
-  Future<void> updateSettings(String apiKey, {Locale? locale}) async {
+  Future<void> updateSettings(String apiKey,
+      {Locale? locale, bool? useNewApi}) async {
     _apiKey = apiKey;
     if (locale != null) {
       _locale = locale;
+    }
+    if (useNewApi != null) {
+      _useNewApi = useNewApi;
     }
   }
 
@@ -57,11 +64,12 @@ class FlutterGooglePlacesSdkHttpPlugin
     inter.LatLngBounds? locationRestriction,
   }) async {
     final sessionToken = (newSessionToken ?? false) ? null : _lastSessionToken;
-    final url = _buildAutocompleteUrl(query, countries, placeTypesFilter,
-        sessionToken, origin, locationBias, locationRestriction);
 
-    final PlacesAutocompleteResponse response =
-        await _doGet(url, (json) => PlacesAutocompleteResponse.fromJson(json));
+    final PlacesAutocompleteResponse response = await (_useNewApi
+        ? _findAutocompleteNewApi(query, countries, placeTypesFilter,
+            sessionToken, origin, locationBias, locationRestriction)
+        : _findAutocompleteOldApi(query, countries, placeTypesFilter,
+            sessionToken, origin, locationBias, locationRestriction));
 
     if (response.status != PlacesAutocompleteStatus.OK &&
         response.status != PlacesAutocompleteStatus.ZERO_RESULTS) {
@@ -74,11 +82,109 @@ class FlutterGooglePlacesSdkHttpPlugin
     return inter.FindAutocompletePredictionsResponse(predictions);
   }
 
+  Future<PlacesAutocompleteResponse> _findAutocompleteNewApi(
+    String query,
+    List<String>? countries,
+    List<String> placeTypesFilter,
+    String? sessionToken,
+    inter.LatLng? origin,
+    inter.LatLngBounds? locationBias,
+    inter.LatLngBounds? locationRestriction,
+  ) {
+    final url = '${_kAPI_PLACES}/v1/places:autocomplete';
+    final headers = {
+      'Content-Type': 'application/json',
+      'X-Goog-Api-Key': _apiKey!
+    };
+    final body = _buildAutocompleteBody(query, countries, placeTypesFilter,
+        sessionToken, origin, locationBias, locationRestriction);
+
+    return _doPost(
+      url,
+      body,
+      (json) => PlacesAutocompleteResponse.fromJson(json),
+      headers: headers,
+    );
+  }
+
+  Object _buildAutocompleteBody(
+    String query,
+    List<String>? countries,
+    List<String> placeTypesFilter,
+    String? sessionToken,
+    inter.LatLng? origin,
+    inter.LatLngBounds? locationBias,
+    inter.LatLngBounds? locationRestriction,
+  ) {
+    final data = <String, dynamic>{};
+
+    // -- Language (from _locale)
+    final langCode = _locale?.languageCode;
+    if (langCode != null) {
+      data['language'] = langCode;
+    }
+
+    // -- Countries (to Components)
+    if (countries != null) {
+      final strCountries =
+          countries.map((country) => 'country:$country').join('|');
+      data['components'] = strCountries;
+    }
+
+    // -- Place Type
+    if (placeTypesFilter.isNotEmpty) {
+      data['types'] = placeTypesFilter;
+    }
+
+    // -- Session Token
+    if (sessionToken != null) {
+      data['sessionToken'] = sessionToken;
+    }
+
+    // -- Origin
+    if (origin != null) {
+      data['origin'] = origin;
+    }
+
+    // -- Location Bias/Restrictions
+    if (locationBias != null && locationRestriction != null) {
+      print(
+          '${_kLogPrefix}Only locationBias OR locationRestriction are supported - not both. Using locationRestriction');
+    }
+
+    final loc = locationRestriction ?? locationBias;
+    if (loc != null) {
+      data['location'] = loc.center;
+      data['radius'] = loc.radius;
+      if (locationRestriction != null) {
+        data['strictbounds'] = true;
+      }
+    }
+
+    return data;
+  }
+
+  Future<PlacesAutocompleteResponse> _findAutocompleteOldApi(
+    String query,
+    List<String>? countries,
+    List<String> placeTypesFilter,
+    String? sessionToken,
+    inter.LatLng? origin,
+    inter.LatLngBounds? locationBias,
+    inter.LatLngBounds? locationRestriction,
+  ) {
+    final url = _buildAutocompleteUrl(query, countries, placeTypesFilter,
+        sessionToken, origin, locationBias, locationRestriction);
+
+    return _doGet(url, (json) => PlacesAutocompleteResponse.fromJson(json));
+  }
+
   @override
   Future<inter.FetchPlaceResponse> fetchPlace(
     String placeId, {
     List<inter.PlaceField>? fields,
     bool? newSessionToken,
+    String? regionCode,
   }) async {
     throw UnimplementedError();
   }
@@ -149,9 +255,40 @@ class FlutterGooglePlacesSdkHttpPlugin
     return url;
   }
 
+  Future<T> _doPost<T>(
+    String url,
+    Object body,
+    T Function(Map<String, Object?>) jsonParser, {
+    Map<String, String> headers = const {},
+  }) async {
+    final response =
+        await http.post(Uri.parse(url), headers: headers, body: body);
+
+    String? strBody = null;
+    String strBodyErr = '';
+    try {
+      strBody = utf8.decode(response.bodyBytes);
+    } catch (err) {
+      strBodyErr = 'Failed decoding body! ' + err.toString();
+    }
+    if (response.statusCode < 200 ||
+        response.statusCode >= 300 ||
+        strBody == null) {
+      final err =
+          "Bad result on call to $url. Status code (${response.statusCode}), body: $strBody, bodyFetchErr (if any): $strBodyErr";
+      throw err;
+    }
+
+    final Map<String, Object?> jsonBody = jsonDecode(strBody);
+    return jsonParser(jsonBody);
+  }
+
   Future<T> _doGet<T>(
-      String url, T Function(Map<String, Object?>) jsonParser) async {
-    final response = await http.get(Uri.parse(url));
+    String url,
+    T Function(Map<String, Object?>) jsonParser, {
+    Map<String, String> headers = const {},
+  }) async {
+    final response = await http.get(Uri.parse(url), headers: headers);
 
     String? strBody = null;
     String strBodyErr = '';

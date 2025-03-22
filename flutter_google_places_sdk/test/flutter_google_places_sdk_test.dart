@@ -28,7 +28,28 @@ void main() {
     fullText: 'ftext6cad',
   );
 
-  const kPlace = const Place(id: '', latLng: LatLng(lat: 542.13, lng: -32.43), address: '', addressComponents: [], businessStatus: null, attributions: [], name: '', openingHours: null, phoneNumber: '', photoMetadatas: [], plusCode: null, priceLevel: null, rating: null, types: [], userRatingsTotal: null, utcOffsetMinutes: null, viewport: null, websiteUri: null);
+  const kPlace = const Place(
+    id: '',
+    latLng: LatLng(lat: 542.13, lng: -32.43),
+    address: '',
+    addressComponents: [],
+    businessStatus: null,
+    attributions: [],
+    name: '',
+    openingHours: null,
+    phoneNumber: '',
+    photoMetadatas: [],
+    plusCode: null,
+    priceLevel: null,
+    rating: null,
+    types: [],
+    userRatingsTotal: null,
+    utcOffsetMinutes: null,
+    viewport: null,
+    websiteUri: null,
+    nameLanguageCode: '',
+    reviews: [],
+  );
 
   final kDefaultResponses = <dynamic, dynamic>{
     'findAutocompletePredictions': <dynamic>[

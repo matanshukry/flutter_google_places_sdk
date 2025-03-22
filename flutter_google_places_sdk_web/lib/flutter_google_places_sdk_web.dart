@@ -3,21 +3,21 @@ library places;
 
 import 'dart:async';
 import 'dart:developer';
-import 'dart:html' as html;
 import 'dart:js_interop';
-import 'dart:js_util';
+import 'dart:js_interop_unsafe';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
 import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart'
     as inter;
+import 'package:flutter_google_places_sdk_platform_interface/flutter_google_places_sdk_platform_interface.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:google_maps/google_maps.dart' as core;
 import 'package:google_maps/google_maps_geocoding.dart' as geocoding;
 import 'package:google_maps/google_maps_places.dart' as places;
 import 'package:google_maps/google_maps_places.dart';
+import 'package:web/web.dart' as html;
 import 'package:web/web.dart' as web;
 
 @JS('initMap')
@@ -52,7 +52,8 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   }
 
   @override
-  Future<void> initialize(String apiKey, {Locale? locale}) async {
+  Future<void> initialize(String apiKey,
+      {Locale? locale, bool? useNewApi}) async {
     if (_svcAutoComplete != null) {
       return;
     }
@@ -73,7 +74,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       if (locale?.languageCode != null) {
         _language = locale?.languageCode;
       }
-      body.append(html.ScriptElement()
+      body.append(html.HTMLScriptElement()
         ..id = _SCRIPT_ID
         ..src = src
         ..async = true
@@ -84,7 +85,8 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   }
 
   @override
-  Future<void> updateSettings(String apiKey, {Locale? locale}) async {
+  Future<void> updateSettings(String apiKey,
+      {Locale? locale, bool? useNewApi}) async {
     if (locale != null) {
       _language = locale.languageCode;
     }
@@ -92,7 +94,8 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
 
   void _doInit() {
     _svcAutoComplete = AutocompleteService();
-    _svcPlaces = PlacesService(html.window.document.createElement('div') as web.HTMLElement);
+    _svcPlaces = PlacesService(
+        html.window.document.createElement('div') as web.HTMLElement);
     _completer!.complete();
   }
 
@@ -120,15 +123,15 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       ..input = query
       ..origin = origin == null ? null : core.LatLng(origin.lat, origin.lng)
       ..types = placeTypesFilter.isEmpty ? null : placeTypesFilter
-      ..componentRestrictions = (ComponentRestrictions()..country = countries?.jsify())
+      ..componentRestrictions =
+          (ComponentRestrictions()..country = countries?.jsify())
       ..bounds = _boundsToWeb(locationBias)
       ..language = _language);
     final resp = await prom;
 
-    final predictions = resp.predictions
-            .whereNotNull()
-            .map(_translatePrediction)
-            .toList(growable: false);
+    final predictions = resp.predictions.nonNulls
+        .map(_translatePrediction)
+        .toList(growable: false);
     return FindAutocompletePredictionsResponse(predictions);
   }
 
@@ -148,12 +151,13 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   @override
   Future<FetchPlaceResponse> fetchPlace(
     String placeId, {
-    List<PlaceField>? fields,
+    required List<PlaceField> fields,
     bool? newSessionToken,
+    String? regionCode,
   }) async {
     final prom = _getDetails(PlaceDetailsRequest()
       ..placeId = placeId
-      ..fields = fields?.map(this._mapField).toList(growable: false)
+      ..fields = fields.map(this._mapField).toList(growable: false)
       ..sessionToken = _lastSessionToken
       ..language = _language);
 
@@ -226,11 +230,12 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
           ?.map(_parseAddressComponent)
           .cast<inter.AddressComponent>()
           .toList(growable: false),
-      businessStatus:
-          _parseBusinessStatus(getProperty(place, 'business_status')),
+      businessStatus: _parseBusinessStatus(
+          place.getProperty('business_status'.toJS) as String?),
       attributions: place.htmlAttributions?.cast<String>(),
       latLng: _parseLatLang(place.geometry?.location),
       name: place.name,
+      nameLanguageCode: null,
       openingHours: _parseOpeningHours(place.openingHours),
       phoneNumber: place.internationalPhoneNumber,
       photoMetadatas: place.photos
@@ -249,6 +254,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       utcOffsetMinutes: place.utcOffsetMinutes?.toInt(),
       viewport: _parseLatLngBounds(place.geometry?.viewport),
       websiteUri: place.website == null ? null : Uri.parse(place.website!),
+      reviews: null,
     );
   }
 
@@ -272,11 +278,10 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     return inter.AddressComponent(
       name: addressComponent.longName,
       shortName: addressComponent.shortName,
-      types: addressComponent.types
-              .whereNotNull()
-              .map((e) => e.toString())
-              .cast<String>()
-              .toList(growable: false),
+      types: addressComponent.types.nonNulls
+          .map((e) => e.toString())
+          .cast<String>()
+          .toList(growable: false),
     );
   }
 
@@ -296,8 +301,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       return null;
     }
 
-    final htmlAttrs =
-        photo.htmlAttributions.whereNotNull().toList(growable: false);
+    final htmlAttrs = photo.htmlAttributions.nonNulls.toList(growable: false);
     final photoMetadata = PhotoMetadata(
         photoReference: _getPhotoMetadataReference(photo),
         width: photo.width.toInt(),
@@ -351,14 +355,12 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     }
 
     return inter.OpeningHours(
-      periods: openingHours.periods
-              ?.whereNotNull()
+      periods: openingHours.periods?.nonNulls
               .map(_parsePeriod)
               .cast<Period>()
               .toList(growable: false) ??
           [],
-      weekdayText: openingHours.weekdayText
-              ?.whereNotNull()
+      weekdayText: openingHours.weekdayText?.nonNulls
               .cast<String>()
               .toList(growable: false) ??
           [],

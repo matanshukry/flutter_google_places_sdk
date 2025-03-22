@@ -1,5 +1,5 @@
-import 'dart:html' as html;
-import 'dart:ui' as ui;
+import 'dart:ui_web';
+import 'package:web/web.dart' as web;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
@@ -26,8 +26,12 @@ class GooglePlacesImg extends StatelessWidget {
     }
 
     // ignore: undefined_prefixed_name
-    ui.platformViewRegistry.registerViewFactory(photoMetadata.photoReference,
-        (int viewId) => html.Element.img()..setAttribute('src', imageUrl));
+    platformViewRegistry.registerViewFactory(
+      photoMetadata.photoReference,
+      (int viewId) => web.HTMLImageElement()
+        ..id = 'gp_img_$viewId'
+        ..setAttribute('src', imageUrl),
+    );
 
     final view = HtmlElementView(viewType: photoMetadata.photoReference);
     return Container(
