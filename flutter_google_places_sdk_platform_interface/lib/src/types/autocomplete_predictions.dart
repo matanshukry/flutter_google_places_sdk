@@ -11,7 +11,7 @@ part 'autocomplete_predictions.g.dart';
 ///
 /// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/AutocompletePrediction
 @freezed
-class AutocompletePrediction with _$AutocompletePrediction {
+sealed class AutocompletePrediction with _$AutocompletePrediction {
   /// Constructs an [AutocompletePrediction] object.
   const factory AutocompletePrediction({
     /// the straight-line distance between the place being referred to by getPlaceId() and the origin specified in the request.

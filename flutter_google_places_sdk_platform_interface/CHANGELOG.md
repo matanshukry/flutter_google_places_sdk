@@ -1,3 +1,11 @@
+## 0.3.2
+
+* Upgrading `freezed_annotation` to `^3.0.0`
+* Upgrading `freezed` to `^3.0.4`
+* Upgrading `json_annotation` to `^4.9.0`
+* Upgrading `json_serializable` to `^6.9.4`
+* Upgrading `build_runner` to `^2.4.15`
+
 ## 0.3.1+1
 
 * Add missing place types: `administrative_area_level_6`, `administrative_area_level_7`, `landmark`

@@ -8,7 +8,7 @@ part 'lat_lng_bounds.g.dart';
 ///
 /// Ref: https://developers.google.com/android/reference/com/google/android/gms/maps/model/LatLngBounds.html
 @Freezed()
-class LatLngBounds with _$LatLngBounds {
+sealed class LatLngBounds with _$LatLngBounds {
   /// constructs a [LatLngBounds] object.
   const factory LatLngBounds({
     /// The southwest coordinate of the bounds.

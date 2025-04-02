@@ -5,7 +5,7 @@ part 'search_by_text_response.freezed.dart';
 
 /// The response for a [FlutterGooglePlacesSdkPlatform.searchByText] request
 @Freezed()
-class SearchByTextResponse with _$SearchByTextResponse {
+sealed class SearchByTextResponse with _$SearchByTextResponse {
   /// constructs a [SearchByTextResponse] object.
   const factory SearchByTextResponse(
     /// the Place list returned by the response.

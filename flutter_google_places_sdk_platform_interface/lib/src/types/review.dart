@@ -5,7 +5,7 @@ part 'review.freezed.dart';
 part 'review.g.dart';
 
 @Freezed()
-class Review with _$Review {
+sealed class Review with _$Review {
   /// Constructs a [Review] object.
   const factory Review({
     /// The attribution that must be shown to the user if this review is displayed.

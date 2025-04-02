@@ -6,7 +6,7 @@ part 'circular_bounds.g.dart';
 
 /// An immutable class representing a latitude/longitude aligned circle, with a defined radius.
 @Freezed()
-class CircularBounds with _$CircularBounds {
+sealed class CircularBounds with _$CircularBounds {
   /// constructs a [CircularBounds] object.
   const factory CircularBounds({
     required LatLng center,

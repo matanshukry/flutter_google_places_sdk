@@ -20,7 +20,7 @@ part 'place.g.dart';
 ///
 /// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/Place
 @freezed
-class Place with _$Place {
+sealed class Place with _$Place {
   const factory Place({
     required String? id,
     required String? address,

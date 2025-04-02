@@ -7,7 +7,7 @@ part 'photo_metadata.g.dart';
 ///
 /// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/PhotoMetadata
 @freezed
-class PhotoMetadata with _$PhotoMetadata {
+sealed class PhotoMetadata with _$PhotoMetadata {
   const factory PhotoMetadata({
     /// Non-empty String used to identify the underlying photo.
     required String photoReference,

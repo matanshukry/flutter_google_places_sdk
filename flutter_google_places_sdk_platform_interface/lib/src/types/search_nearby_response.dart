@@ -5,7 +5,7 @@ part 'search_nearby_response.freezed.dart';
 
 /// The response for a [FlutterGooglePlacesSdkPlatform.searchNearby] request
 @Freezed()
-class SearchNearbyResponse with _$SearchNearbyResponse {
+sealed class SearchNearbyResponse with _$SearchNearbyResponse {
   /// constructs a [SearchNearbyResponse] object.
   const factory SearchNearbyResponse(
     /// the Place list returned by the response.

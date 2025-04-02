@@ -7,7 +7,7 @@ part 'place_local_time.g.dart';
 ///
 /// ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/LocalTime
 @freezed
-class PlaceLocalTime with _$PlaceLocalTime {
+sealed class PlaceLocalTime with _$PlaceLocalTime {
   const factory PlaceLocalTime({
     /// The hours in 24 hour format (0 <= return value < 24).
     required int hours,

@@ -7,7 +7,7 @@ part 'lat_lng.g.dart';
 ///
 /// Ref: https://developers.google.com/android/reference/com/google/android/gms/maps/model/LatLng
 @Freezed()
-class LatLng with _$LatLng {
+sealed class LatLng with _$LatLng {
   /// constructs a [LatLng] object.
   const factory LatLng({
     /// The latitude part of the coordinate,

@@ -8,7 +8,7 @@ part 'period.g.dart';
 ///
 /// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/Period
 @freezed
-class Period with _$Period {
+sealed class Period with _$Period {
   const factory Period({
     required TimeOfWeek open,
     required TimeOfWeek? close,

@@ -5,7 +5,7 @@ part 'author_attribution.freezed.dart';
 part 'author_attribution.g.dart';
 
 @Freezed()
-class AuthorAttribution with _$AuthorAttribution {
+sealed class AuthorAttribution with _$AuthorAttribution {
   /// Constructs a [AuthorAttribution] object.
   const factory AuthorAttribution({
     /// The name of the author.
