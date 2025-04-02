@@ -1,4 +1,11 @@
-## 0.4
+## 0.4.1
+
+* Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.2`
+* Upgrading `flutter_google_places_sdk_windows` to `0.2.1`
+* Upgrading `flutter_google_places_sdk_linux` to `0.2.1`
+* Upgrading `flutter_google_places_sdk_macos` to `0.2.1`
+
+## 0.4.0
 
 * Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.1+1`
 * Upgrading `flutter_google_places_sdk_ios` to `0.2.0`
