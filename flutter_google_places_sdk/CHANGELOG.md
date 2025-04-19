@@ -1,3 +1,7 @@
+## 0.4.2
+
+* Adding useNewApi argument on the main client - when initializing and updating
+
 ## 0.4.1
 
 * Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.2`
