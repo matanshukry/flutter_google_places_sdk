@@ -1,3 +1,10 @@
+## 0.3.2+1
+
+* Adding missing field types
+* Upgrading `freezed` to `^3.0.6`
+* Upgrading `json_serializable` to `^6.9.5`
+
+
 ## 0.3.2
 
 * Upgrading `freezed_annotation` to `^3.0.0`
