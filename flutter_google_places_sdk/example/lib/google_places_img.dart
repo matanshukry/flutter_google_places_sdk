@@ -16,9 +16,9 @@ class GooglePlacesImg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return placePhotoResponse.maybeWhen(
-      image: (image) => image,
-      orElse: () => Text('Invalid image'),
-    );
+    return switch (placePhotoResponse) {
+      FetchPlacePhotoResponseImage(image: final image) => image,
+      _ => Text('Invalid Image'),
+    };
   }
 }

@@ -19,8 +19,10 @@ class GooglePlacesImg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl =
-        placePhotoResponse.whenOrNull(imageUrl: (imageUrl) => imageUrl);
+    final imageUrl = switch (placePhotoResponse) {
+      FetchPlacePhotoResponseImageUrl(imageUrl: final imageUrl) => imageUrl,
+      _ => null,
+    };
     if (imageUrl == null) {
       return Text('Invalid image url!');
     }
