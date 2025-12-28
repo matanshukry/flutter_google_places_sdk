@@ -1,7 +1,8 @@
 plugins {
     id "com.android.application"
-    id "kotlin-android"
+    id "org.jetbrains.kotlin.android"
     id "dev.flutter.flutter-gradle-plugin"
+//    id "kotlin-android"
 }
 
 def localKeystoreProperties = new Properties()
@@ -10,24 +11,29 @@ localKeystoreProperties.load(new FileInputStream(localKeystorePropertiesFile))
 
 android {
     namespace 'com.msh.flutter_google_places_sdk_example'
-    compileSdkVersion 34
-    ndkVersion "27.0.12077973"
+    compileSdk = flutter.compileSdkVersion
+//    compileSdkVersion 34
+    ndkVersion "26.1.10909125" // "27.0.12077973"
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_17
+//        targetCompatibility JavaVersion.VERSION_17
+//    }
 
-    kotlinOptions {
-        jvmTarget = '17'
-    }
+//    kotlinOptions {
+//        jvmTarget = JavaVersion.VERSION_17
+//    }
 
     defaultConfig {
         applicationId "com.msh.flutter_google_places_sdk_example"
         minSdkVersion flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
+        targetSdkVersion flutter.targetSdkVersion
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+//        targetSdk = flutter.targetSdkVersion
+//        versionCode = flutter.versionCode
         versionName = flutter.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
     }

@@ -8,8 +8,8 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:8.4.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+        classpath 'com.android.tools.build:gradle:8.13.1'
+//        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     }
 }
 
@@ -21,29 +21,30 @@ allprojects {
 }
 
 apply plugin: "com.android.library"
-apply plugin: "kotlin-android"
+//apply plugin: "kotlin-android"
 
 android {
-    if (project.android.hasProperty("namespace")) {
-        namespace "com.msh.flutter_google_places_sdk"
-    }
-    compileSdkVersion 34
+    namespace "com.msh.flutter_google_places_sdk"
+    compileSdk = flutter.compileSdkVersion
+    // compileSdkVersion flutter.compileSdkVersion
+    // compileSdkVersion 34
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
-    }
+//    kotlinOptions {
+//        jvmTarget = JavaVersion.VERSION_17
+//    }
 
-    sourceSets {
-        main.java.srcDirs += "src/main/kotlin"
-        test.java.srcDirs += "src/test/kotlin"
-    }
+//    sourceSets {
+//        main.java.srcDirs += "src/main/kotlin"
+//        test.java.srcDirs += "src/test/kotlin"
+//    }
     defaultConfig {
-        minSdk = 21
+//        minSdk = 21
+        minSdkVersion 21
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -55,12 +56,12 @@ android {
 }
 
 dependencies {
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:$kotlin_version"))
-    implementation "com.google.android.libraries.places:places:$google_places_version"
+//    implementation(platform("org.jetbrains.kotlin:kotlin-bom:$kotlin_version"))
+//    implementation "com.google.android.libraries.places:places:$google_places_version"
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.mockito:mockito-core:5.1.1'
-    testImplementation 'androidx.test:core:1.5.0'
-    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-    testImplementation 'org.robolectric:robolectric:4.10.3'
+    testImplementation 'org.mockito:mockito-core:5.21.0'
+    testImplementation 'androidx.test:core:1.7.0'
+//    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testImplementation 'org.robolectric:robolectric:4.16'
 }
