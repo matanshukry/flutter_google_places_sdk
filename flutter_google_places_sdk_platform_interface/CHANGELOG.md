@@ -1,3 +1,14 @@
+## 0.3.3
+
+* Added correct parsing for BusinessStatus
+* Flutter SDK minimum is now at `3.8.0`
+* Upgrading `freezed_annotation` to `^3.1.0`
+* Upgrading dev `build_runner` to `^2.10.4`
+* Upgrading dev `flutter_lints` to `6.0.0`
+* Upgrading dev `freezed`: `^3.2.3` 
+* Upgrading dev `json_serializable`: `^6.11.2` 
+* Upgrading dev `mockito`: `^5.6.1`
+
 ## 0.3.2+1
 
 * Adding missing field types
