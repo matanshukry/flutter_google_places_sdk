@@ -1,3 +1,9 @@
+## 0.2.2
+
+* Updated places to use the new google places api, `Place.fetchFields`
+* Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.4`
+* Fix using `lastSessionToken` with `AutocompleteSuggestion`
+
 ## 0.2.1
 
 * Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.3`

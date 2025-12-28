@@ -15,10 +15,9 @@ import 'package:flutter_google_places_sdk_platform_interface/flutter_google_plac
 import 'package:flutter_google_places_sdk_web/extension.dart' as ext;
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:google_maps/google_maps.dart' as core;
-import 'package:google_maps/google_maps_geocoding.dart' as geocoding;
+import 'package:google_maps/google_maps_places.dart' as places;
 import 'package:google_maps/google_maps_places.dart';
 import 'package:web/web.dart' as html;
-import 'package:web/web.dart' as web;
 
 @JS('initMap')
 external set _initMap(JSFunction f);
@@ -36,14 +35,13 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   Completer? _completer;
 
   bool _elementInjected = false;
-  PlacesService? _svcPlaces;
   AutocompleteSessionToken? _lastSessionToken;
 
   // Language
   String? _language;
 
   // Cache for photos
-  final _photosCache = <String, PlacePhoto>{};
+  final _photosCache = <String, places.Photo>{};
   var _runningUid = 1;
 
   @override
@@ -102,9 +100,6 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   }
 
   void _doInit() {
-    _svcPlaces = PlacesService(
-      html.window.document.createElement('div') as web.HTMLElement,
-    );
     _elementInjected = true;
     _completer!.complete();
   }
@@ -134,6 +129,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     final prom =
         AutocompleteSuggestion.fetchAutocompleteSuggestions(
               AutocompleteRequest()
+                ..sessionToken = _lastSessionToken
                 ..input = query
                 ..origin = origin == null
                     ? null
@@ -182,78 +178,57 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     bool? newSessionToken,
     String? regionCode,
   }) async {
-    final prom = _getDetails(
-      PlaceDetailsRequest()
-        ..placeId = placeId
-        ..fields = fields.map(this._mapField).toList(growable: false)
-        ..sessionToken = _lastSessionToken
-        ..language = _language,
-    );
-
-    final resp = await prom;
-    return FetchPlaceResponse(resp.place);
+    final respPlace = await _getDetails(placeId, fields);
+    return FetchPlaceResponse(respPlace);
   }
 
-  String _mapField(PlaceField field) {
-    switch (field) {
-      case PlaceField.Address:
-        return 'formatted_address';
-      case PlaceField.AddressComponents:
-        return 'address_components';
-      case PlaceField.BusinessStatus:
-        return 'business_status';
-      case PlaceField.Id:
-        return 'place_id';
-      case PlaceField.Location:
-        return 'geometry.location';
-      case PlaceField.Name:
-        return 'name';
-      case PlaceField.OpeningHours:
-        return 'opening_hours';
-      case PlaceField.PhoneNumber:
-        return 'international_phone_number';
-      case PlaceField.PhotoMetadatas:
-        return 'photos';
-      case PlaceField.PlusCode:
-        return 'plus_code';
-      case PlaceField.PriceLevel:
-        return 'price_level';
-      case PlaceField.Rating:
-        return 'rating'; // not done yet
-      case PlaceField.Types:
-        return 'types';
-      case PlaceField.UserRatingsTotal:
-        return 'user_ratings_total';
-      case PlaceField.UTCOffset:
-        return 'utc_offset_minutes';
-      case PlaceField.Viewport:
-        return 'geometry.viewport';
-      case PlaceField.WebsiteUri:
-        return 'website';
-      default:
-        throw ArgumentError('Unsupported place field: $this');
+  PlaceField? _mapToNew(PlaceField field) => switch (field) {
+    // PlaceField.OpeningHours => PlaceField.CurrentOpeningHours,
+    _ => field.v2,
+  };
+
+  String? _mapField(PlaceField field) {
+    final mapped = _mapToNew(field);
+    if (mapped == null) {
+      return null;
     }
+    final name = mapped.name;
+    final first = name[0].toLowerCase();
+    final rest = name.substring(1);
+    return first + rest;
   }
 
-  Future<_GetDetailsResponse> _getDetails(PlaceDetailsRequest request) {
-    final completer = Completer<_GetDetailsResponse>();
+  Future<inter.Place?> _getDetails(
+    String placeId,
+    List<inter.PlaceField> fields,
+  ) async {
+    final fieldsMapped = fields
+        .map(this._mapField)
+        .nonNulls
+        .map((str) => str.toJS)
+        .toList(growable: false)
+        .toJS;
 
-    final func = (PlaceResult? place, PlacesServiceStatus? status) {
-      completer.complete(_GetDetailsResponse(_parsePlace(place), status));
-    };
-
-    _svcPlaces!.getDetails(request, func.toJS);
-
-    return completer.future;
+    final place = new places.Place(
+      PlaceOptions(id: placeId, requestedLanguage: _language),
+    );
+    final task =
+        place.fetchFields(FetchFieldsRequest(fields: fieldsMapped))
+            as JSPromise<JSObject>?;
+    // /*UNPARSED:Promise<{place:Place}>*/
+    final result = await task?.toDart;
+    final response = result as ext.FetchFieldsResponse?;
+    final resultPlace = response?.place; // PlaceResult? Place?
+    return _parsePlace(resultPlace);
   }
 
-  inter.Place? _parsePlace(PlaceResult? place) {
+  inter.Place? _parsePlace(places.Place? place) {
     if (place == null) {
       return null;
     }
 
     return inter.Place(
-      id: place.placeId,
+      id: place.id,
       address: place.formattedAddress,
       addressComponents: place.addressComponents
           ?.map(_parseAddressComponent)
@@ -262,9 +237,9 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       businessStatus: _parseBusinessStatus(
         place.getProperty('business_status'.toJS) as String?,
       ),
-      attributions: place.htmlAttributions?.cast<String>(),
-      latLng: _parseLatLang(place.geometry?.location),
-      name: place.name,
+      attributions: place.attributions?.cast<String>(),
+      latLng: _parseLatLang(place.location),
+      name: place.displayName,
       nameLanguageCode: null,
       openingHours: _parseOpeningHours(place.openingHours),
       phoneNumber: place.internationalPhoneNumber,
@@ -273,17 +248,19 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
           .cast<PhotoMetadata>()
           .toList(growable: false),
       plusCode: _parsePlusCode(place.plusCode),
-      priceLevel: place.priceLevel?.toInt(),
+      priceLevel: place.priceLevel?.toLevelNumber,
       rating: place.rating?.toDouble(),
       types: place.types
           ?.map(_parsePlaceType)
           .where((item) => item != null)
           .cast<PlaceType>()
           .toList(growable: false),
-      userRatingsTotal: place.userRatingsTotal?.toInt(),
+      userRatingsTotal: place.userRatingCount?.toInt(),
       utcOffsetMinutes: place.utcOffsetMinutes?.toInt(),
-      viewport: _parseLatLngBounds(place.geometry?.viewport),
-      websiteUri: place.website == null ? null : Uri.parse(place.website!),
+      viewport: _parseLatLngBounds(place.viewport),
+      websiteUri: place.websiteURI == null
+          ? null
+          : Uri.parse(place.websiteURI!),
       reviews: null,
     );
   }
@@ -300,17 +277,13 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     );
   }
 
-  inter.AddressComponent? _parseAddressComponent(
-    geocoding.GeocoderAddressComponent? addressComponent,
+  inter.AddressComponent _parseAddressComponent(
+    places.AddressComponent addressComponent,
   ) {
-    if (addressComponent == null) {
-      return null;
-    }
-
     return inter.AddressComponent(
-      name: addressComponent.longName,
-      shortName: addressComponent.shortName,
-      types: addressComponent.types.nonNulls
+      name: addressComponent.longText ?? '',
+      shortName: addressComponent.shortText ?? '',
+      types: addressComponent.types
           .map((e) => e.toString())
           .cast<String>()
           .toList(growable: false),
@@ -328,17 +301,20 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     );
   }
 
-  PhotoMetadata? _parsePhotoMetadata(PlacePhoto? photo) {
+  PhotoMetadata? _parsePhotoMetadata(places.Photo? photo) {
     if (photo == null) {
       return null;
     }
 
-    final htmlAttrs = photo.htmlAttributions.nonNulls.toList(growable: false);
+    final attrs = photo.authorAttributions
+        .map((attr) => attr.uri)
+        .nonNulls
+        .toList(growable: false);
     final photoMetadata = PhotoMetadata(
-      photoReference: _getPhotoMetadataReference(photo),
-      width: photo.width.toInt(),
-      height: photo.height.toInt(),
-      attributions: htmlAttrs.length == 1 ? htmlAttrs[0] : '',
+      photoReference: _getPhotoMetadataReference(),
+      width: photo.widthPx.toInt(),
+      height: photo.heightPx.toInt(),
+      attributions: attrs.length == 1 ? attrs[0] : '',
     );
 
     _photosCache[photoMetadata.photoReference] = photo;
@@ -346,7 +322,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     return photoMetadata;
   }
 
-  String _getPhotoMetadataReference(PlacePhoto photo) {
+  String _getPhotoMetadataReference() {
     final num = _runningUid++;
     return "id_${num.toString()}";
   }
@@ -362,14 +338,14 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     );
   }
 
-  inter.PlusCode? _parsePlusCode(PlacePlusCode? plusCode) {
+  inter.PlusCode? _parsePlusCode(places.PlusCode? plusCode) {
     if (plusCode == null) {
       return null;
     }
 
     return inter.PlusCode(
       compoundCode: plusCode.compoundCode ?? '',
-      globalCode: plusCode.globalCode,
+      globalCode: plusCode.globalCode ?? '',
     );
   }
 
@@ -384,34 +360,30 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     );
   }
 
-  inter.OpeningHours? _parseOpeningHours(PlaceOpeningHours? openingHours) {
+  inter.OpeningHours? _parseOpeningHours(places.OpeningHours? openingHours) {
     if (openingHours == null) {
       return null;
     }
 
     return inter.OpeningHours(
-      periods:
-          openingHours.periods?.nonNulls
-              .map(_parsePeriod)
-              .cast<Period>()
-              .toList(growable: false) ??
-          [],
-      weekdayText:
-          openingHours.weekdayText?.nonNulls.cast<String>().toList(
-            growable: false,
-          ) ??
-          [],
+      periods: openingHours.periods
+          .map(_parsePeriod)
+          .cast<Period>()
+          .toList(growable: false),
+      weekdayText: openingHours.weekdayDescriptions.cast<String>().toList(
+        growable: false,
+      ),
     );
   }
 
-  Period _parsePeriod(PlaceOpeningHoursPeriod period) {
+  Period _parsePeriod(places.OpeningHoursPeriod period) {
     return Period(
       open: _parseTimeOfWeek(period.open)!,
       close: _parseTimeOfWeek(period.close),
     );
   }
 
-  TimeOfWeek? _parseTimeOfWeek(PlaceOpeningHoursTime? timeOfWeek) {
+  TimeOfWeek? _parseTimeOfWeek(places.OpeningHoursPoint? timeOfWeek) {
     if (timeOfWeek == null) {
       return null;
     }
@@ -421,8 +393,8 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     return TimeOfWeek(
       day: _parseDayOfWeek(day),
       time: PlaceLocalTime(
-        hours: timeOfWeek.hours.toInt(),
-        minutes: timeOfWeek.minutes.toInt(),
+        hours: timeOfWeek.hour.toInt(),
+        minutes: timeOfWeek.minute.toInt(),
       ),
     );
   }
@@ -451,7 +423,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     int? maxWidth,
     int? maxHeight,
   }) async {
-    PlacePhoto? value = _photosCache[photoMetadata.photoReference];
+    places.Photo? value = _photosCache[photoMetadata.photoReference];
     if (value == null) {
       throw PlatformException(
         code: 'API_ERROR_PHOTO',
@@ -460,20 +432,29 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       );
     }
 
-    final url = value.url;
+    final url = value.uRI;
 
     return FetchPlacePhotoResponse.imageUrl(url);
   }
 }
 
-/// A Place details response returned from PlacesService
-class _GetDetailsResponse {
-  /// Construct a new response
-  const _GetDetailsResponse(this.place, this.status);
-
-  /// The place of the response.
-  final inter.Place? place;
-
-  /// The status of the response.
-  final PlacesServiceStatus? status;
+extension _PriceLevelExtension on PriceLevel {
+  int? get toLevelNumber {
+    if (PriceLevel.FREE == this) {
+      return 0;
+    }
+    if (PriceLevel.INEXPENSIVE == this) {
+      return 1;
+    }
+    if (PriceLevel.MODERATE == this) {
+      return 2;
+    }
+    if (PriceLevel.EXPENSIVE == this) {
+      return 3;
+    }
+    if (PriceLevel.VERY_EXPENSIVE == this) {
+      return 4;
+    }
+    return null;
+  }
 }
