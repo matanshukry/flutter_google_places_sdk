@@ -1,9 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'business_status.g.dart';
+
 /// The business status of a place
 ///
 /// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/Place.BusinessStatus
-@JsonEnum(fieldRename: FieldRename.screamingSnake)
+@JsonEnum(fieldRename: FieldRename.screamingSnake, alwaysCreate: true)
 enum BusinessStatus {
   Operational,
   ClosedTemporarily,
@@ -12,9 +14,9 @@ enum BusinessStatus {
 
   factory BusinessStatus.fromJson(String name) {
     name = name.toLowerCase();
-    for (final value in values) {
-      if (value.name.toLowerCase() == name) {
-        return value;
+    for (final pair in _$BusinessStatusEnumMap.entries) {
+      if (pair.value.toLowerCase() == name) {
+        return pair.key;
       }
     }
     throw ArgumentError.value(name, 'name', 'No enum value with that name');
