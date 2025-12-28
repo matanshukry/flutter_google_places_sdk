@@ -1,3 +1,8 @@
+## 0.2.1
+
+* Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.3`
+* Removing deprecated `AutocompleteService` in favor of `AutocompleteSuggestion`
+
 ## 0.2.0
 
 * No changes, released to a non-dev version
