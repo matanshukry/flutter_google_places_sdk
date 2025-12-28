@@ -1,3 +1,7 @@
+## 0.3.4
+
+* `PlaceField` updated so it can be used with v2
+
 ## 0.3.3
 
 * Added correct parsing for BusinessStatus

@@ -7,25 +7,33 @@ part 'place_field.g.dart';
 /// Ref: https://developers.google.com/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/model/Place.Field
 @JsonEnum(fieldRename: FieldRename.screamingSnake, alwaysCreate: true)
 enum PlaceField {
-  Address,
+  Address(v1Only: true),
   AddressComponents,
   BusinessStatus,
   Id,
-  @JsonValue('LAT_LNG') Location,
+  @JsonValue('LAT_LNG')
+  Location,
   Name,
   OpeningHours,
-  PhoneNumber,
-  PhotoMetadatas,
+  PhoneNumber(v2: NationalPhoneNumber),
+  PhotoMetadatas(v2: Photos),
   PlusCode,
   PriceLevel,
   Rating,
   Types,
-  UserRatingsTotal,
-  @JsonValue('UTC_OFFSET') UTCOffset,
+  UserRatingsTotal(v2: UserRatingCount),
+  @JsonValue('UTC_OFFSET')
+  UTCOffset(v2: UtcOffsetMinutes),
   Viewport,
-  WebsiteUri,
+  WebsiteUri(v2: WebsiteURI),
 
   /// Places (new) API
+  Photos,
+  WebsiteURI,
+  UtcOffsetMinutes,
+  UserRatingCount,
+  NationalPhoneNumber,
+  InternationalPhoneNumber,
   CurbsidePickup,
   CurrentOpeningHours,
   Delivery,
@@ -46,6 +54,8 @@ enum PlaceField {
   Takeout,
   WheelchairAccessibleEntrance;
 
+  const PlaceField({this.v2, this.v1Only = false});
+
   factory PlaceField.fromJson(String name) {
     name = name.toLowerCase();
     for (final value in values) {
@@ -55,6 +65,11 @@ enum PlaceField {
     }
     throw ArgumentError.value(name, 'name', 'No enum value with that name');
   }
+
+  final bool v1Only;
+  final PlaceField? v2;
+
+  PlaceField? get forV2 => v2 ?? (v1Only ? null : this);
 }
 
 extension PlaceFieldValue on PlaceField {
