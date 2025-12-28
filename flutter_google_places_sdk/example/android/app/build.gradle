@@ -11,7 +11,7 @@ localKeystoreProperties.load(new FileInputStream(localKeystorePropertiesFile))
 android {
     namespace 'com.msh.flutter_google_places_sdk_example'
     compileSdkVersion 34
-    ndkVersion "26.1.10909125"
+    ndkVersion "27.0.12077973"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         applicationId "com.msh.flutter_google_places_sdk_example"
-        minSdkVersion 21
+        minSdkVersion flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
