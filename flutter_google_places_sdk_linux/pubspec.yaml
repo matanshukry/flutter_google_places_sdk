@@ -4,7 +4,7 @@ version: 0.2.1
 homepage: https://github.com/matanshukry/flutter_google_places_sdk/tree/master/flutter_google_places_sdk_linux
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
   flutter: ">=1.20.0"
 
 dependencies:
@@ -14,7 +14,7 @@ dependencies:
   flutter_google_places_sdk_http: ^0.2.1
 
 dev_dependencies:
-  flutter_lints: ^5.0.0
+  flutter_lints:: ^6.0.0
 
 flutter:
   plugin:
