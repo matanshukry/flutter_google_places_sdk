@@ -22,9 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: title,
-      theme: ThemeData(
-        primaryColor: Colors.blueAccent,
-      ),
+      theme: ThemeData(primaryColor: Colors.blueAccent),
       home: MyHomePage(),
     );
   }
@@ -32,12 +30,22 @@ class MyApp extends StatelessWidget {
 
 /// Main home page
 class MyHomePage extends StatefulWidget {
+  /// Construct the HomePage
+  const MyHomePage({super.key, this.initOnStart = true});
+
+  /// When true, the relevant classes (e.g. [FlutterGooglePlacesSdk]) will be
+  /// initialized as part of the lifecycle (e.g. initState).
+  /// When false, user will need to click the "Init" button to initialize it.
+  final bool initOnStart;
+
   @override
   State<StatefulWidget> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late final FlutterGooglePlacesSdk _places;
+  FlutterGooglePlacesSdk? _placesVar;
+
+  FlutterGooglePlacesSdk get _places => _placesVar!;
 
   //
   String? _predictLastText;
@@ -46,13 +54,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool _locationBiasEnabled = true;
   LatLngBounds _locationBias = LatLngBounds(
-      southwest: LatLng(lat: 32.0810305, lng: 34.785707),
-      northeast: LatLng(lat: 32.0935937, lng: 34.8013896));
+    southwest: LatLng(lat: 32.0810305, lng: 34.785707),
+    northeast: LatLng(lat: 32.0935937, lng: 34.8013896),
+  );
 
   bool _locationRestrictionEnabled = false;
   LatLngBounds _locationRestriction = LatLngBounds(
-      southwest: LatLng(lat: 32.0583974, lng: 34.7633473),
-      northeast: LatLng(lat: 32.0876885, lng: 34.8040563));
+    southwest: LatLng(lat: 32.0583974, lng: 34.7633473),
+    northeast: LatLng(lat: 32.0876885, lng: 34.8040563),
+  );
 
   List<String> _countries = ['il'];
   bool _countriesEnabled = true;
@@ -64,25 +74,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //
   final TextEditingController _fetchPlaceIdController = TextEditingController();
-  List<PlaceField> _placeFields = [
-    PlaceField.Address,
-    PlaceField.AddressComponents,
-    PlaceField.BusinessStatus,
-    PlaceField.Id,
-    PlaceField.Location,
-    PlaceField.Name,
-    PlaceField.OpeningHours,
-    PlaceField.PhoneNumber,
-    PlaceField.PhotoMetadatas,
-    PlaceField.PlusCode,
-    PlaceField.PriceLevel,
-    PlaceField.Rating,
-    PlaceField.Types,
-    PlaceField.UserRatingsTotal,
-    PlaceField.UTCOffset,
-    PlaceField.Viewport,
-    PlaceField.WebsiteUri,
-  ];
+  List<PlaceField> _placeFields = PlaceField.values;
+
+  // List<PlaceField> _placeFields = [
+  //   PlaceField.Address,
+  //   PlaceField.AddressComponents,
+  //   PlaceField.BusinessStatus,
+  //   PlaceField.Id,
+  //   PlaceField.Location,
+  //   PlaceField.DisplayName,
+  //   PlaceField.OpeningHours,
+  //   PlaceField.NationalPhoneNumber,
+  //   PlaceField.InternationalPhoneNumber,
+  //   PlaceField.Photos,
+  //   PlaceField.PlusCode,
+  //   PlaceField.PriceLevel,
+  //   PlaceField.Rating,
+  //   PlaceField.Types,
+  //   PlaceField.UserRatingCount,
+  //   PlaceField.UtcOffset,
+  //   PlaceField.Viewport,
+  //   PlaceField.WebsiteUri,
+  // ];
 
   bool _fetchingPlace = false;
   dynamic _fetchingPlaceErr;
@@ -98,14 +111,32 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    _places = FlutterGooglePlacesSdk(INITIAL_API_KEY, locale: INITIAL_LOCALE);
+    if (widget.initOnStart) {
+      _doInit();
+    }
+  }
+
+  void _doInit() {
+    if (_placesVar != null) {
+      debugPrint('Warning: Places init called after already initialized!');
+      return;
+    }
+
+    _placesVar = FlutterGooglePlacesSdk(
+      INITIAL_API_KEY,
+      locale: INITIAL_LOCALE,
+    );
     _places.isInitialized().then((value) {
       debugPrint('Places Initialized: $value');
+
+      // Update the state to reflect initialized state
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final initWidgets = _buildInitWidgets();
     final predictionsWidgets = _buildPredictionWidgets();
     final fetchPlaceWidgets = _buildFetchPlaceWidgets();
     final fetchPlacePhotoWidgets = _buildFetchPlacePhotoWidgets();
@@ -114,20 +145,21 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text(title),
         actions: [
           new IconButton(
-              onPressed: _openSettingsModal, icon: const Icon(Icons.settings)),
+            onPressed: _openSettingsModal,
+            icon: const Icon(Icons.settings),
+          ),
         ],
       ),
       body: Padding(
         padding: EdgeInsets.all(30),
         child: ListView(
-          children: predictionsWidgets +
-              [
-                SizedBox(height: 16),
-              ] +
+          children:
+              initWidgets +
+              [SizedBox(height: 16)] +
+              predictionsWidgets +
+              [SizedBox(height: 16)] +
               fetchPlaceWidgets +
-              [
-                SizedBox(height: 16),
-              ] +
+              [SizedBox(height: 16)] +
               fetchPlacePhotoWidgets,
         ),
       ),
@@ -164,9 +196,9 @@ class _MyHomePageState extends State<MyHomePage> {
     _countries = (countries == "")
         ? []
         : countries
-            .split(",")
-            .map((item) => item.trim())
-            .toList(growable: false);
+              .split(",")
+              .map((item) => item.trim())
+              .toList(growable: false);
   }
 
   void _onPredictTextChanged(String value) {
@@ -191,8 +223,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     try {
-      final result = await _places.fetchPlace(_fetchPlaceIdController.text,
-          fields: _placeFields);
+      final result = await _places.fetchPlace(
+        _fetchPlaceIdController.text,
+        fields: _placeFields,
+      );
 
       setState(() {
         _place = result.place;
@@ -230,8 +264,9 @@ class _MyHomePageState extends State<MyHomePage> {
         newSessionToken: false,
         origin: LatLng(lat: 43.12, lng: 95.20),
         locationBias: _locationBiasEnabled ? _locationBias : null,
-        locationRestriction:
-            _locationRestrictionEnabled ? _locationRestriction : null,
+        locationRestriction: _locationRestrictionEnabled
+            ? _locationRestriction
+            : null,
       );
 
       setState(() {
@@ -253,19 +288,25 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildPredictionItem(AutocompletePrediction item) {
     return InkWell(
       onTap: () => _onItemClicked(item),
-      child: Column(children: [
-        Text(item.fullText),
-        Text(item.primaryText + ' - ' + item.secondaryText),
-        const Divider(thickness: 2),
-      ]),
+      child: Column(
+        children: [
+          Text(item.fullText),
+          Text(item.primaryText + ' - ' + item.secondaryText),
+          const Divider(thickness: 2),
+        ],
+      ),
     );
   }
 
   Widget _buildErrorWidget(dynamic err) {
     final theme = Theme.of(context);
     final errorText = err == null ? '' : err.toString();
-    return Text(errorText,
-        style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error));
+    return Text(
+      errorText,
+      style: theme.textTheme.bodySmall?.copyWith(
+        color: theme.colorScheme.error,
+      ),
+    );
   }
 
   List<Widget> _buildFetchPlacePhotoWidgets() {
@@ -338,19 +379,41 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildEnabledOption(
-      bool value, void Function(bool) callback, Widget child) {
+    bool value,
+    void Function(bool) callback,
+    Widget child,
+  ) {
     return Row(
       children: [
         Checkbox(
-            value: value,
-            onChanged: (value) {
-              setState(() {
-                callback(value ?? false);
-              });
-            }),
+          value: value,
+          onChanged: (value) {
+            setState(() {
+              callback(value ?? false);
+            });
+          },
+        ),
         Flexible(child: child),
       ],
     );
+  }
+
+  List<Widget> _buildInitWidgets() {
+    final isInit = _placesVar != null;
+    return [
+      Row(
+        children: [
+          isInit
+              ? Icon(Icons.check, color: Colors.green)
+              : Icon(Icons.close, color: Colors.red),
+          Text('Initialized: ' + (isInit ? 'true' : 'false')),
+        ],
+      ),
+      ElevatedButton(
+        onPressed: isInit ? null : _doInit,
+        child: Text('Initialize!'),
+      ),
+    ];
   }
 
   List<Widget> _buildPredictionWidgets() {
@@ -376,8 +439,12 @@ class _MyHomePageState extends State<MyHomePage> {
       // -- Place Types
       DropdownButton<PlaceTypeFilter>(
         items: PlaceTypeFilter.values
-            .map((item) => DropdownMenuItem<PlaceTypeFilter>(
-                child: Text(item.value), value: item))
+            .map(
+              (item) => DropdownMenuItem<PlaceTypeFilter>(
+                child: Text(item.value),
+                value: item,
+              ),
+            )
             .toList(growable: false),
         value: _placeTypesFilter.isEmpty ? null : _placeTypesFilter[0],
         onChanged: _onPlaceTypeFilterChanged,
@@ -426,9 +493,7 @@ class _MyHomePageState extends State<MyHomePage> {
             .map(_buildPredictionItem)
             .toList(growable: false),
       ),
-      Image(
-        image: FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
-      ),
+      Image(image: FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE),
     ];
   }
 
@@ -438,12 +503,16 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return gpi.GooglePlacesImg(
-        photoMetadata: _placePhotoMetadata!, placePhotoResponse: placePhoto);
+      photoMetadata: _placePhotoMetadata!,
+      placePhotoResponse: placePhoto,
+    );
   }
 
   void _openSettingsModal() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => SettingsPage(_places)));
+      context,
+      MaterialPageRoute(builder: (context) => SettingsPage(_places)),
+    );
   }
 }
 
@@ -466,13 +535,13 @@ class LocationField extends StatefulWidget {
   final ActionWithBounds onChanged;
 
   /// Create a LocationField
-  const LocationField(
-      {Key? key,
-      required this.label,
-      required this.enabled,
-      required this.value,
-      required this.onChanged})
-      : super(key: key);
+  const LocationField({
+    Key? key,
+    required this.label,
+    required this.enabled,
+    required this.value,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _LocationFieldState();
@@ -489,13 +558,17 @@ class _LocationFieldState extends State<LocationField> {
     super.initState();
 
     _ctrlNeLat = TextEditingController.fromValue(
-        TextEditingValue(text: widget.value.northeast.lat.toString()));
+      TextEditingValue(text: widget.value.northeast.lat.toString()),
+    );
     _ctrlNeLng = TextEditingController.fromValue(
-        TextEditingValue(text: widget.value.northeast.lng.toString()));
+      TextEditingValue(text: widget.value.northeast.lng.toString()),
+    );
     _ctrlSwLat = TextEditingController.fromValue(
-        TextEditingValue(text: widget.value.southwest.lat.toString()));
+      TextEditingValue(text: widget.value.southwest.lat.toString()),
+    );
     _ctrlSwLng = TextEditingController.fromValue(
-        TextEditingValue(text: widget.value.southwest.lng.toString()));
+      TextEditingValue(text: widget.value.southwest.lng.toString()),
+    );
   }
 
   @override
@@ -506,16 +579,16 @@ class _LocationFieldState extends State<LocationField> {
         decoration: InputDecoration(
           enabled: widget.enabled,
           labelText: widget.label,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
         ),
-        child: Row(children: [
-          _buildField("NE/Lat", _ctrlNeLat),
-          _buildField("NE/Lng", _ctrlNeLng),
-          _buildField("SW/Lat", _ctrlSwLat),
-          _buildField("SW/Lng", _ctrlSwLng),
-        ]),
+        child: Row(
+          children: [
+            _buildField("NE/Lat", _ctrlNeLat),
+            _buildField("NE/Lng", _ctrlNeLng),
+            _buildField("SW/Lat", _ctrlSwLat),
+            _buildField("SW/Lng", _ctrlSwLng),
+          ],
+        ),
       ),
     );
   }
@@ -524,11 +597,11 @@ class _LocationFieldState extends State<LocationField> {
     return Flexible(
       child: TextFormField(
         enabled: widget.enabled,
-        keyboardType:
-            TextInputType.numberWithOptions(signed: true, decimal: true),
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
-        ],
+        keyboardType: TextInputType.numberWithOptions(
+          signed: true,
+          decimal: true,
+        ),
+        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[\d.]'))],
         onChanged: (value) => _onValueChanged(controller, value),
         decoration: InputDecoration(label: Text(label)),
         // validator: _boundsValidator,
@@ -542,8 +615,9 @@ class _LocationFieldState extends State<LocationField> {
     final neLat = double.parse(ctrlNELat.value.text);
 
     LatLngBounds bounds = LatLngBounds(
-        southwest: LatLng(lat: 0.0, lng: 0.0),
-        northeast: LatLng(lat: neLat, lng: 0.0));
+      southwest: LatLng(lat: 0.0, lng: 0.0),
+      northeast: LatLng(lat: neLat, lng: 0.0),
+    );
 
     widget.onChanged(bounds);
   }
