@@ -1,3 +1,8 @@
+## 0.2.2
+
+* Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.4`
+* Upgrading `com.google.android.libraries.places:places` version to `5.1.1`
+
 ## 0.2.1
 
 * Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.3`
