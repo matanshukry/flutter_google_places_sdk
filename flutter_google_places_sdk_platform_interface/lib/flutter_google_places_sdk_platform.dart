@@ -9,13 +9,15 @@ abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
 
   /// "Powered by google" image that should be used when background is white
   static const AssetImage ASSET_POWERED_BY_GOOGLE_ON_WHITE = AssetImage(
-      'assets/google/powered_by_google_on_white.png',
-      package: 'flutter_google_places_sdk_platform_interface');
+    'assets/google/powered_by_google_on_white.png',
+    package: 'flutter_google_places_sdk_platform_interface',
+  );
 
   /// "Powered by google" image that should be used when background is not white
   static const AssetImage ASSET_POWERED_BY_GOOGLE_ON_NON_WHITE = AssetImage(
-      'assets/google/powered_by_google_on_non_white.png',
-      package: 'flutter_google_places_sdk_platform_interface');
+    'assets/google/powered_by_google_on_non_white.png',
+    package: 'flutter_google_places_sdk_platform_interface',
+  );
 
   static final Object _token = Object();
 
@@ -40,13 +42,13 @@ abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
     throw UnimplementedError('deinitialize() has not been implemented.');
   }
 
-  /// Initializes Places for the given application context with the given API key. Use [useNewApi] to enable the Places API (New) in the SDK
+  /// Initializes Places for the given application context with the given API key.
   ///
   /// All Places API responses are localized using the device's locale.
   /// This method should only be called once prior to using the Places API.
   /// You may call this method again to update the API key used;
   /// if so, all widgets and instances of PlacesClient will now use this new key.
-  Future<void> initialize(String apiKey, {Locale? locale, bool? useNewApi}) {
+  Future<void> initialize(String apiKey, {Locale? locale}) {
     throw UnimplementedError('initialize() has not been implemented.');
   }
 
@@ -56,7 +58,7 @@ abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
   }
 
   /// Updates the settings of the places client with the given API key and locale.
-  Future<void> updateSettings(String apiKey, {Locale? locale, bool? useNewApi}) {
+  Future<void> updateSettings(String apiKey, {Locale? locale}) {
     throw UnimplementedError('initialize() has not been implemented.');
   }
 
@@ -86,7 +88,8 @@ abstract class FlutterGooglePlacesSdkPlatform extends PlatformInterface {
     LatLngBounds? locationRestriction,
   }) {
     throw UnimplementedError(
-        'findAutocompletePredictions() has not been implemented.');
+      'findAutocompletePredictions() has not been implemented.',
+    );
   }
 
   /// Fetches the details of a place.

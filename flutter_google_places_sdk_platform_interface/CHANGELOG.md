@@ -1,3 +1,10 @@
+## 0.4.0
+
+* Starting to support v2/new-api only - removing useNewApi.
+* Formatting
+* `fetchPlacePhoto` - photo reference only for photoMetadata (cached on the other side)
+* `PlaceField` - Removing v1/v2 and specific mapping - leaving it to platform implementation
+
 ## 0.3.4
 
 * `PlaceField` updated so it can be used with v2

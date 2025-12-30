@@ -43,7 +43,6 @@ void main() {
         <Matcher>[
           isMethodCall('initialize', arguments: <String, Object>{
             'apiKey': testKey,
-            'useNewApi': false,
             'locale': {
               'country': null,
               'language': 'en',
@@ -103,7 +102,7 @@ void main() {
 
     test('fetchPlace', () async {
       const placeId = 'my-test-place-id';
-      const testFields = [PlaceField.Location, PlaceField.Address];
+      const testFields = [PlaceField.Location, PlaceField.FormattedAddress];
       const newSessionToken = true;
       await places.fetchPlace(
         placeId,
@@ -183,7 +182,7 @@ void main() {
           LatLngBounds(southwest: LatLng(lat: 49.28, lng: 3921.38), northeast: LatLng(lat: 38.64, lng: 23.32));
       await places.searchByText(
         testQuery,
-        fields: [PlaceField.Id, PlaceField.Name],
+        fields: [PlaceField.Id, PlaceField.DisplayName],
         openNow: true,
         regionCode: 'eu',
         rankPreference: TextSearchRankPreference.Distance,
@@ -226,7 +225,7 @@ void main() {
         radius: 1000,
       );
       await places.searchNearby(
-          fields: [PlaceField.Id, PlaceField.Name],
+          fields: [PlaceField.Id, PlaceField.DisplayName],
           locationRestriction: locationRestriction,
           includedTypes: types,
           includedPrimaryTypes: types,

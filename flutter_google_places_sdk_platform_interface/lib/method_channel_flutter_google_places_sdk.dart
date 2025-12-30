@@ -19,8 +19,8 @@ class FlutterGooglePlacesSdkMethodChannel
   }
 
   @override
-  Future<void> initialize(String apiKey, {Locale? locale, bool? useNewApi}) {
-    return _invokeForSettings('initialize', apiKey, locale, useNewApi);
+  Future<void> initialize(String apiKey, {Locale? locale}) {
+    return _invokeForSettings('initialize', apiKey, locale);
   }
 
   @override
@@ -29,25 +29,23 @@ class FlutterGooglePlacesSdkMethodChannel
   }
 
   @override
-  Future<void> updateSettings(String apiKey, {Locale? locale, bool? useNewApi}) {
-    return _invokeForSettings('updateSettings', apiKey, locale, useNewApi);
+  Future<void> updateSettings(
+    String apiKey, {
+    Locale? locale,
+  }) {
+    return _invokeForSettings('updateSettings', apiKey, locale);
   }
 
   Future<void> _invokeForSettings(
     String methodName,
     String apiKey,
     Locale? locale,
-    bool? useNewApi,
   ) {
     return _channel.invokeMethod<void>(methodName, {
       'apiKey': apiKey,
-      'useNewApi': useNewApi ?? false,
       'locale': locale == null
           ? null
-          : {
-              'country': locale.countryCode,
-              'language': locale.languageCode,
-            },
+          : {'country': locale.countryCode, 'language': locale.languageCode},
     });
   }
 
@@ -66,24 +64,27 @@ class FlutterGooglePlacesSdkMethodChannel
     if (query.isEmpty) {
       throw ArgumentError('Argument query can not be empty');
     }
-    return _channel.invokeListMethod<Map<dynamic, dynamic>>(
-      'findAutocompletePredictions',
-      {
-        'query': query,
-        'countries': countries ?? [],
-        'typesFilter': placeTypesFilter,
-        'newSessionToken': newSessionToken,
-        'origin': origin?.toJson(),
-        'locationBias': locationBias?.toJson(),
-        'locationRestriction': locationRestriction?.toJson(),
-      },
-    ).then(_responseFromResult);
+    return _channel
+        .invokeListMethod<Map<dynamic, dynamic>>(
+          'findAutocompletePredictions',
+          {
+            'query': query,
+            'countries': countries ?? [],
+            'typesFilter': placeTypesFilter,
+            'newSessionToken': newSessionToken,
+            'origin': origin?.toJson(),
+            'locationBias': locationBias?.toJson(),
+            'locationRestriction': locationRestriction?.toJson(),
+          },
+        )
+        .then(_responseFromResult);
   }
 
   FindAutocompletePredictionsResponse _responseFromResult(
     List<Map<dynamic, dynamic>>? value,
   ) {
-    final items = value
+    final items =
+        value
             ?.map((item) => item.cast<String, dynamic>())
             .map((map) => AutocompletePrediction.fromJson(map))
             .toList(growable: false) ??
@@ -98,20 +99,20 @@ class FlutterGooglePlacesSdkMethodChannel
     bool? newSessionToken,
     String? regionCode,
   }) {
-    return _channel.invokeMapMethod(
-      'fetchPlace',
-      {
-        'placeId': placeId,
-        'fields': fields.map((e) => e.value).toList(),
-        'newSessionToken': newSessionToken,
-        'regionCode': regionCode,
-      },
-    ).then(_responseFromPlaceDetails);
+    return _channel
+        .invokeMapMethod('fetchPlace', {
+          'placeId': placeId,
+          'fields': fields.map((field) => field.name).toList(),
+          'newSessionToken': newSessionToken,
+          'regionCode': regionCode,
+        })
+        .then(_responseFromPlaceDetails);
   }
 
   FetchPlaceResponse _responseFromPlaceDetails(dynamic value) {
-    final Place? place =
-        value == null ? null : Place.fromJson(value.cast<String, dynamic>());
+    final Place? place = value == null
+        ? null
+        : Place.fromJson(value.cast<String, dynamic>());
     return FetchPlaceResponse(place);
   }
 
@@ -121,18 +122,13 @@ class FlutterGooglePlacesSdkMethodChannel
     int? maxWidth,
     int? maxHeight,
   }) {
-    return _channel.invokeMethod(
-      'fetchPlacePhoto',
-      {
-        'photoMetadata': {
+    return _channel
+        .invokeMethod('fetchPlacePhoto', {
           'photoReference': photoMetadata.photoReference,
-          'width': photoMetadata.width,
-          'height': photoMetadata.height,
-        },
-        'maxWidth': maxWidth,
-        'maxHeight': maxHeight,
-      },
-    ).then(_responseFromPlacePhoto);
+          'maxWidth': maxWidth,
+          'maxHeight': maxHeight,
+        })
+        .then(_responseFromPlacePhoto);
   }
 
   FetchPlacePhotoResponse _responseFromPlacePhoto(dynamic value) {
@@ -170,29 +166,33 @@ class FlutterGooglePlacesSdkMethodChannel
     if (textQuery.isEmpty) {
       throw ArgumentError('Argument query can not be empty');
     }
-    return _channel.invokeListMethod<Map<dynamic, dynamic>>(
-      'searchByText',
-      {
-        'textQuery': textQuery,
-        'fields': fields.map((e) => e.value).toList(),
-        'includedType': includedType,
-        'maxResultCount': maxResultCount,
-        'locationBias': locationBias?.toJson(),
-        'locationRestriction': locationRestriction?.toJson(),
-        'minRating': minRating,
-        'openNow': openNow,
-        'priceLevels': priceLevels,
-        'rankPreference': rankPreference?.value,
-        'regionCode': regionCode,
-        'strictTypeFiltering': strictTypeFiltering,
-      },
-    ).then(_responseFromTextSearch);
+    return _channel
+        .invokeListMethod<Map<dynamic, dynamic>>('searchByText', {
+          'textQuery': textQuery,
+          'fields': fields.map((e) => e.value).toList(),
+          'includedType': includedType,
+          'maxResultCount': maxResultCount,
+          'locationBias': locationBias?.toJson(),
+          'locationRestriction': locationRestriction?.toJson(),
+          'minRating': minRating,
+          'openNow': openNow,
+          'priceLevels': priceLevels,
+          'rankPreference': rankPreference?.value,
+          'regionCode': regionCode,
+          'strictTypeFiltering': strictTypeFiltering,
+        })
+        .then(_responseFromTextSearch);
   }
 
-  SearchByTextResponse _responseFromTextSearch(List<Map<dynamic, dynamic>>? value) {
+  SearchByTextResponse _responseFromTextSearch(
+    List<Map<dynamic, dynamic>>? value,
+  ) {
     final items =
-        value?.map((item) => item.cast<String, dynamic>()).map((map) => Place.fromJson(map)).toList(growable: false) ??
-            [];
+        value
+            ?.map((item) => item.cast<String, dynamic>())
+            .map((map) => Place.fromJson(map))
+            .toList(growable: false) ??
+        [];
     return SearchByTextResponse(items);
   }
 
@@ -208,26 +208,30 @@ class FlutterGooglePlacesSdkMethodChannel
     String? regionCode,
     int? maxResultCount,
   }) {
-    return _channel.invokeListMethod<Map<dynamic, dynamic>>(
-      'searchNearby',
-      {
-        'fields': fields.map((e) => e.value).toList(),
-        'locationRestriction': locationRestriction.toJson(),
-        'includedTypes': includedTypes,
-        'includedPrimaryTypes': includedPrimaryTypes,
-        'excludedTypes': excludedTypes,
-        'excludedPrimaryTypes': excludedPrimaryTypes,
-        'rankPreference': rankPreference?.value,
-        'regionCode': regionCode,
-        'maxResultCount': maxResultCount,
-      },
-    ).then(_responseFromNearbySearch);
+    return _channel
+        .invokeListMethod<Map<dynamic, dynamic>>('searchNearby', {
+          'fields': fields.map((e) => e.value).toList(),
+          'locationRestriction': locationRestriction.toJson(),
+          'includedTypes': includedTypes,
+          'includedPrimaryTypes': includedPrimaryTypes,
+          'excludedTypes': excludedTypes,
+          'excludedPrimaryTypes': excludedPrimaryTypes,
+          'rankPreference': rankPreference?.value,
+          'regionCode': regionCode,
+          'maxResultCount': maxResultCount,
+        })
+        .then(_responseFromNearbySearch);
   }
 
-  SearchNearbyResponse _responseFromNearbySearch(List<Map<dynamic, dynamic>>? value) {
+  SearchNearbyResponse _responseFromNearbySearch(
+    List<Map<dynamic, dynamic>>? value,
+  ) {
     final items =
-        value?.map((item) => item.cast<String, dynamic>()).map((map) => Place.fromJson(map)).toList(growable: false) ??
-            [];
+        value
+            ?.map((item) => item.cast<String, dynamic>())
+            .map((map) => Place.fromJson(map))
+            .toList(growable: false) ??
+        [];
     return SearchNearbyResponse(items);
   }
 }
