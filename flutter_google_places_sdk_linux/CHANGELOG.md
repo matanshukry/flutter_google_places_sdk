@@ -1,3 +1,8 @@
+## 0.3.0
+
+* Upgrading `flutter_google_places_sdk_platform_interface` to `0.4.0`
+* Upgrading `flutter_google_places_sdk_http` to `0.3.0`
+
 ## 0.2.2
 
 * Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.4`
