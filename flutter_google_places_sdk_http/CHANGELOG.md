@@ -1,3 +1,7 @@
+## 0.2.2
+
+* Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.4`
+
 ## 0.2.1
 
 * Upgrading `freezed_annotation` to `^3.0.0`
