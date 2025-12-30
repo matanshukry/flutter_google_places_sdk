@@ -1,3 +1,14 @@
+## 0.3.0
+
+* Upgrading `flutter_google_places_sdk_platform_interface` to `0.4.0`
+* Upgraded kotlin version to `2.2.0`
+* Photos metadata is now cached on the android side rather then re-created
+* Api v1 is no longer supported - v2 only
+
+## 0.2.3
+
+* Fixes build errors in 0.2.2 - please skip 0.2.2 and use this version
+
 ## 0.2.2
 
 * Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.4`
