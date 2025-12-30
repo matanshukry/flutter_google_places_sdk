@@ -1,3 +1,13 @@
+## 0.4.3
+
+* Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.4`
+* Upgrading `flutter_google_places_sdk_ios` to `0.2.2`
+* Upgrading `flutter_google_places_sdk_web` to `0.2.2`
+* Upgrading `flutter_google_places_sdk_android` to `0.2.2`
+* Upgrading `flutter_google_places_sdk_windows` to `0.2.2`
+* Upgrading `flutter_google_places_sdk_linux` to `0.2.2`
+* Upgrading `flutter_google_places_sdk_macos` to `0.2.2`
+
 ## 0.4.2+1
 
 * Upgrading `flutter_google_places_sdk_platform_interface` to `0.3.2+1` (new field types)
