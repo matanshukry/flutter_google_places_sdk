@@ -50,11 +50,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   }
 
   @override
-  Future<void> initialize(
-    String apiKey, {
-    Locale? locale,
-    bool? useNewApi,
-  }) async {
+  Future<void> initialize(String apiKey, {Locale? locale}) async {
     if (_elementInjected) {
       return;
     }
@@ -89,11 +85,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
   }
 
   @override
-  Future<void> updateSettings(
-    String apiKey, {
-    Locale? locale,
-    bool? useNewApi,
-  }) async {
+  Future<void> updateSettings(String apiKey, {Locale? locale}) async {
     if (locale != null) {
       _language = locale.languageCode;
     }
@@ -182,17 +174,27 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     return FetchPlaceResponse(respPlace);
   }
 
-  PlaceField? _mapToNew(PlaceField field) => switch (field) {
-    // PlaceField.OpeningHours => PlaceField.CurrentOpeningHours,
-    _ => field.v2,
-  };
-
   String? _mapField(PlaceField field) {
-    final mapped = _mapToNew(field);
-    if (mapped == null) {
-      return null;
-    }
-    final name = mapped.name;
+    return switch (field) {
+      PlaceField.FormattedAddressAdr => 'adrFormatAddress',
+      PlaceField.UtcOffset => 'utcOffsetMinutes',
+      PlaceField.OpeningHours => 'regularOpeningHours',
+      PlaceField.CurrentOpeningHours => 'regularOpeningHours',
+      // SecondaryOpeningHours just don't exist on the javascript api;
+      // we're falling back to the regularOpeningHours as best-case scenario
+      PlaceField.SecondaryOpeningHours => 'regularOpeningHours',
+      PlaceField.WebsiteUri => 'websiteURI',
+      PlaceField.CurbsidePickup => 'hasCurbsidePickup',
+      PlaceField.Delivery => 'hasDelivery',
+      PlaceField.DineIn => 'hasDineIn',
+      PlaceField.Reservable => 'isReservable',
+      PlaceField.Takeout => 'hasTakeout',
+      PlaceField.IconMaskUrl => 'svgIconMaskURI',
+      _ => _UpperCamelCaseToLowerCamelCase(field.name),
+    };
+  }
+
+  String _UpperCamelCaseToLowerCamelCase(String name) {
     final first = name[0].toLowerCase();
     final rest = name.substring(1);
     return first + rest;
@@ -205,6 +207,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     final fieldsMapped = fields
         .map(this._mapField)
         .nonNulls
+        .toSet() // Distinct
         .map((str) => str.toJS)
         .toList(growable: false)
         .toJS;
@@ -242,7 +245,7 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
       name: place.displayName,
       nameLanguageCode: null,
       openingHours: _parseOpeningHours(place.openingHours),
-      phoneNumber: place.internationalPhoneNumber,
+      phoneNumber: place.nationalPhoneNumber,
       photoMetadatas: place.photos
           ?.map((photo) => _parsePhotoMetadata(photo))
           .cast<PhotoMetadata>()

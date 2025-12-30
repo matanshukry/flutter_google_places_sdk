@@ -1,3 +1,9 @@
+## 0.3.0
+
+* Upgrading `flutter_google_places_sdk_platform_interface` to `0.4.0`
+  * No longer supporting the old api - new api only now 
+* Places mapping are now on the web-implementation side
+
 ## 0.2.2
 
 * Updated places to use the new google places api, `Place.fetchFields`
