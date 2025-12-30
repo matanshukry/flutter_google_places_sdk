@@ -1,6 +1,6 @@
 name: flutter_google_places_sdk_ios
 description: The iOS implementation of Flutter plugin for google places sdk
-version: 0.2.0
+version: 0.2.2
 homepage: https://github.com/matanshukry/flutter_google_places_sdk/tree/master/flutter_google_places_sdk_ios
 
 environment:
@@ -10,13 +10,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_google_places_sdk_platform_interface: ^0.3.1+1
+  flutter_google_places_sdk_platform_interface: ^0.3.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: ^5.4.5
-  flutter_lints:: ^6.0.0
+  mockito: ^5.6.1
+  flutter_lints: ^6.0.0
 
 flutter:
   plugin:
