@@ -118,6 +118,13 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
         "locationRestriction is not supported: https://issuetracker.google.com/issues/36219203",
       );
     }
+
+    // On Web, AutocompleteSessionToken must be explicitly created.
+    // Create a new token if requested or if none exists.
+    if (newSessionToken == true || _lastSessionToken == null) {
+      _lastSessionToken = AutocompleteSessionToken();
+    }
+
     final prom =
         AutocompleteSuggestion.fetchAutocompleteSuggestions(
               AutocompleteRequest()
@@ -171,6 +178,9 @@ class FlutterGooglePlacesSdkWebPlugin extends FlutterGooglePlacesSdkPlatform {
     String? regionCode,
   }) async {
     final respPlace = await _getDetails(placeId, fields);
+    // End the session after fetching a place (billing optimization).
+    // The next autocomplete call will create a new session token.
+    _lastSessionToken = null;
     return FetchPlaceResponse(respPlace);
   }
 
