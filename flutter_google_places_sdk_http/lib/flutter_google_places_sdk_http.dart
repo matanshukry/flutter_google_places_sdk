@@ -28,7 +28,7 @@ class FlutterGooglePlacesSdkHttpPlugin
   }
 
   @override
-  Future<void> initialize(String apiKey, {Locale? locale}) async {
+  Future<void> initialize(String apiKey, {Locale? locale, bool useNewApi = false}) async {
     _apiKey = apiKey;
     _locale = locale;
   }
@@ -37,7 +37,7 @@ class FlutterGooglePlacesSdkHttpPlugin
   Future<bool?> isInitialized() async => _apiKey != null;
 
   @override
-  Future<void> updateSettings(String apiKey, {Locale? locale}) async {
+  Future<void> updateSettings(String apiKey, {Locale? locale, bool? useNewApi}) async {
     _apiKey = apiKey;
     if (locale != null) {
       _locale = locale;

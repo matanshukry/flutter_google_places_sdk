@@ -28,8 +28,9 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
         case METHOD_INITIALIZE:
             let args = call.arguments as? Dictionary<String,Any>
             let apiKey = args?["apiKey"] as! String?
+            let useNewApi = args?["useNewApi"] as? Bool ?? false
             // we can't do anything with the locale so no need to read it
-            initialize(apiKey: apiKey)
+            initialize(apiKey: apiKey, useNewApi: useNewApi)
             result(nil)
         case METHOD_DEINITIALIZE:
             // nothing to do
@@ -345,8 +346,10 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
         return CLLocation(latitude: lat, longitude: lng)
     }
     
-    private func initialize(apiKey: String?) {
+    private func initialize(apiKey: String?, useNewApi: Bool) {
         GMSPlacesClient.provideAPIKey(apiKey ?? "")
         placesClient = GMSPlacesClient.shared()
+        // Note: useNewApi is not directly supported in iOS SDK, 
+        // the SDK version determines which API is used
     }
 }

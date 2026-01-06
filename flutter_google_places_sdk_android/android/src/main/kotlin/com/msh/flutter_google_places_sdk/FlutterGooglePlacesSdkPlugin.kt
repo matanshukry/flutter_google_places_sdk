@@ -61,7 +61,8 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                 val apiKey = call.argument<String>("apiKey")
                 val localeMap = call.argument<Map<String, Any>>("locale")
                 val locale = readLocale(localeMap)
-                initialize(apiKey, locale)
+                val useNewApi = call.argument<Boolean>("useNewApi") ?: false
+                initialize(apiKey, locale, useNewApi)
                 result.success(null)
             }
 
@@ -69,7 +70,8 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                 val apiKey = call.argument<String>("apiKey")
                 val localeMap = call.argument<Map<String, Any>>("locale")
                 val locale = readLocale(localeMap)
-                updateSettings(apiKey, locale)
+                val useNewApi = call.argument<Boolean>("useNewApi")
+                updateSettings(apiKey, locale, useNewApi)
                 result.success(null)
             }
 
@@ -517,13 +519,17 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
         return Locale(language, country)
     }
 
-    private fun initialize(apiKey: String?, locale: Locale?) {
-        updateSettings(apiKey, locale)
+    private fun initialize(apiKey: String?, locale: Locale?, useNewApi: Boolean) {
+        updateSettings(apiKey, locale, useNewApi)
         client = Places.createClient(applicationContext)
     }
 
-    private fun updateSettings(apiKey: String?, locale: Locale?) {
-        Places.initializeWithNewPlacesApiEnabled(applicationContext, apiKey ?: "", locale)
+    private fun updateSettings(apiKey: String?, locale: Locale?, useNewApi: Boolean?) {
+        if (useNewApi == true) {
+            Places.initializeWithNewPlacesApiEnabled(applicationContext, apiKey ?: "", locale)
+        } else {
+            Places.initialize(applicationContext, apiKey ?: "", locale)
+        }
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
