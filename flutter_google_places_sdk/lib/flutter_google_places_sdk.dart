@@ -69,7 +69,7 @@ class FlutterGooglePlacesSdk {
 
   Future<void> _ensureInitialized() {
     return _initialization ??=
-        platform.initialize(apiKey, locale: locale, useNewApi: _useNewApi)
+        platform.initialize(apiKey, locale: locale)
           ..catchError((dynamic err) {
             print('FlutterGooglePlacesSdk::_ensureInitialized error: $err');
             _initialization = null;
@@ -152,6 +152,6 @@ class FlutterGooglePlacesSdk {
     _useNewApi = useNewApi ?? _useNewApi;
 
     return _addMethodCall(() => platform.updateSettings(_apiKey,
-        locale: locale, useNewApi: _useNewApi));
+        locale: locale));
   }
 }

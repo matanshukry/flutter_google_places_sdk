@@ -10,13 +10,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_google_places_sdk_platform_interface: ^0.3.4
+  flutter_google_places_sdk_platform_interface: ^0.4.0
   flutter_google_places_sdk_ios: ^0.2.2
-  flutter_google_places_sdk_web: ^0.2.2
-  flutter_google_places_sdk_android: ^0.2.2
-  flutter_google_places_sdk_windows: ^0.2.2
-  flutter_google_places_sdk_linux: ^0.2.2
-  flutter_google_places_sdk_macos: ^0.2.2
+  flutter_google_places_sdk_web: ^0.3.0
+  flutter_google_places_sdk_android: ^0.3.0
+  flutter_google_places_sdk_windows: ^0.3.0
+  flutter_google_places_sdk_linux: ^0.3.0
+  flutter_google_places_sdk_macos: ^0.3.0
+
+
+dependency_overrides:
+  flutter_google_places_sdk_platform_interface: ^0.4.0
+
 
 dev_dependencies:
   flutter_test:
