@@ -5,7 +5,7 @@ part 'place_autocomplete_term.g.dart';
 
 /// Autocomplete Term as returned from the google maps api.
 @freezed
-class PlaceAutocompleteTerm with _$PlaceAutocompleteTerm {
+sealed class PlaceAutocompleteTerm with _$PlaceAutocompleteTerm {
   /// Construct a [PlaceAutocompleteTerm] object.
   const factory PlaceAutocompleteTerm({
     /// Defines the start position of this term in the description, measured in Unicode characters.
