@@ -18,6 +18,11 @@ dependencies:
   flutter_google_places_sdk_linux: ^0.3.0
   flutter_google_places_sdk_macos: ^0.3.0
 
+
+dependency_overrides:
+  flutter_google_places_sdk_platform_interface: ^0.4.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
