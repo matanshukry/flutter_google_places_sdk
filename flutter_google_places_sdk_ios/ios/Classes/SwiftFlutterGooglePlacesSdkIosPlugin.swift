@@ -289,7 +289,7 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
         case "TYPES": return GMSPlaceField.types
         case "USER_RATINGS_TOTAL": return GMSPlaceField.userRatingsTotal
         case "UTC_OFFSET": return GMSPlaceField.utcOffsetMinutes
-        case "VIEWPORT": return GMSPlaceField.viewportInfo
+        case "VIEWPORT": return GMSPlaceField.viewport
         case "WEBSITE_URI": return GMSPlaceField.website
         default:
             fatalError("Invalid placeField: \(it)")
