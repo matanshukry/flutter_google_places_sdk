@@ -8,7 +8,7 @@ part 'places_autocomplete_response.g.dart';
 
 /// Response return from an api call to google places sdk.
 @freezed
-class PlacesAutocompleteResponse with _$PlacesAutocompleteResponse {
+sealed class PlacesAutocompleteResponse with _$PlacesAutocompleteResponse {
   /// Construct a new response object.
   const factory PlacesAutocompleteResponse({
     /// Contains an array of predictions.

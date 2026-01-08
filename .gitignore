@@ -51,3 +51,11 @@ build/
 # Generated dart files
 *.g.dart
 *.freezed.dart
+
+# Exception: commit generated files for platform_interface (needed for git dependencies)
+!flutter_google_places_sdk_platform_interface/lib/src/types/*.g.dart
+!flutter_google_places_sdk_platform_interface/lib/src/types/*.freezed.dart
+
+# Exception: commit generated files for http package (needed for git dependencies)
+!flutter_google_places_sdk_http/lib/types/**/*.g.dart
+!flutter_google_places_sdk_http/lib/types/**/*.freezed.dart
