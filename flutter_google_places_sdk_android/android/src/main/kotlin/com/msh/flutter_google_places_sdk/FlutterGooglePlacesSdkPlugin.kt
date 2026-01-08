@@ -525,11 +525,11 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun updateSettings(apiKey: String?, locale: Locale?, useNewApi: Boolean?) {
-        if (useNewApi == true) {
-            Places.initializeWithNewPlacesApiEnabled(applicationContext, apiKey ?: "", locale)
-        } else {
-            Places.initialize(applicationContext, apiKey ?: "", locale)
+        // SDK 5.0+ only supports the new Places API, always use initializeWithNewPlacesApiEnabled
+        if (Places.isInitialized()) {
+            Places.deinitialize()
         }
+        Places.initializeWithNewPlacesApiEnabled(applicationContext, apiKey ?: "", locale)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {

@@ -43,7 +43,7 @@ android {
         test.java.srcDirs += "src/test/kotlin"
     }
     defaultConfig {
-        minSdk = 21
+        minSdk = 24
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
