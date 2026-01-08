@@ -35,7 +35,7 @@ import java.util.Locale
 
 /** FlutterGooglePlacesSdkPlugin */
 class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
-    private lateinit var client: PlacesClient
+    private var client: PlacesClient? = null
     private lateinit var channel: MethodChannel
     private lateinit var applicationContext: Context
 
@@ -43,6 +43,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
     private var runningUid = 1
 
     private var lastSessionToken: AutocompleteSessionToken? = null
+    private var initializedApiKey: String? = null
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         onAttachedToEngine(binding.applicationContext, binding.binaryMessenger)
@@ -76,6 +77,8 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
             }
 
             METHOD_DEINITIALIZE -> {
+                client = null
+                initializedApiKey = null
                 Places.deinitialize()
                 result.success(null)
             }
@@ -105,7 +108,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                     .setSessionToken(sessionToken)
                     .setOrigin(origin)
                     .build()
-                client.findAutocompletePredictions(request).addOnCompleteListener { task ->
+                client!!.findAutocompletePredictions(request).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         lastSessionToken = request.sessionToken
                         val resultList = responseToList(task.result)
@@ -132,7 +135,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                     .setSessionToken(getSessionToken(newSessionToken == true))
                     .setRegionCode(regionCode)
                     .build()
-                client.fetchPlace(request).addOnCompleteListener { task ->
+                client!!.fetchPlace(request).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val place = placeToMap(task.result?.place)
                         print("FetchPlace Result: $place")
@@ -158,7 +161,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                     .setMaxWidth(maxWidth)
                     .setMaxHeight(maxHeight)
                     .build()
-                client.fetchResolvedPhotoUri(request).addOnCompleteListener { task ->
+                client!!.fetchResolvedPhotoUri(request).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val photoUri = task.result?.uri?.toString()
                         print("fetchPlacePhoto Result: $photoUri")
@@ -205,7 +208,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                     .setRegionCode(regionCode)
                     .setStrictTypeFiltering(strictTypeFiltering)
                     .build()
-                client.searchByText(request).addOnCompleteListener { task ->
+                client!!.searchByText(request).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val places = task.result?.places?.map { placeToMap(it) }
                         print("searchByText Result: $places")
@@ -249,7 +252,7 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
                     .setRegionCode(regionCode)
                     .setMaxResultCount(maxResultCount)
                     .build()
-                client.searchNearby(request).addOnCompleteListener { task ->
+                client!!.searchNearby(request).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val places = task.result?.places?.map { placeToMap(it) }
                         print("searchNearby Result: $places")
@@ -520,16 +523,33 @@ class FlutterGooglePlacesSdkPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun initialize(apiKey: String?, locale: Locale?, useNewApi: Boolean) {
-        updateSettings(apiKey, locale, useNewApi)
-        client = Places.createClient(applicationContext)
+        // Only reinitialize if not initialized or API key changed
+        if (!Places.isInitialized() || initializedApiKey != apiKey) {
+            if (Places.isInitialized()) {
+                Places.deinitialize()
+            }
+            // SDK 5.0+ only supports the new Places API
+            Places.initializeWithNewPlacesApiEnabled(applicationContext, apiKey ?: "", locale)
+            initializedApiKey = apiKey
+        }
+        // Reuse existing client if possible, only create new one if null
+        if (client == null) {
+            client = Places.createClient(applicationContext)
+        }
     }
 
     private fun updateSettings(apiKey: String?, locale: Locale?, useNewApi: Boolean?) {
-        // SDK 5.0+ only supports the new Places API, always use initializeWithNewPlacesApiEnabled
-        if (Places.isInitialized()) {
-            Places.deinitialize()
+        // Only reinitialize if API key changed
+        if (initializedApiKey != apiKey) {
+            if (Places.isInitialized()) {
+                Places.deinitialize()
+            }
+            // SDK 5.0+ only supports the new Places API
+            Places.initializeWithNewPlacesApiEnabled(applicationContext, apiKey ?: "", locale)
+            initializedApiKey = apiKey
+            // Need new client after reinitialization
+            client = Places.createClient(applicationContext)
         }
-        Places.initializeWithNewPlacesApiEnabled(applicationContext, apiKey ?: "", locale)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
