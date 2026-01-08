@@ -27,6 +27,8 @@ dependency_overrides:
     path: ../../flutter_google_places_sdk_linux
   flutter_google_places_sdk_macos:
     path: ../../flutter_google_places_sdk_macos
+  flutter_google_places_sdk_http:
+    path: ../../flutter_google_places_sdk_http
 
 dev_dependencies:
   flutter_test:
