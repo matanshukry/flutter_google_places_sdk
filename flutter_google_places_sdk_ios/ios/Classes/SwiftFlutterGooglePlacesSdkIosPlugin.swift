@@ -28,8 +28,9 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
         case METHOD_INITIALIZE:
             let args = call.arguments as? Dictionary<String,Any>
             let apiKey = args?["apiKey"] as! String?
+            let useNewApi = args?["useNewApi"] as? Bool ?? false
             // we can't do anything with the locale so no need to read it
-            initialize(apiKey: apiKey)
+            initialize(apiKey: apiKey, useNewApi: useNewApi)
             result(nil)
         case METHOD_DEINITIALIZE:
             // nothing to do
@@ -272,24 +273,45 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
     }
     
     private func placeFieldFromStr(it: String) -> GMSPlaceField {
+        // Handle both PascalCase Dart enum names (e.g., "Viewport") and legacy SCREAMING_SNAKE_CASE
         switch (it) {
-        case "ADDRESS": return GMSPlaceField.formattedAddress
-        case "ADDRESS_COMPONENTS": return GMSPlaceField.addressComponents
-        case "BUSINESS_STATUS": return GMSPlaceField.businessStatus
-        case "ID": return GMSPlaceField.placeID
-        case "LAT_LNG": return GMSPlaceField.coordinate
-        case "NAME": return GMSPlaceField.name
-        case "OPENING_HOURS": return GMSPlaceField.openingHours
-        case "PHONE_NUMBER": return GMSPlaceField.phoneNumber
-        case "PHOTO_METADATAS": return GMSPlaceField.photos
-        case "PLUS_CODE": return GMSPlaceField.plusCode
-        case "PRICE_LEVEL": return GMSPlaceField.priceLevel
-        case "RATING": return GMSPlaceField.rating
-        case "TYPES": return GMSPlaceField.types
-        case "USER_RATINGS_TOTAL": return GMSPlaceField.userRatingsTotal
-        case "UTC_OFFSET": return GMSPlaceField.utcOffsetMinutes
-        case "VIEWPORT": return GMSPlaceField.viewport
-        case "WEBSITE_URI": return GMSPlaceField.website
+        // Dart enum names (PascalCase)
+        case "FormattedAddress", "ADDRESS", "FORMATTED_ADDRESS": return GMSPlaceField.formattedAddress
+        case "AddressComponents", "ADDRESS_COMPONENTS": return GMSPlaceField.addressComponents
+        case "BusinessStatus", "BUSINESS_STATUS": return GMSPlaceField.businessStatus
+        case "Id", "ID": return GMSPlaceField.placeID
+        case "Location", "LAT_LNG": return GMSPlaceField.coordinate
+        case "DisplayName", "NAME": return GMSPlaceField.name
+        case "OpeningHours", "OPENING_HOURS": return GMSPlaceField.openingHours
+        case "NationalPhoneNumber", "InternationalPhoneNumber", "PHONE_NUMBER": return GMSPlaceField.phoneNumber
+        case "Photos", "PHOTO_METADATAS": return GMSPlaceField.photos
+        case "PlusCode", "PLUS_CODE": return GMSPlaceField.plusCode
+        case "PriceLevel", "PRICE_LEVEL": return GMSPlaceField.priceLevel
+        case "Rating", "RATING": return GMSPlaceField.rating
+        case "Types", "TYPES": return GMSPlaceField.types
+        case "UserRatingCount", "USER_RATINGS_TOTAL", "USER_RATING_COUNT": return GMSPlaceField.userRatingsTotal
+        case "UtcOffset", "UTC_OFFSET": return GMSPlaceField.utcOffsetMinutes
+        case "Viewport", "VIEWPORT": return GMSPlaceField.viewport
+        case "WebsiteUri", "WEBSITE_URI": return GMSPlaceField.website
+        // New Places API fields
+        case "CurbsidePickup", "CURBSIDE_PICKUP": return GMSPlaceField.curbsidePickup
+        case "CurrentOpeningHours", "CURRENT_OPENING_HOURS": return GMSPlaceField.currentOpeningHours
+        case "Delivery", "DELIVERY": return GMSPlaceField.delivery
+        case "DineIn", "DINE_IN": return GMSPlaceField.dineIn
+        case "EditorialSummary", "EDITORIAL_SUMMARY": return GMSPlaceField.editorialSummary
+        case "IconBackgroundColor", "ICON_BACKGROUND_COLOR": return GMSPlaceField.iconBackgroundColor
+        case "IconMaskUrl", "ICON_MASK_URL": return GMSPlaceField.iconImageURL
+        case "Reservable", "RESERVABLE": return GMSPlaceField.reservable
+        case "SecondaryOpeningHours", "SECONDARY_OPENING_HOURS": return GMSPlaceField.secondaryOpeningHours
+        case "ServesBeer", "SERVES_BEER": return GMSPlaceField.servesBeer
+        case "ServesBreakfast", "SERVES_BREAKFAST": return GMSPlaceField.servesBreakfast
+        case "ServesBrunch", "SERVES_BRUNCH": return GMSPlaceField.servesBrunch
+        case "ServesDinner", "SERVES_DINNER": return GMSPlaceField.servesDinner
+        case "ServesLunch", "SERVES_LUNCH": return GMSPlaceField.servesLunch
+        case "ServesVegetarianFood", "SERVES_VEGETARIAN_FOOD": return GMSPlaceField.servesVegetarianFood
+        case "ServesWine", "SERVES_WINE": return GMSPlaceField.servesWine
+        case "Takeout", "TAKEOUT": return GMSPlaceField.takeout
+        case "AccessibilityOptions", "ACCESSIBILITY_OPTIONS": return GMSPlaceField.wheelchairAccessibleEntrance
         default:
             fatalError("Invalid placeField: \(it)")
         }
@@ -345,8 +367,10 @@ public class SwiftFlutterGooglePlacesSdkIosPlugin: NSObject, FlutterPlugin {
         return CLLocation(latitude: lat, longitude: lng)
     }
     
-    private func initialize(apiKey: String?) {
+    private func initialize(apiKey: String?, useNewApi: Bool) {
         GMSPlacesClient.provideAPIKey(apiKey ?? "")
         placesClient = GMSPlacesClient.shared()
+        // Note: useNewApi is not directly supported in iOS SDK, 
+        // the SDK version determines which API is used
     }
 }

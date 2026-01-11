@@ -37,7 +37,7 @@ void main() {
 
     test('initialize', () async {
       const testKey = 'my-key';
-      await places.initialize(testKey, locale: const Locale('en'));
+      await places.initialize(testKey, locale: const Locale('en'), useNewApi: true);
       expect(
         log,
         <Matcher>[
@@ -47,6 +47,7 @@ void main() {
               'country': null,
               'language': 'en',
             },
+            'useNewApi': true,
           })
         ],
       );

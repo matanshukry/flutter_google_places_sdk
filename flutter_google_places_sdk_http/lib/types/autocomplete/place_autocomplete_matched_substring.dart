@@ -5,7 +5,7 @@ part 'place_autocomplete_matched_substring.g.dart';
 
 /// Autocomplete matched substring as returned from the google maps api.
 @freezed
-class PlaceAutocompleteMatchedSubstring
+sealed class PlaceAutocompleteMatchedSubstring
     with _$PlaceAutocompleteMatchedSubstring {
   /// Construct a [PlaceAutocompleteMatchedSubstring] object.
   const factory PlaceAutocompleteMatchedSubstring({

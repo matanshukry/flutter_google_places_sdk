@@ -1,16 +1,13 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_google_places_sdk_ios (0.0.1):
+  - flutter_google_places_sdk_ios (0.0.3):
     - Flutter
-    - GooglePlaces
-  - GooglePlaces (5.1.0)
-  - integration_test (0.0.1):
-    - Flutter
+    - GooglePlaces (~> 10.1.0)
+  - GooglePlaces (10.1.0)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_google_places_sdk_ios (from `.symlinks/plugins/flutter_google_places_sdk_ios/ios`)
-  - integration_test (from `.symlinks/plugins/integration_test/ios`)
 
 SPEC REPOS:
   trunk:
@@ -21,15 +18,12 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_google_places_sdk_ios:
     :path: ".symlinks/plugins/flutter_google_places_sdk_ios/ios"
-  integration_test:
-    :path: ".symlinks/plugins/integration_test/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  flutter_google_places_sdk_ios: 68d8df9529e979d2554bdb8076020f7515ab566d
-  GooglePlaces: c57cd5aa7e91d10fa5106c792de74f3bd6436260
-  integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  flutter_google_places_sdk_ios: 1ffe678cd62a83445cc7050c919734000ebd6055
+  GooglePlaces: 049b41d9c8b7685d3a3a145fdab3069684655533
 
-PODFILE CHECKSUM: 642e1262a59f7238a9b65ccfac5b00f35ff92053
+PODFILE CHECKSUM: f8b44afcf094fdea113c806614b2eadfa77f294c
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.16.2

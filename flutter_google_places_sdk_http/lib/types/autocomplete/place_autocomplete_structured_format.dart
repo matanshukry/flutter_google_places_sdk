@@ -7,7 +7,7 @@ part 'place_autocomplete_structured_format.g.dart';
 
 /// Autocomplete Structured Format as returned from the google maps api.
 @freezed
-class PlaceAutocompleteStructuredFormat
+sealed class PlaceAutocompleteStructuredFormat
     with _$PlaceAutocompleteStructuredFormat {
   /// Construct a [PlaceAutocompleteStructuredFormat ] object.
   const factory PlaceAutocompleteStructuredFormat({
