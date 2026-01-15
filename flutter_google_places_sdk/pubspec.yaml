@@ -1,6 +1,6 @@
 name: flutter_google_places_sdk
 description: A Flutter plugin for google places sdk that uses the native libraries on each platform
-version: 1.0.5
+version: 1.0.6
 homepage: https://github.com/matanshukry/flutter_google_places_sdk/tree/master/flutter_google_places_sdk
 
 environment:
@@ -14,43 +14,43 @@ dependencies:
     git:
       url: git@github.com:crispybaconsrl/flutter_google_places.git
       path: flutter_google_places_sdk_platform_interface
-      ref: 1.0.5
-#    path: ../flutter_google_places_sdk_platform_interface
+      ref: 1.0.6
+  #    path: ../flutter_google_places_sdk_platform_interface
   flutter_google_places_sdk_ios:
     git:
       url: git@github.com:crispybaconsrl/flutter_google_places.git
       path: flutter_google_places_sdk_ios
-      ref: 1.0.5
-#    path: ../flutter_google_places_sdk_ios
+      ref: 1.0.6
+  #    path: ../flutter_google_places_sdk_ios
   flutter_google_places_sdk_web:
     git:
       url: git@github.com:crispybaconsrl/flutter_google_places.git
       path: flutter_google_places_sdk_web
-      ref: 1.0.5
-#      path: ../flutter_google_places_sdk_web
+      ref: 1.0.6
+  #      path: ../flutter_google_places_sdk_web
   flutter_google_places_sdk_android:
     git:
       url: git@github.com:crispybaconsrl/flutter_google_places.git
       path: flutter_google_places_sdk_android
-      ref: 1.0.5
-#    path: ../flutter_google_places_sdk_android
+      ref: 1.0.6
+  #    path: ../flutter_google_places_sdk_android
   flutter_google_places_sdk_windows:
     git:
       url: git@github.com:crispybaconsrl/flutter_google_places.git
       path: flutter_google_places_sdk_windows
-      ref: 1.0.5
-#    path: ../flutter_google_places_sdk_windows
+      ref: 1.0.6
+  #    path: ../flutter_google_places_sdk_windows
   flutter_google_places_sdk_linux:
     git:
       url: git@github.com:crispybaconsrl/flutter_google_places.git
       path: flutter_google_places_sdk_linux
-      ref: 1.0.5
-#    path: ../flutter_google_places_sdk_linux
+      ref: 1.0.6
+  #    path: ../flutter_google_places_sdk_linux
   flutter_google_places_sdk_macos:
     git:
       url: git@github.com:crispybaconsrl/flutter_google_places.git
       path: flutter_google_places_sdk_macos
-      ref: 1.0.5
+      ref: 1.0.6
 #    path: ../flutter_google_places_sdk_macos
 
 dev_dependencies:
